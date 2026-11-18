@@ -1,0 +1,3775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>e-Minit Curai | 马来西亚公文 / 学校会议简报生成系统 (.docx)</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Native Office Open XML (.docx) Browser Generator Library v8.5.0 -->
+  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <!-- Google Fonts: Inter & Noto Sans SC for crisp bilingual UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans SC', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Custom Scrollbar for smooth split-screen experience */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Realistic A4 Paper Sheet */
+    .a4-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      background: #ffffff;
+      color: #000000;
+      padding: 16mm 17mm 18mm 17mm;
+      box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.22), 0 4px 16px -4px rgba(15, 23, 42, 0.1);
+      transform-origin: top center;
+      transition: transform 0.2s ease;
+    }
+
+    /* Standard Malaysian KPM / Government Official Table */
+    .official-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #000000;
+    }
+    .official-table th,
+    .official-table td {
+      border: 1px solid #000000;
+      padding: 6px 8px;
+      vertical-align: top;
+      line-height: 1.45;
+      color: #000000;
+    }
+    .official-table th {
+      background-color: #f3f4f6;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    /* Print Stylesheet: Clean A4 Print / Save as PDF */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 14mm 15mm 15mm 15mm;
+      }
+
+      html,
+      body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      /* Hide all UI controls */
+      #top-navbar,
+      #mobile-view-tabs,
+      #editor-panel,
+      #preview-toolbar,
+      #drafts-modal,
+      #toast-container,
+      #confirm-modal {
+        display: none !important;
+      }
+
+      #main-workspace,
+      #preview-panel,
+      #preview-scroll-container,
+      #a4-scale-wrapper {
+        display: block !important;
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .a4-sheet {
+        width: 100% !important;
+        min-height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        transform: none !important;
+      }
+
+      .official-table th {
+        background-color: #f3f4f6 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .official-table tr,
+      .avoid-break {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- ==================== TOP NAVIGATION BAR ==================== -->
+  <header id="top-navbar" class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-[1600px] mx-auto px-3 sm:px-5 h-16 flex items-center justify-between gap-2">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-700 flex items-center justify-center text-white shadow-sm shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+        </div>
+        <div class="truncate">
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight truncate">e-Minit Curai</h1>
+            <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Native .DOCX &amp; KPM Format
+            </span>
+          </div>
+          <p class="text-[11px] sm:text-xs text-slate-500 truncate">马来西亚公文 / 学校会议简报生成系统</p>
+        </div>
+      </div>
+
+      <!-- Top Toolbar Actions -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <!-- Sample Templates Dropdown -->
+        <div class="relative" id="sample-dropdown-wrapper">
+          <button
+            type="button"
+            onclick="toggleSampleMenu()"
+            class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
+            title="载入马来西亚学校或政府部门示例数据"
+          >
+            <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            <span class="hidden sm:inline">载入示例</span>
+            <span class="hidden xl:inline text-xs text-slate-500">(Contoh)</span>
+            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div id="sample-menu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50">
+            <div class="px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+              Pilih Templat Contoh (选择示例模板)
+            </div>
+            <button type="button" onclick="loadSample('sjkc')" class="w-full text-left px-3.5 py-2.5 hover:bg-indigo-50 transition">
+              <div class="text-xs font-semibold text-slate-800">1. SJK(C) - Taklimat PBD &amp; UASA</div>
+              <div class="text-[11px] text-slate-500">华小校本评估与学年末测验汇报简报</div>
+            </button>
+            <button type="button" onclick="loadSample('smk')" class="w-full text-left px-3.5 py-2.5 hover:bg-indigo-50 transition">
+              <div class="text-xs font-semibold text-slate-800">2. SMK - Mesyuarat Kokurikulum Daerah</div>
+              <div class="text-[11px] text-slate-500">国中县级课外活动与学联运动会协调会议</div>
+            </button>
+            <button type="button" onclick="loadSample('agensi')" class="w-full text-left px-3.5 py-2.5 hover:bg-indigo-50 transition">
+              <div class="text-xs font-semibold text-slate-800">3. PPD / Agensi - Bengkel Digital DELIMa</div>
+              <div class="text-[11px] text-slate-500">县教育局/政府部门数字教学工作坊</div>
+            </button>
+            <div class="border-t border-slate-100 mt-1 pt-1">
+              <button type="button" onclick="clearFormPrompt()" class="w-full text-left px-3.5 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 transition flex items-center gap-1.5">
+                <span>🗑️ 清空当前表单 (Kosongkan Borang)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drafts Box Button -->
+        <button
+          type="button"
+          onclick="openDraftsModal()"
+          class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition"
+          title="查看或管理本地保存的历史草稿"
+        >
+          <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+          </svg>
+          <span class="hidden sm:inline">草稿箱</span>
+          <span id="draft-count-badge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-indigo-100 text-indigo-700">
+            0
+          </span>
+        </button>
+
+        <!-- Primary Action 1: Export Native .DOCX -->
+        <button
+          type="button"
+          id="btn-export-docx"
+          onclick="exportToDocx()"
+          class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-sm transition"
+          title="导出原生 Microsoft Word (.docx) 文件"
+        >
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          <span>导出 Word (.docx)</span>
+        </button>
+
+        <!-- Primary Action 2: Print / Save PDF -->
+        <button
+          type="button"
+          onclick="printDocument()"
+          class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm transition"
+          title="打印或另存为标准 A4 PDF"
+        >
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          <span class="hidden sm:inline">打印 / PDF</span>
+          <span class="sm:hidden">PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MOBILE VIEW TABS ==================== -->
+  <div id="mobile-view-tabs" class="lg:hidden bg-white border-b border-slate-200 px-4 py-2 flex gap-2 sticky top-16 z-20">
+    <button
+      type="button"
+      id="tab-btn-editor"
+      onclick="switchMobileView('editor')"
+      class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm transition"
+    >
+      ✏️ 填写表单 (Editor)
+    </button>
+    <button
+      type="button"
+      id="tab-btn-preview"
+      onclick="switchMobileView('preview')"
+      class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 transition"
+    >
+      📄 实时预览 (Pratonton A4)
+    </button>
+  </div>
+
+  <!-- ==================== MAIN SPLIT-SCREEN WORKSPACE ==================== -->
+  <main id="main-workspace" class="max-w-[1600px] mx-auto flex flex-col lg:flex-row lg:h-[calc(100vh-4rem)]">
+
+    <!-- ==================== LEFT PANEL: BILINGUAL EDITOR FORM ==================== -->
+    <section id="editor-panel" class="w-full lg:w-1/2 lg:h-full lg:overflow-y-auto p-4 sm:p-6 space-y-5 bg-slate-50/70 border-r border-slate-200">
+
+      <!-- 1. DUAL-ENGINE AI SMART NOTE CONVERTER (PENJANA PINTAR AI) -->
+      <div class="rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-violet-50 border border-indigo-200 shadow-sm overflow-hidden">
+        <div
+          onclick="toggleSection('ai-section-body', 'ai-chevron')"
+          class="cursor-pointer w-full px-4 sm:px-5 py-3.5 flex items-center justify-between text-left hover:bg-indigo-50/60 transition gap-2"
+        >
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm shadow-sm shrink-0">✨</span>
+            <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <h2 class="text-sm font-bold text-indigo-950 truncate">AI 智能公文助手 (Penjana Pintar AI)</h2>
+                <span id="ai-engine-badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  🧠 本地 KPM 智能公文引擎 (离线可用)
+                </span>
+              </div>
+              <p class="text-xs text-indigo-700/80 truncate mt-0.5">支持中/英/马混合草稿 → 自动提取元数据并生成标准 KPM 公文马来文</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onclick="toggleApiSettings(event)"
+              class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-2xs transition"
+              title="配置可选的 Google Gemini API Key"
+            >
+              <span>⚙️ API 设置</span>
+            </button>
+            <svg id="ai-chevron" class="w-5 h-5 text-indigo-600 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Collapsible API Key Settings Drawer -->
+        <div id="ai-api-drawer" class="hidden px-4 sm:px-5 py-3.5 bg-indigo-950/[0.03] border-t border-indigo-100 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-1">
+            <span class="text-xs font-bold text-slate-800">⚙️ Google Gemini API 设置 (可选增强)</span>
+            <span id="api-test-status" class="text-[11px] font-medium text-slate-500">内置 KPM 智能引擎无需配置即可离线使用</span>
+          </div>
+          <p class="text-[11px] text-slate-600 leading-relaxed">
+            本系统已内置<strong>本地 KPM 智能公文引擎</strong>，下载到本地（<code class="bg-white px-1 rounded border border-slate-200">file://</code>）无需网络或 Key 即可直接提取日期、地点、会议标题并生成规范公文马来文。如希望启用 <strong>Gemini 2.5 Flash</strong> 云端大模型进行更深度的自由语义润色，可在 <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="text-indigo-600 underline font-medium">Google AI Studio</a> 获取免费 Key 并粘贴于此（仅保存在当前浏览器本地）：
+          </p>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input
+              type="password"
+              id="inp-custom-gemini-key"
+              placeholder="输入 AIzaSy... 开头的 Gemini API Key（留空则使用内置 KPM 智能引擎）"
+              class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-800 focus:border-indigo-500 outline-none"
+            />
+            <div class="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onclick="saveCustomGeminiKey()"
+                class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition"
+              >
+                保存 Key
+              </button>
+              <button
+                type="button"
+                id="btn-test-gemini"
+                onclick="testGeminiConnection()"
+                class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
+              >
+                测试连接
+              </button>
+              <button
+                type="button"
+                onclick="clearCustomGeminiKey()"
+                class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-300 transition"
+              >
+                清除
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="ai-section-body" class="px-4 sm:px-5 pb-4 pt-1 space-y-3 border-t border-indigo-100">
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
+            <label for="ai-raw-notes" class="text-xs font-semibold text-slate-700">
+              输入会议/课程草稿笔记 (Nota Kasar - 支持中文 / English / BM):
+            </label>
+            <button
+              type="button"
+              onclick="fillSampleRawNotes()"
+              class="text-xs font-medium text-indigo-600 hover:text-indigo-800 underline underline-offset-2"
+            >
+              填入示例草稿试一试
+            </button>
+          </div>
+
+          <textarea
+            id="ai-raw-notes"
+            rows="4"
+            placeholder="例如：今天18/11去SK Puteri出席Bengkel Pengenalan Dan Persediaan Penilaian Antarabangsa SEA-PLM Bagi Guru Matematik Tahun 3 Sekolah Rendah Tahun 2026，时间早上8点半到下午4点半。重点：1. 汇报三年级数学SEA-PLM国际评估框架。2. 科主任与老师需准备KBAT练习。3. 需办校内PLC分享会并向校长汇报..."
+            class="w-full rounded-xl border border-indigo-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
+          ></textarea>
+
+          <!-- Quick Context Chips -->
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-[11px] font-medium text-slate-500 mr-0.5">快捷补充意图:</span>
+            <button
+              type="button"
+              onclick="appendContextChip('需办校内培训（LDP/PLC）向全体老师传达最新指示。')"
+              class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
+            >
+              + 需办校内培训 (LDP)
+            </button>
+            <button
+              type="button"
+              onclick="appendContextChip('需在截止日期前提交相关报告/填写Google Form回执。')"
+              class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
+            >
+              + 需提交报告/Google Form
+            </button>
+            <button
+              type="button"
+              onclick="appendContextChip('需整理并核对涉及的学生及教师名单以供存档。')"
+              class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
+            >
+              + 涉及学生/教师名单
+            </button>
+            <button
+              type="button"
+              onclick="appendContextChip('需向校长及副校长汇报并获取行政指示。')"
+              class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
+            >
+              + 校长/副校长指示
+            </button>
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-0.5">
+            <div class="flex items-center gap-2">
+              <label for="ai-context-style" class="text-xs font-medium text-slate-600">公文语境:</label>
+              <select
+                id="ai-context-style"
+                class="rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 focus:border-indigo-500 outline-none"
+              >
+                <option value="sekolah">Sekolah / KPM / PPD (学校与教育部体系)</option>
+                <option value="agensi">Jabatan Kerajaan / Agensi (政府部门公文)</option>
+                <option value="persatuan">Persatuan / PIBG / NGO (家协与社团)</option>
+              </select>
+            </div>
+
+            <button
+              type="button"
+              id="ai-generate-btn"
+              onclick="generateMinitWithAI()"
+              class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 shadow-sm disabled:opacity-60 disabled:cursor-not-allowed transition"
+            >
+              <svg id="ai-spinner" class="hidden animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+              <span id="ai-btn-text">✨ 生成正式马来文简报 (Jana Rasmi)</span>
+            </button>
+          </div>
+
+          <!-- AI Draft Review Panel -->
+          <div id="ai-result-box" class="hidden rounded-xl bg-white border border-emerald-200 p-3.5 space-y-3 shadow-sm">
+            <div class="flex items-center justify-between gap-2">
+              <span id="ai-result-header-label" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700">
+                ✅ 已整理为标准马来文公文，请选择应用方式：
+              </span>
+              <button type="button" onclick="document.getElementById('ai-result-box').classList.add('hidden')" class="text-xs text-slate-400 hover:text-slate-600 px-1">✕</button>
+            </div>
+            <div id="ai-result-summary" class="text-xs text-slate-700 bg-slate-50 rounded-lg p-3 max-h-52 overflow-y-auto space-y-1.5 border border-slate-100 leading-relaxed"></div>
+            <div class="flex flex-wrap items-center justify-end gap-2">
+              <button
+                type="button"
+                onclick="applyAIResultToForm('append')"
+                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
+                title="保留现有抬头与事项，仅将新生成的条款追加到列表末尾"
+              >
+                ➕ 追加到现有事项 (Tambah ke Senarai)
+              </button>
+              <button
+                type="button"
+                onclick="applyAIResultToForm('replace')"
+                class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition"
+                title="用提取的会议信息与事项替换当前表单内容"
+              >
+                ⬇️ 覆盖填入简报 (Ganti Semua)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 机构与校徽设置 (ORGANISASI, LOGO & TIPOGRAFI) -->
+      <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <button
+          type="button"
+          onclick="toggleSection('org-section-body', 'org-chevron')"
+          class="w-full px-4 sm:px-5 py-3.5 flex items-center justify-between text-left hover:bg-slate-50 transition"
+        >
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">01</span>
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">机构与校徽设置 (Organisasi, Logo &amp; Fon Rasmi)</h2>
+              <p class="text-xs text-slate-500">校名/部门名称、校徽上传与排版、公文字体（Arial / Times New Roman）</p>
+            </div>
+          </div>
+          <svg id="org-chevron" class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div id="org-section-body" class="p-4 sm:p-5 border-t border-slate-100 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                学校 / 部门名称 <span class="text-slate-400 font-normal">(Nama Sekolah / Jabatan)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-namaOrganisasi"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: SEKOLAH JENIS KEBANGSAAN (CINA) FOON YEW 2"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                学校代码 / 地址 <span class="text-slate-400 font-normal">(Kod Sekolah / Alamat)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-kodOrganisasi"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: JBC1002 • 80100 Johor Bahru, Johor"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                档案编号 <span class="text-slate-400 font-normal">(No. Rujukan Fail)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-noRujukan"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: JBC1002/600-3/1/2 (14)"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <!-- Logo Upload + Preview + Clear -->
+            <div class="sm:col-span-2 bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <label class="text-xs font-semibold text-slate-700">
+                  校徽 / 部门 Logo 图片 <span class="text-slate-400 font-normal">(同步嵌入 .docx 公文顶部)</span>
+                </label>
+                <div class="flex items-center gap-2">
+                  <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-indigo-50 border border-slate-300 hover:border-indigo-400 text-xs font-semibold text-slate-700 hover:text-indigo-700 shadow-2xs transition">
+                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span id="logo-upload-label">上传校徽 / Logo</span>
+                    <input type="file" id="inp-logo" accept="image/*" onchange="handleLogoUpload(event)" class="hidden" />
+                  </label>
+                  <button
+                    type="button"
+                    id="btn-remove-logo"
+                    onclick="removeLogo()"
+                    class="hidden px-2.5 py-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 text-xs font-semibold transition"
+                  >
+                    清除图片
+                  </button>
+                </div>
+              </div>
+
+              <!-- Logo Preview & Alignment Controls -->
+              <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+                <div class="flex items-center gap-3">
+                  <div id="logo-thumb-box" class="hidden w-12 h-12 rounded-lg bg-white border border-slate-200 p-1 flex items-center justify-center shrink-0">
+                    <img id="logo-thumb-img" src="" alt="Logo Preview" class="max-w-full max-h-full object-contain" />
+                  </div>
+                  <div class="space-y-1">
+                    <div class="text-xs font-medium text-slate-600">校徽排版位置 (Susunan Logo):</div>
+                    <div class="flex items-center gap-3 text-xs">
+                      <label class="inline-flex items-center gap-1.5 cursor-pointer font-medium text-slate-700">
+                        <input type="radio" name="logoAlign" value="center" checked onchange="setLogoAlign('center')" class="accent-indigo-600" />
+                        <span>居中 (Tengah)</span>
+                      </label>
+                      <label class="inline-flex items-center gap-1.5 cursor-pointer font-medium text-slate-700">
+                        <input type="radio" name="logoAlign" value="left" onchange="setLogoAlign('left')" class="accent-indigo-600" />
+                        <span>居左 (Kiri)</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Font Switcher inside Form -->
+                <div class="space-y-1">
+                  <div class="text-xs font-medium text-slate-600">公文字体 (Jenis Fon Rasmi):</div>
+                  <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5 text-xs">
+                    <button
+                      type="button"
+                      id="form-font-arial"
+                      onclick="setDocFont('Arial')"
+                      class="px-2.5 py-1 rounded-md font-semibold bg-indigo-600 text-white transition"
+                    >
+                      Arial
+                    </button>
+                    <button
+                      type="button"
+                      id="form-font-times"
+                      onclick="setDocFont('Times New Roman')"
+                      class="px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition"
+                      style="font-family: 'Times New Roman', serif;"
+                    >
+                      Times New Roman
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. 基本会议信息 (MAKLUMAT MESYUARAT) -->
+      <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <button
+          type="button"
+          onclick="toggleSection('pegawai-section-body', 'pegawai-chevron')"
+          class="w-full px-4 sm:px-5 py-3.5 flex items-center justify-between text-left hover:bg-slate-50 transition"
+        >
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">02</span>
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">基本会议信息 (Maklumat Mesyuarat / Taklimat)</h2>
+              <p class="text-xs text-slate-500">会议名称、日期、时间、地点、主办单位、主席、出席官员及分发资料</p>
+            </div>
+          </div>
+          <svg id="pegawai-chevron" class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div id="pegawai-section-body" class="p-4 sm:p-5 border-t border-slate-100 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                公文类型 <span class="text-slate-400 font-normal">(Kategori)</span>
+              </label>
+              <select
+                id="inp-kategori"
+                onchange="syncFromInputs()"
+                class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              >
+                <option value="MESYUARAT">MESYUARAT (会议)</option>
+                <option value="TAKLIMAT">TAKLIMAT (汇报会 / 说明会)</option>
+                <option value="KURSUS">KURSUS (培训课程)</option>
+                <option value="BENGKEL">BENGKEL (工作坊)</option>
+                <option value="SEMINAR">SEMINAR (研讨会)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                日期 <span class="text-slate-400 font-normal">(Tarikh - 自动转标准马来文)</span>
+              </label>
+              <div class="flex items-center gap-2">
+                <input
+                  type="date"
+                  id="inp-tarikh"
+                  onchange="syncFromInputs(true)"
+                  class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                />
+              </div>
+              <div id="tarikh-malay-hint" class="text-[11px] font-medium text-indigo-600 mt-1">
+                马来文显示：18 November 2026
+              </div>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                会议 / 课程名称 <span class="text-slate-400 font-normal">(Tajuk Mesyuarat / Kursus / Taklimat)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-tajuk"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: TAKLIMAT PENGURUSAN PENTAKSIRAN BILIK DARJAH (PBD) DAERAH JOHOR BAHRU"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                结束日期 <span class="text-slate-400 font-normal">(Tarikh Tamat - 多日课程选填)</span>
+              </label>
+              <input
+                type="date"
+                id="inp-tarikhTamat"
+                onchange="syncFromInputs()"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                时间 <span class="text-slate-400 font-normal">(Masa)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-masa"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: 8.30 pagi – 1.00 tengah hari"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+              <div class="flex flex-wrap gap-1 mt-1.5">
+                <button type="button" onclick="setField('inp-masa', '8.30 pagi – 1.00 tengah hari')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] text-slate-600 transition">8.30 pagi – 1.00 tengah hari</button>
+                <button type="button" onclick="setField('inp-masa', '8.00 pagi – 4.30 petang')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] text-slate-600 transition">8.00 pagi – 4.30 petang</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                地点 <span class="text-slate-400 font-normal">(Tempat)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-tempat"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: Dewan Seri Gemilang, PPD Johor Bahru"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                主办单位 <span class="text-slate-400 font-normal">(Anjuran)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-anjuran"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: Pejabat Pendidikan Daerah Johor Bahru"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                会议主席 / 主讲人 <span class="text-slate-400 font-normal">(Pengerusi)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-pengerusi"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: Encik Ahmad bin Salleh (Penolong PPD)"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                出席官员 / 教师 <span class="text-slate-400 font-normal">(Pegawai yang Hadir)</span>
+              </label>
+              <textarea
+                id="inp-pegawaiHadir"
+                rows="2"
+                oninput="syncFromInputs(true)"
+                placeholder="Contoh: 1. Cik Tan Mei Ling (Ketua Panitia Bahasa Melayu)&#10;2. Encik Lim Wei Jie (Setiausaha Kurikulum)"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              ></textarea>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                分发资料 <span class="text-slate-400 font-normal">(Bahan-bahan yang Diedarkan)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-bahanEdaran"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: Slaid Pembentangan Digital & Surat Siaran KPM Bil. 4/2026"
+                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+              <div class="flex flex-wrap gap-1 mt-1.5">
+                <button type="button" onclick="setField('inp-bahanEdaran', 'Tiada')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 text-[11px] text-slate-600">Tiada</button>
+                <button type="button" onclick="setField('inp-bahanEdaran', 'Slaid Pembentangan (Salinan Digital)')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 text-[11px] text-slate-600">Slaid Pembentangan</button>
+                <button type="button" onclick="setField('inp-bahanEdaran', 'Surat Siaran & Garis Panduan Pelaksanaan')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 text-[11px] text-slate-600">Surat Siaran &amp; Garis Panduan</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. 动态事项表格 (PERKARA & TINDAKAN) -->
+      <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-4 sm:px-5 py-3.5 flex items-center justify-between border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">03</span>
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">简报内容明细 (Perkara &amp; Tindakan)</h2>
+              <p class="text-xs text-slate-500">支持添加、删除、上下排序，并点击快捷标签插入常用马来文公文短语</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onclick="addItemRow()"
+            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
+          >
+            <span>+ 添加行</span>
+          </button>
+        </div>
+
+        <div id="items-editor-list" class="p-4 sm:p-5 space-y-3.5">
+          <!-- Dynamic item cards injected by JS -->
+        </div>
+
+        <div class="px-4 sm:px-5 pb-4 flex flex-col sm:flex-row gap-2.5">
+          <button
+            type="button"
+            onclick="addItemRow()"
+            class="flex-1 py-2.5 px-3 rounded-xl border-2 border-dashed border-slate-300 hover:border-indigo-400 hover:bg-indigo-50/40 text-xs sm:text-sm font-semibold text-slate-600 hover:text-indigo-700 transition flex items-center justify-center gap-1.5"
+          >
+            <span>+ Tambah Baris (添加新事项行)</span>
+          </button>
+          <button
+            type="button"
+            onclick="generateFollowUpItems()"
+            class="py-2.5 px-4 rounded-xl border border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100 text-xs sm:text-sm font-semibold text-indigo-700 transition flex items-center justify-center gap-1.5 shrink-0"
+            title="根据当前会议标题自动补充标准校内传达（LDP）与汇报校长行动项"
+          >
+            <span>➕ AI 补充后续行动</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 5. 签署栏信息 (TANDATANGAN & PENGESAHAN) -->
+      <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <button
+          type="button"
+          onclick="toggleSection('sign-section-body', 'sign-chevron')"
+          class="w-full px-4 sm:px-5 py-3.5 flex items-center justify-between text-left hover:bg-slate-50 transition"
+        >
+          <div class="flex items-center gap-2.5">
+            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">04</span>
+            <div>
+              <h2 class="text-sm font-bold text-slate-900">签署栏信息 (Tandatangan &amp; Pengesahan)</h2>
+              <p class="text-xs text-slate-500">拟稿人（Disediakan oleh）与审核/校长（Disahkan oleh）姓名及职位</p>
+            </div>
+          </div>
+          <svg id="sign-chevron" class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <div id="sign-section-body" class="p-4 sm:p-5 border-t border-slate-100 space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Disediakan oleh -->
+            <div class="space-y-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+              <div class="text-xs font-bold text-slate-800">拟稿人 (Disediakan oleh):</div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿人姓名 (Nama)</label>
+                <input
+                  type="text"
+                  id="inp-disediakanNama"
+                  oninput="syncFromInputs()"
+                  placeholder="Contoh: TAN MEI LING"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:border-indigo-500 outline-none"
+                />
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿人职位 (Jawatan)</label>
+                <input
+                  type="text"
+                  id="inp-disediakanJawatan"
+                  oninput="syncFromInputs()"
+                  placeholder="Contoh: Ketua Panitia Bahasa Melayu"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:border-indigo-500 outline-none"
+                />
+                <div class="flex flex-wrap gap-1 mt-1">
+                  <button type="button" onclick="setField('inp-disediakanJawatan', 'Guru Akademik')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Guru Akademik</button>
+                  <button type="button" onclick="setField('inp-disediakanJawatan', 'Ketua Panitia')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Ketua Panitia</button>
+                  <button type="button" onclick="setField('inp-disediakanJawatan', 'Setiausaha')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Setiausaha</button>
+                  <button type="button" onclick="setField('inp-disediakanJawatan', 'GPK HEM')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">GPK HEM</button>
+                
+               </div>
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿日期 (Tarikh)</label>
+                <input
+                  type="date"
+                  id="inp-tarikhDisediakan"
+                  onchange="syncFromInputs()"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:border-indigo-500 outline-none"
+                />
+              </div>
+            </div>
+
+            <!-- Disahkan oleh -->
+            <div class="space-y-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
+              <div class="text-xs font-bold text-slate-800">审核 / 校长 (Disahkan oleh):</div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">校长 / 主管姓名 (Nama - 留空供盖章签名)</label>
+                <input
+                  type="text"
+                  id="inp-disahkanNama"
+                  oninput="syncFromInputs()"
+                  placeholder="留空则显示空白签名括号 (          )"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:border-indigo-500 outline-none"
+                />
+              </div>
+              <div>
+                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">职位 (Jawatan)</label>
+                <input
+                  type="text"
+                  id="inp-disahkanGelaran"
+                  oninput="syncFromInputs()"
+                  placeholder="Contoh: Guru Besar / Pengetua"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:border-indigo-500 outline-none"
+                />
+                <div class="flex flex-wrap gap-1 mt-1">
+                  <button type="button" onclick="setField('inp-disahkanGelaran', 'Guru Besar')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Guru Besar</button>
+                  <button type="button" onclick="setField('inp-disahkanGelaran', 'Pengetua')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Pengetua</button>
+                  <button type="button" onclick="setField('inp-disahkanGelaran', 'GPK Pentadbiran')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">GPK Pentadbiran</button>
+                  <button type="button" onclick="setField('inp-disahkanGelaran', 'Ketua Jabatan')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Ketua Jabatan</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Optional Tindakan Susulan Ketua Jabatan -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">
+              校长 / 主管后续指示批示栏 <span class="text-slate-400 font-normal">(Tindakan Susulan Ketua Jabatan - 留空自动生成手写划线)</span>
+            </label>
+            <textarea
+              id="inp-tindakanSusulan"
+              rows="2"
+              oninput="syncFromInputs()"
+              placeholder="留空则在公文底部生成标准 3 行手写划线供校长/主管批示..."
+              class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+            ></textarea>
+          </div>
+
+          <!-- Save Draft Action -->
+          <div class="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100">
+            <span class="text-xs text-slate-500">随时将当前简报存入本地草稿箱，方便日后修改或再次导出 `.docx`。</span>
+            <button
+              type="button"
+              onclick="saveCurrentDraft()"
+              class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
+            >
+              <span>💾 保存到草稿箱 (Simpan Draf)</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="h-6"></div>
+    </section>
+
+    <!-- ==================== RIGHT PANEL: LIVE A4 PREVIEW ==================== -->
+    <section id="preview-panel" class="hidden lg:flex w-full lg:w-1/2 lg:h-full flex-col bg-slate-200/85">
+      <!-- Preview Toolbar -->
+      <div id="preview-toolbar" class="bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 shrink-0">
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            实时 A4 公文预览
+          </span>
+          <span id="item-counter-badge" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
+            4 项内容
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Font Switcher -->
+          <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
+            <button
+              type="button"
+              id="font-btn-arial"
+              onclick="setDocFont('Arial')"
+              class="px-2.5 py-1 rounded-md font-semibold bg-white text-indigo-700 shadow-sm transition"
+            >
+              Arial
+            </button>
+            <button
+              type="button"
+              id="font-btn-times"
+              onclick="setDocFont('Times New Roman')"
+              class="px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition"
+              style="font-family: 'Times New Roman', serif;"
+            >
+              Times New Roman
+            </button>
+          </div>
+
+          <!-- Font Size Switcher -->
+          <select
+            id="doc-fontsize-select"
+            onchange="setDocFontSize(this.value)"
+            class="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-700 outline-none"
+            title="公文字体大小"
+          >
+            <option value="10pt">10pt</option>
+            <option value="10.5pt" selected>10.5pt (标准)</option>
+            <option value="11pt">11pt</option>
+          </select>
+
+          <!-- Zoom Controls -->
+          <div class="hidden sm:inline-flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden text-xs">
+            <button type="button" onclick="adjustZoom(-0.1)" class="px-2 py-1 hover:bg-slate-100 text-slate-600 font-bold" title="缩小">−</button>
+            <span id="zoom-label" class="px-2 py-1 text-slate-700 font-medium min-w-[46px] text-center">80%</span>
+            <button type="button" onclick="adjustZoom(0.1)" class="px-2 py-1 hover:bg-slate-100 text-slate-600 font-bold" title="放大">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scrollable A4 Paper Canvas -->
+      <div id="preview-scroll-container" class="flex-1 overflow-auto p-4 sm:p-8 flex justify-center items-start">
+        <div id="a4-scale-wrapper" class="transition-all duration-200">
+          <!-- ==================== OFFICIAL A4 DOCUMENT SHEET ==================== -->
+          <article id="a4-paper" class="a4-sheet" style="font-family: Arial, sans-serif; font-size: 10.5pt;">
+            <!-- Header Section -->
+            <div id="doc-header-container" class="mb-3"></div>
+
+            <!-- Document Title -->
+            <div class="text-center my-3.5">
+              <h1 id="doc-main-title" class="font-bold uppercase tracking-wide underline underline-offset-4" style="font-size: 13pt;">
+                MINIT CURAI
+              </h1>
+              <p id="doc-sub-title" class="font-semibold uppercase mt-1" style="font-size: 10pt;">
+                TAKLIMAT / MESYUARAT
+              </p>
+            </div>
+
+            <!-- Section 1: Maklumat Mesyuarat Table -->
+            <table class="official-table mb-4" style="font-size: inherit;">
+              <tbody>
+                <tr>
+                  <td style="width: 31%; font-weight: 700; background-color: #f9fafb;">TAJUK MESYUARAT / TAKLIMAT</td>
+                  <td style="width: 2%; font-weight: 700; text-align: center;">:</td>
+                  <td id="doc-tajuk" colspan="4" style="font-weight: 700;"></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; background-color: #f9fafb;">TARIKH</td>
+                  <td style="font-weight: 700; text-align: center;">:</td>
+                  <td id="doc-tarikh" style="width: 25%;"></td>
+                  <td style="width: 11%; font-weight: 700; background-color: #f9fafb;">MASA</td>
+                  <td style="width: 2%; font-weight: 700; text-align: center;">:</td>
+                  <td id="doc-masa" style="width: 29%;"></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; background-color: #f9fafb;">TEMPAT</td>
+                  <td style="font-weight: 700; text-align: center;">:</td>
+                  <td id="doc-tempat" colspan="4"></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; background-color: #f9fafb;">ANJURAN</td>
+                  <td style="font-weight: 700; text-align: center;">:</td>
+                  <td id="doc-anjuran" colspan="4"></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; background-color: #f9fafb;">PENGERUSI</td>
+                  <td style="font-weight: 700; text-align: center;">:</td>
+                  <td id="doc-pengerusi" colspan="4"></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; background-color: #f9fafb;">PEGAWAI YANG HADIR</td>
+                  <td style="font-weight: 700; text-align: center;">:</td>
+                  <td id="doc-pegawaiHadir" colspan="4"></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; background-color: #f9fafb;">BAHAN-BAHAN YANG DIEDARKAN</td>
+                  <td style="font-weight: 700; text-align: center;">:</td>
+                  <td id="doc-bahanEdaran" colspan="4"></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Section 2: Kandungan Minit Curai (Perkara & Tindakan) Table -->
+            <div class="mb-4">
+              <div class="font-bold uppercase mb-1.5" style="font-size: 10pt;">
+                KANDUNGAN MINIT CURAI :
+              </div>
+              <table class="official-table" style="font-size: inherit;">
+                <thead>
+                  <tr>
+                    <th style="width: 7%; text-align: center;">BIL.</th>
+                    <th style="width: 63%;">PERKARA / ISU YANG DIBINCANGKAN</th>
+                    <th style="width: 30%;">TINDAKAN / MAKLUMAN</th>
+                  </tr>
+                </thead>
+                <tbody id="doc-items-tbody"></tbody>
+              </table>
+            </div>
+
+            <!-- Section 3: Tindakan Susulan Ketua Jabatan -->
+            <div class="avoid-break mb-5">
+              <table class="official-table" style="font-size: inherit;">
+                <tbody>
+                  <tr>
+                    <td style="background-color: #f9fafb; font-weight: 700;">
+                      TINDAKAN SUSULAN OLEH KETUA JABATAN / PENGETUA / GURU BESAR :
+                    </td>
+                  </tr>
+                  <tr>
+                    <td id="doc-tindakanSusulan-cell" style="padding: 9px 10px;"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Section 4: Two-Column Signature Block -->
+            <div class="avoid-break mt-5">
+              <table style="width: 100%; border-collapse: collapse; border: none; font-size: inherit;">
+                <tbody>
+                  <tr>
+                    <!-- Left Signature: Disediakan oleh -->
+                    <td style="width: 50%; vertical-align: top; padding-right: 18px; border: none;">
+                      <div>Disediakan oleh,</div>
+                      <div style="height: 48px;"></div>
+                      <div>........................................................................</div>
+                      <div id="doc-sig-disediakanNama" style="font-weight: 700; margin-top: 2px;"></div>
+                      <div id="doc-sig-disediakanJawatan"></div>
+                      <div id="doc-sig-organisasi"></div>
+                      <div style="margin-top: 4px;">Tarikh : <span id="doc-sig-tarikhDisediakan"></span></div>
+                    </td>
+
+                    <!-- Right Signature: Disahkan oleh -->
+                    <td style="width: 50%; vertical-align: top; padding-left: 18px; border: none;">
+                      <div>Disahkan oleh,</div>
+                      <div style="height: 48px;"></div>
+                      <div>........................................................................</div>
+                      <div id="doc-sig-disahkanNama" style="font-weight: 700; margin-top: 2px;"></div>
+                      <div id="doc-sig-disahkanGelaran"></div>
+                      <div style="margin-top: 4px;">Cop Rasmi &amp; Tarikh :</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== DRAFTS MODAL ==================== -->
+  <div id="drafts-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-bold text-slate-900">草稿箱管理 (Rekod Draf Tersimpan)</h3>
+          <p class="text-xs text-slate-500">保存在本地浏览器中，可随时加载编辑或重新导出 `.docx`</p>
+        </div>
+        <button type="button" onclick="closeDraftsModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="px-5 py-3 bg-indigo-50/70 border-b border-indigo-100 flex items-center justify-between gap-2">
+        <span class="text-xs font-medium text-indigo-900">将当前正在编辑的简报保存为新草稿：</span>
+        <button
+          type="button"
+          onclick="saveCurrentDraft()"
+          class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition"
+        >
+          + 保存当前简报 (Simpan Sekarang)
+        </button>
+      </div>
+
+      <div id="drafts-list-container" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- ==================== CUSTOM CONFIRMATION MODAL ==================== -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-sm w-full p-5 space-y-4">
+      <h3 id="confirm-title" class="text-base font-bold text-slate-900">确认操作</h3>
+      <p id="confirm-message" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
+      <div class="flex justify-end gap-2 pt-2">
+        <button
+          type="button"
+          onclick="closeConfirmModal()"
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+        >
+          取消 (Batal)
+        </button>
+        <button
+          type="button"
+          id="confirm-ok-btn"
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 transition"
+        >
+          确认 (Ya)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST CONTAINER ==================== -->
+  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+
+  <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+  <script>
+    // =========================================================================
+    // 1. CONSTANTS, SAMPLE DATA & STATE
+    // =========================================================================
+    const STORAGE_KEY = 'eminit_curai_drafts_v2';
+    const API_KEY_STORAGE_KEY = 'minit_curai_gemini_key';
+
+    const MALAY_MONTHS = [
+      'Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun',
+      'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'
+    ];
+
+    // Quick-insert official Malay phrases for Tindakan column
+    const QUICK_PHRASES = [
+      { label: '供全体教师知悉', text: 'Untuk makluman semua guru.' },
+      { label: '供行政层与全体教师知悉及行动', text: 'Untuk makluman dan tindakan pihak pentadbir.' },
+      { label: '请科主任跟进', text: 'Tindakan Ketua Panitia yang berkenaan.' },
+      { label: '请立即采取行动', text: 'Sila ambil tindakan segera.' },
+      { label: '请相关教师执行', text: 'Tindakan semua guru mata pelajaran yang terlibat.' },
+      { label: '请秘书准备完整报告', text: 'Tindakan Setiausaha untuk menyediakan laporan.' }
+    ];
+
+    const SAMPLES = {
+      sjkc: {
+        namaOrganisasi: 'SJKC CHUNG HUA RANTAU',
+        kodOrganisasi: 'NBC4051 • 71200 Rantau, Negeri Sembilan',
+        noRujukan: 'NBC4051/600-3/1/2 (14)',
+        kategori: 'TAKLIMAT',
+        tajuk: 'TAKLIMAT PENYELARASAN PENTAKSIRAN BILIK DARJAH (PBD) DAN UJIAN AKHIR SESI AKADEMIK (UASA) PERINGKAT DAERAH',
+        tarikh: '2026-11-18',
+        tarikhTamat: '',
+        masa: '8.30 pagi – 1.00 tengah hari',
+        tempat: 'Dewan Seri Gemilang, Pejabat Pendidikan Daerah',
+        anjuran: 'Sektor Pembelajaran, Pejabat Pendidikan Daerah (PPD)',
+        pengerusi: 'Encik Ahmad bin Salleh (Penolong PPD Unit Pentaksiran dan Peperiksaan)',
+        pegawaiHadir: 'Cik Tan Mei Ling (Ketua Panitia Bahasa Melayu)',
+        bahanEdaran: 'Slaid Pembentangan Digital & Surat Siaran KPM Bil. 4/2026',
+        items: [
+          {
+            perkara: 'Pengerusi memaklumkan bahawa pelaporan Pentaksiran Bilik Darjah (PBD) Fasa Akhir bagi sesi akademik semasa hendaklah dilaksanakan secara telus, adil dan berintegriti berpandukan Dokumen Standard Kurikulum dan Pentaksiran (DSKP).',
+            tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+          },
+          {
+            perkara: 'Semua guru mata pelajaran dikehendaki melengkapkan perekodan Tahap Penguasaan (TP) murid dalam Sistem Pengurusan Pentaksiran Bersepadu (SPPB / IDME) selewat-lewatnya pada 5 Disember 2026 sebelum proses penjanaan slip pelaporan dijalankan.',
+            tindakan: 'Tindakan semua guru mata pelajaran yang terlibat.'
+          },
+          {
+            perkara: 'Penyediaan instrumen Ujian Akhir Sesi Akademik (UASA) bagi murid Tahap 2 (Tahun 4, 5 dan 6) hendaklah mematuhi Jadual Spesifikasi Ujian (JSU) yang ditetapkan oleh Lembaga Peperiksaan serta disemak oleh Ketua Panitia masing-masing.',
+            tindakan: 'Tindakan Ketua Panitia yang berkenaan.'
+          },
+          {
+            perkara: 'Pihak sekolah disarankan mengadakan sesi konsultasi akademik bersama ibu bapa dan penjaga selepas pelaporan PBD dan UASA dimuktamadkan bagi membincangkan perkembangan holistik murid.',
+            tindakan: 'Untuk makluman semua guru.'
+          }
+        ],
+        tindakanSusulan: '',
+        disediakanNama: 'TAN MEI LING',
+        disediakanJawatan: 'Ketua Panitia Bahasa Melayu',
+        tarikhDisediakan: '2026-11-18',
+        disahkanGelaran: 'Guru Besar',
+        disahkanNama: ''
+      },
+      smk: {
+        namaOrganisasi: 'SEKOLAH MENENGAH KEBANGSAAN TAMAN PELANGI',
+        kodOrganisasi: 'JEA1045 • 80400 Johor Bahru, Johor',
+        noRujukan: 'JEA1045/700-2/1/5 (09)',
+        kategori: 'MESYUARAT',
+        tajuk: 'MESYUARAT PENYELARASAN PENGURUSAN KOKURIKULUM, SUKAN TAHUNAN DAN PENTAKSIRAN PAJSK DAERAH',
+        tarikh: '2026-11-18',
+        tarikhTamat: '',
+        masa: '9.00 pagi – 1.00 tengah hari',
+        tempat: 'Bilik Mesyuarat Utama, PPD Johor Bahru',
+        anjuran: 'Unit Pembangunan Bakat Murid, PPD Johor Bahru',
+        pengerusi: 'Puan Hajah Noraini binti Mohd Yusof (Timbalan PPD Pembangunan Murid)',
+        pegawaiHadir: 'Encik Lim Wei Jie (Setiausaha Kokurikulum)',
+        bahanEdaran: 'Takwim Kejohanan MSSD & Garis Panduan Pengisian PAJSK',
+        items: [
+          {
+            perkara: 'Pengisian markah Pentaksiran Aktiviti Jasmani, Sukan dan Kokurikulum (PAJSK) bagi murid Tingkatan 1 hingga Tingkatan 5 perlu diselesaikan dalam sistem sebelum tarikh tutup pengesahan peringkat sekolah.',
+            tindakan: 'Sila ambil tindakan segera.'
+          },
+          {
+            perkara: 'Setiap sekolah wajib memastikan prosedur keselamatan padang, gelanggang dan surat kebenaran ibu bapa dipatuhi sepenuhnya sepanjang sesi latihan rumah sukan dan kejohanan peringkat daerah.',
+            tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+          },
+          {
+            perkara: 'Pendaftaran kontinjen sekolah bagi Kejohanan Olahraga MSSD hendaklah dihantar secara dalam talian dua minggu sebelum tarikh kejohanan berlangsung.',
+            tindakan: 'Tindakan Setiausaha untuk menyediakan laporan.'
+          }
+        ],
+        tindakanSusulan: '',
+        disediakanNama: 'LIM WEI JIE',
+        disediakanJawatan: 'Setiausaha Kokurikulum',
+        tarikhDisediakan: '2026-11-18',
+        disahkanGelaran: 'Pengetua',
+        disahkanNama: ''
+      },
+      agensi: {
+        namaOrganisasi: 'PEJABAT PENDIDIKAN DAERAH JOHOR BAHRU',
+        kodOrganisasi: 'JKR 413, Jalan Abdul Rahman Andak, 80100 Johor Bahru',
+        noRujukan: 'PPDJB.800-4/2/3 (21)',
+        kategori: 'BENGKEL',
+        tajuk: 'BENGKEL PEMANTAPAN EKOSISTEM PEMBELAJARAN DIGITAL (DELIMa) DAN PENGGUNAAN KECERDASAN BUATAN (AI) DALAM PENTADBIRAN',
+        tarikh: '2026-11-18',
+        tarikhTamat: '2026-11-19',
+        masa: '8.30 pagi – 4.30 petang',
+        tempat: 'Makmal Komputer Bestari, Sektor Sumber Teknologi Pendidikan (SSTP) Johor',
+        anjuran: 'Sektor Sumber dan Teknologi Pendidikan, Jabatan Pendidikan Negeri Johor',
+        pengerusi: 'Ts. Mohd Faizal bin Othman (Ketua Penolong Pengarah SSTP)',
+        pegawaiHadir: 'Encik Wong Kai Xuan (Penyelaras ICT / Guru Bestari)',
+        bahanEdaran: 'Modul Bengkel Digital DELIMa & Pautan Sumber Latihan',
+        items: [
+          {
+            perkara: 'Kementerian Pendidikan Malaysia (KPM) menyasarkan peningkatan kadar keaktifan penggunaan pelantar DELIMa dalam kalangan guru dan murid melalui integrasi alat produktiviti digital serta Google Workspace for Education.',
+            tindakan: 'Untuk makluman semua guru.'
+          },
+          {
+            perkara: 'Penyelaras ICT sekolah diminta melaksanakan latihan dalaman (In-House Training / LADAP) kepada guru-guru bagi berkongsi kemahiran penggunaan aplikasi AI secara beretika dalam penyediaan bahan bantu mengajar.',
+            tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+          },
+          {
+            perkara: 'Penyelenggaraan aset ICT dan semakan capaian internet sekolah hendaklah dilaporkan melalui sistem STS sekiranya terdapat sebarang gangguan teknikal.',
+            tindakan: 'Sila ambil tindakan segera.'
+          }
+        ],
+        tindakanSusulan: '',
+        disediakanNama: 'WONG KAI XUAN',
+        disediakanJawatan: 'Penyelaras ICT / Guru Bestari',
+        tarikhDisediakan: '2026-11-20',
+        disahkanGelaran: 'Guru Besar',
+        disahkanNama: ''
+      }
+    };
+
+    let state = {
+      ...JSON.parse(JSON.stringify(SAMPLES.sjkc)),
+      logoDataUrl: '',
+      logoAlign: 'center',
+      docFont: 'Arial',
+      docFontSize: '10.5pt',
+      zoom: 0.80
+    };
+
+    let lastAIExtractedData = null;
+
+    // =========================================================================
+    // 2. INITIALIZATION & FORMATTING UTILITIES
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.innerWidth < 640) {
+        state.zoom = 0.44;
+      } else if (window.innerWidth < 1280) {
+        state.zoom = 0.68;
+      }
+      initApiKeySettings();
+      populateInputsFromState();
+      renderItemEditors();
+      renderDocument();
+      applyZoom();
+      updateDraftBadge();
+
+      document.addEventListener('click', (e) => {
+        const wrapper = document.getElementById('sample-dropdown-wrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+          document.getElementById('sample-menu').classList.add('hidden');
+        }
+      });
+    });
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function formatMalayDate(isoDate) {
+      if (!isoDate) return '';
+      const parts = isoDate.split('-');
+      if (parts.length !== 3) return isoDate;
+      const year = parseInt(parts[0], 10);
+      const monthIdx = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      if (isNaN(year) || monthIdx < 0 || monthIdx > 11 || isNaN(day)) return isoDate;
+      return `${day} ${MALAY_MONTHS[monthIdx]} ${year}`;
+    }
+
+    function formatMalayDateRange(startIso, endIso) {
+      const startStr = formatMalayDate(startIso);
+      if (!endIso || endIso === startIso) return startStr;
+      const endStr = formatMalayDate(endIso);
+      if (!startStr) return endStr;
+
+      const sParts = startIso.split('-');
+      const eParts = endIso.split('-');
+      if (sParts[0] === eParts[0] && sParts[1] === eParts[1]) {
+        const sDay = parseInt(sParts[2], 10);
+        return `${sDay} – ${endStr}`;
+      }
+      return `${startStr} – ${endStr}`;
+    }
+
+    // =========================================================================
+    // 3. UI INTERACTIONS, SAMPLES & LOGO HANDLING
+    // =========================================================================
+    function toggleSection(bodyId, chevronId) {
+      const body = document.getElementById(bodyId);
+      const chevron = document.getElementById(chevronId);
+      if (!body) return;
+      body.classList.toggle('hidden');
+      if (chevron) {
+        chevron.classList.toggle('-rotate-90');
+      }
+    }
+
+    function toggleSampleMenu() {
+      document.getElementById('sample-menu').classList.toggle('hidden');
+    }
+
+    function loadSample(key) {
+      document.getElementById('sample-menu').classList.add('hidden');
+      const tpl = SAMPLES[key];
+      if (!tpl) return;
+      state = {
+        ...state,
+        ...JSON.parse(JSON.stringify(tpl))
+      };
+      populateInputsFromState();
+      renderItemEditors();
+      renderDocument();
+      showToast('已载入示例模板 (Templat Contoh Dimuatkan)', 'success');
+    }
+
+    function clearFormPrompt() {
+      document.getElementById('sample-menu').classList.add('hidden');
+      openConfirmModal('清空当前表单 (Kosongkan Borang)', '确定要清空所有已填写的会议内容与事项吗？', () => {
+        state = {
+          ...state,
+          noRujukan: '',
+          kategori: 'MESYUARAT',
+          tajuk: '',
+          tarikh: new Date().toISOString().slice(0, 10),
+          tarikhTamat: '',
+          masa: '',
+          tempat: '',
+          anjuran: '',
+          pengerusi: '',
+          pegawaiHadir: '',
+          bahanEdaran: 'Tiada',
+          items: [{ perkara: '', tindakan: 'Untuk makluman semua guru.' }],
+          tindakanSusulan: '',
+          disediakanNama: '',
+          disediakanJawatan: '',
+          disahkanNama: ''
+        };
+        populateInputsFromState();
+        renderItemEditors();
+        renderDocument();
+        showToast('表单已清空', 'info');
+      });
+    }
+
+    function setField(inputId, value) {
+      const el = document.getElementById(inputId);
+      if (!el) return;
+      el.value = value;
+      syncFromInputs(true);
+    }
+
+    function populateInputsFromState() {
+      const map = {
+        'inp-namaOrganisasi': state.namaOrganisasi,
+        'inp-kodOrganisasi': state.kodOrganisasi,
+        'inp-noRujukan': state.noRujukan,
+        'inp-kategori': state.kategori,
+        'inp-tajuk': state.tajuk,
+        'inp-tarikh': state.tarikh,
+        'inp-tarikhTamat': state.tarikhTamat,
+        'inp-masa': state.masa,
+        'inp-tempat': state.tempat,
+        'inp-anjuran': state.anjuran,
+        'inp-pengerusi': state.pengerusi,
+        'inp-pegawaiHadir': state.pegawaiHadir,
+        'inp-bahanEdaran': state.bahanEdaran,
+        'inp-disediakanNama': state.disediakanNama,
+        'inp-disediakanJawatan': state.disediakanJawatan,
+        'inp-tarikhDisediakan': state.tarikhDisediakan,
+        'inp-disahkanNama': state.disahkanNama,
+        'inp-disahkanGelaran': state.disahkanGelaran,
+        'inp-tindakanSusulan': state.tindakanSusulan
+      };
+
+      Object.entries(map).forEach(([id, val]) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val || '';
+      });
+
+      const hint = document.getElementById('tarikh-malay-hint');
+      if (hint) {
+        hint.textContent = `马来文显示：${formatMalayDate(state.tarikh) || '-'}`;
+      }
+
+      // Logo state
+      const thumbBox = document.getElementById('logo-thumb-box');
+      const thumbImg = document.getElementById('logo-thumb-img');
+      const removeBtn = document.getElementById('btn-remove-logo');
+      if (state.logoDataUrl) {
+        thumbImg.src = state.logoDataUrl;
+        thumbBox.classList.remove('hidden');
+        removeBtn.classList.remove('hidden');
+      } else {
+        thumbImg.src = '';
+        thumbBox.classList.add('hidden');
+        removeBtn.classList.add('hidden');
+      }
+
+      const radios = document.querySelectorAll('input[name="logoAlign"]');
+      radios.forEach((r) => {
+        r.checked = r.value === (state.logoAlign || 'center');
+      });
+    }
+
+    function syncFromInputs(updateHints = false) {
+      state.namaOrganisasi = document.getElementById('inp-namaOrganisasi').value;
+      state.kodOrganisasi = document.getElementById('inp-kodOrganisasi').value;
+      state.noRujukan = document.getElementById('inp-noRujukan').value;
+      state.kategori = document.getElementById('inp-kategori').value;
+      state.tajuk = document.getElementById('inp-tajuk').value;
+      state.tarikh = document.getElementById('inp-tarikh').value;
+      state.tarikhTamat = document.getElementById('inp-tarikhTamat').value;
+      state.masa = document.getElementById('inp-masa').value;
+      state.tempat = document.getElementById('inp-tempat').value;
+      state.anjuran = document.getElementById('inp-anjuran').value;
+      state.pengerusi = document.getElementById('inp-pengerusi').value;
+      state.pegawaiHadir = document.getElementById('inp-pegawaiHadir').value;
+      state.bahanEdaran = document.getElementById('inp-bahanEdaran').value;
+      state.disediakanNama = document.getElementById('inp-disediakanNama').value;
+      state.disediakanJawatan = document.getElementById('inp-disediakanJawatan').value;
+      state.tarikhDisediakan = document.getElementById('inp-tarikhDisediakan').value;
+      state.disahkanNama = document.getElementById('inp-disahkanNama').value;
+      state.disahkanGelaran = document.getElementById('inp-disahkanGelaran').value;
+      state.tindakanSusulan = document.getElementById('inp-tindakanSusulan').value;
+
+      if (updateHints) {
+        const hint = document.getElementById('tarikh-malay-hint');
+        if (hint) {
+          hint.textContent = `马来文显示：${formatMalayDate(state.tarikh) || '-'}`;
+        }
+      }
+
+      renderDocument();
+    }
+
+    function handleLogoUpload(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        state.logoDataUrl = e.target.result;
+        populateInputsFromState();
+        renderDocument();
+        showToast('校徽 / Logo 已上传并同步至预览与 .docx', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeLogo() {
+      state.logoDataUrl = '';
+      document.getElementById('inp-logo').value = '';
+      populateInputsFromState();
+      renderDocument();
+      showToast('已移除校徽图片', 'info');
+    }
+
+    function setLogoAlign(align) {
+      state.logoAlign = align;
+      renderDocument();
+    }
+
+    function setDocFont(font) {
+      state.docFont = font;
+      const a4 = document.getElementById('a4-paper');
+      if (a4) {
+        a4.style.fontFamily = font === 'Times New Roman' ? "'Times New Roman', Times, serif" : 'Arial, Helvetica, sans-serif';
+      }
+
+      const activeCls = 'px-2.5 py-1 rounded-md font-semibold bg-indigo-600 text-white transition';
+      const inactiveCls = 'px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition';
+      const prevActive = 'px-2.5 py-1 rounded-md font-semibold bg-white text-indigo-700 shadow-sm transition';
+      const prevInactive = 'px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition';
+
+      document.getElementById('form-font-arial').className = font === 'Arial' ? activeCls : inactiveCls;
+      document.getElementById('form-font-times').className = font === 'Times New Roman' ? activeCls : inactiveCls;
+      document.getElementById('font-btn-arial').className = font === 'Arial' ? prevActive : prevInactive;
+      document.getElementById('font-btn-times').className = font === 'Times New Roman' ? prevActive : prevInactive;
+    }
+
+    function setDocFontSize(size) {
+      state.docFontSize = size;
+      const a4 = document.getElementById('a4-paper');
+      if (a4) a4.style.fontSize = size;
+    }
+
+    function adjustZoom(delta) {
+      state.zoom = Math.min(1.25, Math.max(0.4, Math.round((state.zoom + delta) * 100) / 100));
+      applyZoom();
+    }
+
+    function applyZoom() {
+      const sheet = document.getElementById('a4-paper');
+      const wrapper = document.getElementById('a4-scale-wrapper');
+      const label = document.getElementById('zoom-label');
+      if (!sheet || !wrapper) return;
+
+      sheet.style.transform = `scale(${state.zoom})`;
+      wrapper.style.width = `${210 * state.zoom}mm`;
+      wrapper.style.minHeight = `${297 * state.zoom}mm`;
+      if (label) {
+        label.textContent = `${Math.round(state.zoom * 100)}%`;
+      }
+    }
+
+    function switchMobileView(view) {
+      const editor = document.getElementById('editor-panel');
+      const preview = document.getElementById('preview-panel');
+      const btnEd = document.getElementById('tab-btn-editor');
+      const btnPr = document.getElementById('tab-btn-preview');
+
+      if (view === 'editor') {
+        editor.classList.remove('hidden');
+        preview.classList.add('hidden');
+        preview.classList.remove('flex');
+        btnEd.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm transition';
+        btnPr.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 transition';
+      } else {
+        editor.classList.add('hidden');
+        preview.classList.remove('hidden');
+        preview.classList.add('flex');
+        btnPr.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm transition';
+        btnEd.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 transition';
+        applyZoom();
+      }
+    }
+
+    // =========================================================================
+    // 4. DYNAMIC ITEMS EDITOR & PER-ROW AI POLISHER
+    // =========================================================================
+    function renderItemEditors() {
+      const container = document.getElementById('items-editor-list');
+      if (!container) return;
+
+      document.getElementById('item-counter-badge').textContent = `${state.items.length} 项内容`;
+
+      container.innerHTML = state.items
+        .map((item, idx) => {
+          const phraseButtons = QUICK_PHRASES.map(
+            (p) =>
+              `<button type="button" onclick="insertQuickPhrase(${idx}, '${escapeHtml(p.text)}')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[10px] text-slate-600 border border-slate-200/70 transition">${escapeHtml(p.label)}</button>`
+          ).join('');
+
+          return `
+            <div class="rounded-xl border border-slate-200 bg-slate-50/60 p-3.5 space-y-2.5 transition hover:border-indigo-200">
+              <div class="flex items-center justify-between gap-2">
+                <span class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800">
+                  <span class="w-5 h-5 rounded-md bg-indigo-600 text-white text-[11px] flex items-center justify-center">${idx + 1}</span>
+                  <span>Perkara #${idx + 1}</span>
+                </span>
+                <div class="flex items-center gap-1">
+                  <button
+                    type="button"
+                    id="polish-btn-${idx}"
+                    onclick="polishItemRow(${idx})"
+                    class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition"
+                    title="将当前行的中文/口语/简写内容一键润色为标准 KPM 公文马来文"
+                  >
+                    <span>✨ 润色</span>
+                  </button>
+                  <button
+                    type="button"
+                    onclick="moveItemRow(${idx}, -1)"
+                    ${idx === 0 ? 'disabled' : ''}
+                    class="p-1 rounded hover:bg-slate-200 text-slate-500 disabled:opacity-30"
+                    title="上移"
+                  >↑</button>
+                  <button
+                    type="button"
+                    onclick="moveItemRow(${idx}, 1)"
+                    ${idx === state.items.length - 1 ? 'disabled' : ''}
+                    class="p-1 rounded hover:bg-slate-200 text-slate-500 disabled:opacity-30"
+                    title="下移"
+                  >↓</button>
+                  <button
+                    type="button"
+                    onclick="removeItemRow(${idx})"
+                    class="p-1 rounded hover:bg-rose-100 text-rose-500 ml-1"
+                    title="删除此行"
+                  >✕</button>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">事项内容 (Perkara / Isu yang Dibincangkan)</label>
+                <textarea
+                  rows="2"
+                  oninput="updateItemField(${idx}, 'perkara', this.value)"
+                  placeholder="输入议题或汇报内容（支持输入中文或草稿后点击右上角 ✨ 润色）..."
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs sm:text-sm text-slate-800 focus:border-indigo-500 outline-none"
+                >${escapeHtml(item.perkara)}</textarea>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">行动 / 知悉对象 (Tindakan / Makluman)</label>
+                <input
+                  type="text"
+                  value="${escapeHtml(item.tindakan)}"
+                  oninput="updateItemField(${idx}, 'tindakan', this.value)"
+                  placeholder="Contoh: Untuk makluman semua guru."
+                  class="w-full rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-800 focus:border-indigo-500 outline-none"
+                />
+                <div class="flex flex-wrap gap-1 mt-1.5">
+                  ${phraseButtons}
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function addItemRow(perkara = '', tindakan = 'Untuk makluman semua guru.') {
+      state.items.push({ perkara, tindakan });
+      renderItemEditors();
+      renderDocument();
+    }
+
+    function removeItemRow(idx) {
+      if (state.items.length <= 1) {
+        state.items[0] = { perkara: '', tindakan: 'Untuk makluman semua guru.' };
+      } else {
+        state.items.splice(idx, 1);
+      }
+      renderItemEditors();
+      renderDocument();
+    }
+
+    function moveItemRow(idx, dir) {
+      const target = idx + dir;
+      if (target < 0 || target >= state.items.length) return;
+      const temp = state.items[idx];
+      state.items[idx] = state.items[target];
+      state.items[target] = temp;
+      renderItemEditors();
+      renderDocument();
+    }
+
+    function updateItemField(idx, field, val) {
+      if (!state.items[idx]) return;
+      state.items[idx][field] = val;
+      renderDocument();
+    }
+
+    function insertQuickPhrase(idx, phrase) {
+      if (!state.items[idx]) return;
+      state.items[idx].tindakan = phrase;
+      renderItemEditors();
+      renderDocument();
+    }
+
+    async function polishItemRow(idx) {
+      const item = state.items[idx];
+      if (!item || !item.perkara.trim()) {
+        showToast('请先在该行输入需要润色的内容！', 'error');
+        return;
+      }
+
+      const btn = document.getElementById(`polish-btn-${idx}`);
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<span>⏳ 润色中...</span>';
+      }
+
+      const customKey = getConfiguredGeminiKey();
+      const isLocalFile = window.location.protocol === 'file:';
+
+      if (!isLocalFile || customKey) {
+        try {
+          const payload = {
+            contents: [
+              {
+                role: 'user',
+                parts: [
+                  {
+                    text: `Tukarkan ayat berikut kepada satu perenggan Minit Curai Bahasa Melayu rasmi KPM yang gramatis, sopan dan profesional, serta cadangkan Tindakan yang paling sesuai:\nPerkara: ${item.perkara}\nTindakan semasa: ${item.tindakan}`
+                  }
+                ]
+              }
+            ],
+            generationConfig: {
+              responseMimeType: 'application/json',
+              responseSchema: {
+                type: 'OBJECT',
+                properties: {
+                  perkara: { type: 'STRING' },
+                  tindakan: { type: 'STRING' }
+                },
+                required: ['perkara', 'tindakan']
+              }
+            }
+          };
+
+          const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(customKey)}`;
+          const resp = await fetchWithBackoff(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (resp && resp.ok) {
+            const data = await resp.json();
+            const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (txt) {
+              const polished = JSON.parse(txt);
+              state.items[idx].perkara = polished.perkara || item.perkara;
+              state.items[idx].tindakan = polished.tindakan || item.tindakan;
+              renderItemEditors();
+              renderDocument();
+              showToast(`✨ 第 ${idx + 1} 行已润色为标准 KPM 公文马来文`, 'success');
+              return;
+            }
+          }
+        } catch (e) {
+          // Seamless fallback to local KPM polisher
+        }
+      }
+
+      // Offline / Fallback KPM Sentence Polisher
+      const polishedLocal = translateSentenceToFormalBM(item.perkara, state.tajuk);
+      state.items[idx].perkara = polishedLocal.perkara;
+      if (!item.tindakan || item.tindakan === 'Untuk makluman semua guru.') {
+        state.items[idx].tindakan = polishedLocal.tindakan;
+      }
+      renderItemEditors();
+      renderDocument();
+      showToast(`✨ 第 ${idx + 1} 行已通过本地 KPM 引擎润色完成`, 'success');
+    }
+
+    function generateFollowUpItems() {
+      const titleContext = (state.tajuk || 'program yang telah dihadiri').trim();
+      const followUps = [
+        {
+          perkara: `Sesi perkongsian ilmu dan taklimat dalaman (LDP / PLC) di peringkat sekolah akan dilaksanakan dalam masa terdekat bagi menyebarluaskan maklumat serta garis panduan terkini berhubung ${titleContext} kepada semua guru yang terlibat.`,
+          tindakan: 'Untuk makluman dan tindakan semua guru.'
+        },
+        {
+          perkara: `Laporan lengkap serta dapatan utama daripada sesi ini dikemukakan kepada Guru Besar dan barisan pentadbir untuk tujuan semakan, rekod fail rasmi serta tindakan susulan di peringkat sekolah.`,
+          tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+        }
+      ];
+
+      state.items.push(...followUps);
+      renderItemEditors();
+      renderDocument();
+      showToast('➕ 已自动补充 2 项标准校内后续行动（LDP 传达与行政汇报）', 'success');
+    }
+
+    // =========================================================================
+    // 5. LIVE A4 DOCUMENT RENDERER
+    // =========================================================================
+    function renderDocument() {
+      // 1. Header (Logo + Org Name + Kod)
+      const headerContainer = document.getElementById('doc-header-container');
+      const orgName = escapeHtml(state.namaOrganisasi || 'NAMA SEKOLAH / JABATAN');
+      const orgKod = escapeHtml(state.kodOrganisasi || '');
+      const noRuj = escapeHtml(state.noRujukan || '');
+
+      let headerHtml = '';
+      if (state.logoDataUrl && state.logoAlign === 'left') {
+        headerHtml = `
+          <div style="display: flex; align-items: center; gap: 14px; border-bottom: 2px solid #000; padding-bottom: 8px;">
+            <img src="${state.logoDataUrl}" alt="Logo" style="width: 58px; height: 58px; object-fit: contain; flex-shrink: 0;" />
+            <div style="text-align: left;">
+              <div style="font-weight: 700; font-size: 11.5pt; text-transform: uppercase; line-height: 1.3;">${orgName}</div>
+              ${orgKod ? `<div style="font-size: 9pt; margin-top: 2px;">${orgKod}</div>` : ''}
+            </div>
+          </div>
+        `;
+      } else {
+        headerHtml = `
+          <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 8px;">
+            ${state.logoDataUrl ? `<img src="${state.logoDataUrl}" alt="Logo" style="width: 58px; height: 58px; object-fit: contain; margin: 0 auto 6px auto; display: block;" />` : ''}
+            <div style="font-weight: 700; font-size: 11.5pt; text-transform: uppercase; line-height: 1.3;">${orgName}</div>
+            ${orgKod ? `<div style="font-size: 9pt; margin-top: 2px;">${orgKod}</div>` : ''}
+          </div>
+        `;
+      }
+
+      if (noRuj) {
+        headerHtml += `
+          <div style="text-align: right; font-size: 9.5pt; margin-top: 6px;">
+            Ruj. Kami : ${noRuj}
+          </div>
+        `;
+      }
+
+      headerContainer.innerHTML = headerHtml;
+
+      // 2. Title & Metadata
+      document.getElementById('doc-sub-title').textContent = (state.kategori || 'MESYUARAT / TAKLIMAT').toUpperCase();
+      document.getElementById('doc-tajuk').textContent = state.tajuk || '-';
+      document.getElementById('doc-tarikh').textContent = formatMalayDateRange(state.tarikh, state.tarikhTamat) || '-';
+      document.getElementById('doc-masa').textContent = state.masa || '-';
+      document.getElementById('doc-tempat').textContent = state.tempat || '-';
+      document.getElementById('doc-anjuran').textContent = state.anjuran || '-';
+      document.getElementById('doc-pengerusi').textContent = state.pengerusi || '-';
+      document.getElementById('doc-pegawaiHadir').innerHTML = escapeHtml(state.pegawaiHadir || '-').replace(/\n/g, '<br/>');
+      document.getElementById('doc-bahanEdaran').textContent = state.bahanEdaran || 'Tiada';
+
+      // 3. Perkara & Tindakan Rows
+      const tbody = document.getElementById('doc-items-tbody');
+      const items = state.items && state.items.length > 0 ? state.items : [{ perkara: '-', tindakan: '-' }];
+      tbody.innerHTML = items
+        .map(
+          (item, i) => `
+          <tr>
+            <td style="text-align: center; font-weight: 700;">${i + 1}.</td>
+            <td style="text-align: justify;">${escapeHtml(item.perkara || '-').replace(/\n/g, '<br/>')}</td>
+            <td style="font-weight: 600;">${escapeHtml(item.tindakan || '-').replace(/\n/g, '<br/>')}</td>
+          </tr>
+        `
+        )
+        .join('');
+
+      // 4. Tindakan Susulan
+      const susulanCell = document.getElementById('doc-tindakanSusulan-cell');
+      if (state.tindakanSusulan && state.tindakanSusulan.trim()) {
+        susulanCell.innerHTML = escapeHtml(state.tindakanSusulan).replace(/\n/g, '<br/>');
+      } else {
+        susulanCell.innerHTML = `
+          <div style="line-height: 2;">
+            ........................................................................................................................................................<br/>
+            ........................................................................................................................................................<br/>
+            ........................................................................................................................................................
+          </div>
+        `;
+      }
+
+      // 5. Signatures
+      const dNama = (state.disediakanNama || '').trim().toUpperCase();
+      document.getElementById('doc-sig-disediakanNama').textContent = dNama
+        ? `( ${dNama} )`
+        : '(                                                  )';
+      document.getElementById('doc-sig-disediakanJawatan').textContent = state.disediakanJawatan || '';
+      document.getElementById('doc-sig-organisasi').textContent = state.namaOrganisasi || '';
+      document.getElementById('doc-sig-tarikhDisediakan').textContent =
+        formatMalayDate(state.tarikhDisediakan || state.tarikh) || '............................';
+
+      const sNama = (state.disahkanNama || '').trim().toUpperCase();
+      document.getElementById('doc-sig-disahkanNama').textContent = sNama
+        ? `( ${sNama} )`
+        : '(                                                  )';
+      document.getElementById('doc-sig-disahkanGelaran').textContent = state.disahkanGelaran || 'Guru Besar';
+
+      document.getElementById('item-counter-badge').textContent = `${state.items.length} 项内容`;
+    }
+
+    // =========================================================================
+    // 6. TOAST & CONFIRMATION MODAL HELPERS
+    // =========================================================================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const colors = {
+        success: 'bg-emerald-700 text-white border-emerald-600',
+        error: 'bg-rose-700 text-white border-rose-600',
+        info: 'bg-slate-800 text-white border-slate-700'
+      };
+
+      const toast = document.createElement('div');
+      toast.className = `pointer-events-auto px-4 py-3 rounded-xl shadow-lg border text-xs sm:text-sm font-medium transition-all duration-300 ${colors[type] || colors.info}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(8px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3600);
+    }
+
+    let confirmCallback = null;
+    function openConfirmModal(title, message, onConfirm) {
+      document.getElementById('confirm-title').textContent = title;
+      document.getElementById('confirm-message').textContent = message;
+      confirmCallback = onConfirm;
+      document.getElementById('confirm-modal').classList.remove('hidden');
+      document.getElementById('confirm-ok-btn').onclick = () => {
+        closeConfirmModal();
+        if (typeof confirmCallback === 'function') confirmCallback();
+      };
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirm-modal').classList.add('hidden');
+      confirmCallback = null;
+    }
+
+    // =========================================================================
+    // 7. DUAL-ENGINE SMART NOTE CONVERTER (CLOUD GEMINI 2.5 FLASH + LOCAL KPM NLP)
+    // =========================================================================
+    function getConfiguredGeminiKey() {
+      try {
+        return (localStorage.getItem(API_KEY_STORAGE_KEY) || '').trim();
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function initApiKeySettings() {
+      const savedKey = getConfiguredGeminiKey();
+      const inputEl = document.getElementById('inp-custom-gemini-key');
+      if (inputEl) inputEl.value = savedKey;
+      updateApiStatusIndicator();
+    }
+
+    function toggleApiSettings(event) {
+      if (event) event.stopPropagation();
+      const drawer = document.getElementById('ai-api-drawer');
+      if (drawer) {
+        drawer.classList.toggle('hidden');
+      }
+    }
+
+    function saveCustomGeminiKey() {
+      const val = (document.getElementById('inp-custom-gemini-key').value || '').trim();
+      try {
+        if (val) {
+          localStorage.setItem(API_KEY_STORAGE_KEY, val);
+          showToast('✅ 已保存 Gemini API Key，已切换为云端 AI 模式！', 'success');
+        } else {
+          localStorage.removeItem(API_KEY_STORAGE_KEY);
+          showToast('已切换为本地 KPM 智能公文引擎 (离线可用)', 'info');
+        }
+        updateApiStatusIndicator();
+      } catch (e) {
+        showToast('无法访问本地存储', 'error');
+      }
+    }
+
+    function clearCustomGeminiKey() {
+      document.getElementById('inp-custom-gemini-key').value = '';
+      try {
+        localStorage.removeItem(API_KEY_STORAGE_KEY);
+      } catch (e) {
+        // Ignore
+      }
+      const testStatus = document.getElementById('api-test-status');
+      if (testStatus) {
+        testStatus.textContent = '内置 KPM 智能引擎无需配置即可离线使用';
+        testStatus.className = 'text-[11px] font-medium text-slate-500';
+      }
+      updateApiStatusIndicator();
+      showToast('已清除 API Key，当前使用本地 KPM 智能公文引擎', 'info');
+    }
+
+    async function testGeminiConnection() {
+      const inputVal = (document.getElementById('inp-custom-gemini-key').value || '').trim();
+      const statusEl = document.getElementById('api-test-status');
+      const btn = document.getElementById('btn-test-gemini');
+
+      if (!inputVal && window.location.protocol === 'file:') {
+        if (statusEl) {
+          statusEl.textContent = '⚠️ 请先在下方输入框粘贴您的 Gemini API Key 再测试';
+          statusEl.className = 'text-[11px] font-semibold text-amber-700';
+        }
+        return;
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '测试中...';
+      }
+      if (statusEl) {
+        statusEl.textContent = '正在连接 Gemini 2.5 Flash...';
+        statusEl.className = 'text-[11px] font-medium text-indigo-600';
+      }
+
+      try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(inputVal)}`;
+        const resp = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: 'Balas dengan perkataan: OK' }] }]
+          })
+        });
+
+        if (resp.ok) {
+          if (inputVal) {
+            localStorage.setItem(API_KEY_STORAGE_KEY, inputVal);
+            updateApiStatusIndicator();
+          }
+          if (statusEl) {
+            statusEl.textContent = '✅ Gemini 2.5 Flash 连接成功！';
+            statusEl.className = 'text-[11px] font-bold text-emerald-700';
+          }
+          showToast('✅ Gemini 2.5 Flash API 连接测试成功！', 'success');
+        } else {
+          throw new Error(`HTTP ${resp.status}`);
+        }
+      } catch (err) {
+        if (statusEl) {
+          statusEl.textContent = '❌ 连接失败，请检查 Key 或网络（仍可离线使用本地引擎）';
+          statusEl.className = 'text-[11px] font-semibold text-rose-600';
+        }
+        showToast('API Key 测试未通过，但内置本地 KPM 引擎仍可正常使用', 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = '测试连接';
+        }
+      }
+    }
+
+    function updateApiStatusIndicator() {
+      const badge = document.getElementById('ai-engine-badge');
+      if (!badge) return;
+      const savedKey = getConfiguredGeminiKey();
+      const isLocalFile = window.location.protocol === 'file:';
+
+      if (savedKey || !isLocalFile) {
+        badge.textContent = '⚡ Gemini 云端 AI 已就绪';
+        badge.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200';
+      } else {
+        badge.textContent = '🧠 本地 KPM 智能公文引擎 (离线可用)';
+        badge.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200';
+      }
+    }
+
+    function appendContextChip(phrase) {
+      const textarea = document.getElementById('ai-raw-notes');
+      if (!textarea) return;
+      const current = textarea.value.trim();
+      textarea.value = current ? `${current}\n- ${phrase}` : `- ${phrase}`;
+      textarea.focus();
+    }
+
+    function fillSampleRawNotes() {
+      document.getElementById('ai-raw-notes').value =
+        '今天18/11去SK Puteri出席Bengkel Pengenalan Dan Persediaan Penilaian Antarabangsa SEA-PLM Bagi Guru Matematik Tahun 3 Sekolah Rendah Tahun 2026，时间早上8点半到下午4点半。\n' +
+        '重点：\n' +
+        '1. 汇报关于2026年小学三年级数学 SEA-PLM 国际评估的实施指南与评估框架。\n' +
+        '2. 数学科主任与三年级数学老师需要准备相关练习与教学活动，协助学生熟悉高层次思维题型（KBAT）。\n' +
+        '3. 需办校内培训（LDP/PLC）向全体老师传达最新指示，并向校长汇报。';
+    }
+
+    async function fetchWithBackoff(url, options, maxRetries = 2) {
+      let delay = 800;
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const response = await fetch(url, options);
+          if (response.ok) return response;
+          if ((response.status === 429 || response.status >= 500) && attempt < maxRetries) {
+            await new Promise((res) => setTimeout(res, delay));
+            delay *= 2;
+            continue;
+          }
+          return response;
+        } catch (err) {
+          if (attempt < maxRetries) {
+            await new Promise((res) => setTimeout(res, delay));
+            delay *= 2;
+            continue;
+          }
+          throw err;
+        }
+      }
+    }
+
+    /**
+     * Translates a single Chinese/English/Malay administrative line into formal KPM Bahasa Melayu
+     */
+    function translateSentenceToFormalBM(rawLine, contextTitle = '') {
+      let clean = rawLine.replace(/^(\d+[.)、]|[-•*]|\(\d+\))\s*/, '').trim();
+      const hasChinese = /[\u4e00-\u9fa5]/.test(clean);
+
+      // Determine Tindakan based on keywords
+      let tindakan = 'Untuk makluman semua guru.';
+      if (/校长|副校长|行政|guru besar|pengetua|pentadbir/i.test(clean)) {
+        if (/副校长.*学生|hem/i.test(clean)) tindakan = 'Tindakan GPK Hal Ehwal Murid (HEM).';
+        else if (/副校长.*课外|kokurikulum/i.test(clean)) tindakan = 'Tindakan GPK Kokurikulum.';
+        else tindakan = 'Untuk makluman dan tindakan pihak pentadbir.';
+      } else if (/科主任|panitia/i.test(clean)) {
+        tindakan = 'Tindakan Ketua Panitia yang berkenaan.';
+      } else if (/交报告|google form|截止|tarikh tutup|segera|selewat/i.test(clean)) {
+        tindakan = 'Sila ambil tindakan segera.';
+      } else if (/班主任|guru kelas/i.test(clean)) {
+        tindakan = 'Tindakan semua guru kelas yang terlibat.';
+      } else if (/老师|guru mata pelajaran|guru/i.test(clean)) {
+        tindakan = 'Tindakan semua guru mata pelajaran yang terlibat.';
+      }
+
+      if (!hasChinese) {
+        let formalPerkara = clean.charAt(0).toUpperCase() + clean.slice(1);
+        if (!/[.!?]$/.test(formalPerkara)) formalPerkara += '.';
+        return { perkara: formalPerkara, tindakan };
+      }
+
+      // Intent-based high-accuracy KPM Malay sentence synthesis
+      if (/校内培训|传达给老师|分享会|LDP|PLC/i.test(clean)) {
+        return {
+          perkara: `Pihak sekolah perlu mengadakan taklimat dalaman (LDP / In-house Training / PLC) kepada semua guru yang terlibat bagi menyebarluaskan maklumat serta garis panduan terkini${contextTitle ? ` berkaitan ${contextTitle}` : ''}.`,
+          tindakan: 'Untuk makluman dan tindakan semua guru.'
+        };
+      }
+
+      if (/提交.*报告|交报告|Google Form|填写.*回执|填表格/i.test(clean)) {
+        return {
+          perkara: `Guru atau penyelaras yang terlibat dikehendaki menyediakan serta menghantar laporan dan maklum balas melalui pautan rasmi (Google Form / sistem berkaitan) sebelum tarikh tutup yang ditetapkan.`,
+          tindakan: 'Sila ambil tindakan segera.'
+        };
+      }
+
+      if (/学生名单|教师名单|核对.*名单/i.test(clean)) {
+        return {
+          perkara: `Senarai nama murid serta guru yang terlibat hendaklah disemak, dikemas kini dan disahkan oleh pihak pentadbir sekolah untuk tujuan rekod serta tindakan penyelarasan seterusnya.`,
+          tindakan: 'Tindakan guru kelas / penyelaras yang terlibat.'
+        };
+      }
+
+      if (/向校长.*汇报|向副校长.*汇报|行政指示/i.test(clean)) {
+        return {
+          perkara: `Dapatan utama dan keperluan pelaksanaan di peringkat sekolah akan dibentangkan kepada Guru Besar dan barisan pentadbir bagi mendapatkan kelulusan serta arahan tindakan susulan.`,
+          tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+        };
+      }
+
+      // Phrase-level multilingual mapping for general points
+      let bm = clean;
+      const phraseMap = [
+        [/汇报关于|说明关于|通知关于|汇报/g, 'Pihak penganjur memaklumkan mengenai '],
+        [/国际评估/g, 'Penilaian Antarabangsa '],
+        [/小学三年级数学/g, 'bagi murid Tahun 3 mata pelajaran Matematik sekolah rendah '],
+        [/四五六年级|高年级/g, 'murid Tahap 2 (Tahun 4, 5 dan 6) '],
+        [/一二三年级|低年级/g, 'murid Tahap 1 (Tahun 1, 2 dan 3) '],
+        [/实施指南与评估框架|实施指南/g, 'garis panduan pelaksanaan serta kerangka pentaksiran terkini '],
+        [/评估框架/g, 'kerangka pentaksiran terkini '],
+        [/科主任/g, 'Ketua Panitia '],
+        [/数学老师/g, 'guru mata pelajaran Matematik '],
+        [/老师们|全体老师|老师/g, 'semua guru yang terlibat '],
+        [/需要准备|必须准备|准备/g, 'dikehendaki membuat persediaan rapi termasuk menyediakan '],
+        [/相关练习与教学活动|相关练习/g, 'latihan pengukuhan serta aktiviti pengajaran dan pembelajaran (PdP) yang bersesuaian '],
+        [/教学活动/g, 'aktiviti pengajaran dan pembelajaran (PdP) '],
+        [/高层次思维题型|高层次思维/g, 'soalan Kemahiran Berfikir Aras Tinggi (KBAT) '],
+        [/根据JSU出题|出题/g, 'menyediakan instrumen pentaksiran berpandukan Jadual Spesifikasi Ujian (JSU) '],
+        [/审核/g, 'dan disemak oleh Ketua Panitia '],
+        [/输入分数|key in/gi, 'melengkapkan perekodan markah dan tahap penguasaan dalam sistem '],
+        [/截止日期前/g, 'sebelum tarikh tutup yang telah ditetapkan ']
+      ];
+
+      phraseMap.forEach(([rx, rep]) => {
+        bm = bm.replace(rx, rep);
+      });
+
+      const cleanedResidue = bm
+        .replace(/[\u4e00-\u9fa5，。、：；！？（）【】“”‘’]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      let finalPerkara = cleanedResidue
+        ? `${cleanedResidue.charAt(0).toUpperCase() + cleanedResidue.slice(1)}`
+        : `Pelaksanaan perkara berkaitan ${contextTitle || 'program ini'} hendaklah dipatuhi selaras dengan garis panduan Kementerian Pendidikan Malaysia (KPM).`;
+
+      finalPerkara = finalPerkara.replace(/\.+$/, '') + '.';
+      return { perkara: finalPerkara, tindakan };
+    }
+
+    /**
+     * Deeply Intelligent Local KPM NLP & Domain Engine
+     * Works 100% offline / via file:// with rich Malaysian education & government terminology.
+     */
+    function parseNotesLocallyKPM(rawNotes, contextStyle) {
+      const text = rawNotes.trim();
+      const now = new Date();
+      const pad2 = (n) => String(n).padStart(2, '0');
+      const toIso = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+
+      // 1. Smart Date Extraction (tarikh -> YYYY-MM-DD)
+      let extractedTarikh = state.tarikh || toIso(now);
+      const isoMatch = text.match(/\b(20\d{2})[-/.](\d{1,2})[-/.](\d{1,2})\b/);
+      const dmyFullMatch = text.match(/(?:^|[^\d])(\d{1,2})[-/.](\d{1,2})[-/.](20\d{2})(?:[^\d]|$)/);
+      const malayMonthNames = {
+        januari: 1, jan: 1, februari: 2, feb: 2, mac: 3, april: 4, apr: 4, mei: 5,
+        jun: 6, julai: 7, jul: 7, ogos: 8, ogo: 8, september: 9, sep: 9,
+        oktober: 10, okt: 10, november: 11, nov: 11, disember: 12, dis: 12
+      };
+      const malayDateMatch = text.match(
+        /\b(\d{1,2})(?:hb)?\s+(Januari|Jan|Februari|Feb|Mac|April|Apr|Mei|Jun|Julai|Jul|Ogos|Ogo|September|Sep|Oktober|Okt|November|Nov|Disember|Dis)(?:\s+(20\d{2}))?\b/i
+      );
+      const dmShortMatch = text.match(/(?:^|[^\d])(\d{1,2})[/.](\d{1,2})(?:[^\d/.\d]|$)/);
+
+      if (isoMatch) {
+        extractedTarikh = `${isoMatch[1]}-${pad2(isoMatch[2])}-${pad2(isoMatch[3])}`;
+      } else if (dmyFullMatch) {
+        extractedTarikh = `${dmyFullMatch[3]}-${pad2(dmyFullMatch[2])}-${pad2(dmyFullMatch[1])}`;
+      } else if (malayDateMatch) {
+        const d = parseInt(malayDateMatch[1], 10);
+        const m = malayMonthNames[malayDateMatch[2].toLowerCase()] || (now.getMonth() + 1);
+        const y = malayDateMatch[3] ? parseInt(malayDateMatch[3], 10) : now.getFullYear();
+        extractedTarikh = `${y}-${pad2(m)}-${pad2(d)}`;
+      } else if (dmShortMatch) {
+        const d = parseInt(dmShortMatch[1], 10);
+        const m = parseInt(dmShortMatch[2], 10);
+        if (d >= 1 && d <= 31 && m >= 1 && m <= 12) {
+          extractedTarikh = `${now.getFullYear()}-${pad2(m)}-${pad2(d)}`;
+        }
+      } else if (/前天|kelmarin/i.test(text)) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - 2);
+        extractedTarikh = toIso(d);
+      } else if (/昨天|semalam/i.test(text)) {
+        const d = new Date(now);
+        d.setDate(d.getDate() - 1);
+        extractedTarikh = toIso(d);
+      } else if (/明天|esok/i.test(text)) {
+        const d = new Date(now);
+        d.setDate(d.getDate() + 1);
+        extractedTarikh = toIso(d);
+      } else if (/今天|今日|hari ini/i.test(text)) {
+        extractedTarikh = toIso(now);
+      }
+
+      // 2. Detect Category
+      let kategori = 'MESYUARAT';
+      if (/bengkel|工作坊/i.test(text)) kategori = 'BENGKEL';
+      else if (/taklimat|汇报|说明会|简报会/i.test(text)) kategori = 'TAKLIMAT';
+      else if (/kursus|课程|培训|latihan|ldp/i.test(text)) kategori = 'KURSUS';
+      else if (/seminar|研讨会|persidangan|kolokium/i.test(text)) kategori = 'SEMINAR';
+      else if (/mesyuarat|会议|dialog prestasi|perjumpaan/i.test(text)) kategori = 'MESYUARAT';
+
+      // 3. Extract Formal Malay Title (Tajuk)
+      let tajuk = '';
+      const malayTitleRegex =
+        /\b((?:Bengkel|Mesyuarat|Taklimat|Kursus|Seminar|Kolokium|Program|Dialog Prestasi|LDP|PLC|Pertandingan|Lawatan|Perjumpaan)\s+[A-Za-z0-9\s()\-–/&.,']+)/i;
+      const malayTitleMatch = text.match(malayTitleRegex);
+      if (malayTitleMatch) {
+        tajuk = malayTitleMatch[1]
+          .split(/[，。；\n]|(?:时间|地点|主办|主持人|主讲人|重点|tarikh|masa|tempat|anjuran|bertempat)/i)[0]
+          .trim()
+          .replace(/[.,]+$/, '')
+          .toUpperCase();
+      } else {
+        let translatedTitle = text
+          .split(/[\n。；，]/)[0]
+          .replace(/^(今天|今日|昨天|前天|明天)?\s*\d{1,2}[/.]\d{1,2}([/.]\d{2,4})?\s*(去|到|在)?\s*/i, '')
+          .replace(/(出席|参加|召开|聆听|参与)/g, ' ')
+          .trim();
+
+        const titleDict = [
+          [/校本评估/g, 'Pentaksiran Bilik Darjah (PBD)'],
+          [/学年末测验/g, 'Ujian Akhir Sesi Akademik (UASA)'],
+          [/课外活动/g, 'Pengurusan Kokurikulum'],
+          [/运动会/g, 'Kejohanan Sukan Tahunan'],
+          [/学生事务/g, 'Pengurusan Hal Ehwal Murid (HEM)'],
+          [/课程标准/g, 'Dokumen Standard Kurikulum dan Pentaksiran (DSKP)'],
+          [/数字教学/g, 'Pembelajaran Digital (DELIMa)'],
+          [/协调会议/g, 'Mesyuarat Penyelarasan'],
+          [/工作坊/g, 'Bengkel'],
+          [/汇报会|说明会/g, 'Taklimat'],
+          [/培训课程|课程/g, 'Kursus'],
+          [/会议/g, 'Mesyuarat']
+        ];
+        titleDict.forEach(([regex, bm]) => {
+          translatedTitle = translatedTitle.replace(regex, bm);
+        });
+        const cleanTitle = translatedTitle.replace(/[\u4e00-\u9fa5]/g, ' ').replace(/\s+/g, ' ').trim();
+        tajuk = (cleanTitle || `${kategori} PENYELARASAN PROGRAM PERINGKAT SEKOLAH / DAERAH`).toUpperCase();
+      }
+
+      // 4. Extract Venue (Tempat)
+      let tempat = '';
+      const venuePatterns = [
+        /(?:去|到|在)\s*([A-Za-z0-9\s().'-]+?)(?=\s*(?:出席|参加|召开|聆听|参与|听|，|,|\n|$))/,
+        /(?:bertempat di|tempat|lokasi|di)\s*[:：]?\s*((?:SK|SJK\s*\(?C\)?|SJKC|SMK|PPD|JPN|Dewan|Bilik|Hotel|Institut|Kolej|Universiti|Pusat|Makmal|Auditorium|Secara Dalam Talian|Google Meet)[A-Za-z0-9\s().'-]*)/i,
+        /\b((?:SK|SJK\s*\(?C\)?|SJKC|SMK|PPD|JPN|Dewan|Bilik Mesyuarat|Hotel)\s+[A-Za-z0-9\s().'-]+?)(?=\s*(?:出席|参加|召开|聆听|Bengkel|Mesyuarat|Taklimat|Kursus|Seminar|，|,|\n|$))/i
+      ];
+
+      for (const vp of venuePatterns) {
+        const m = text.match(vp);
+        if (m && m[1] && m[1].trim().length >= 3) {
+          tempat = m[1].trim().replace(/[，。；,.]+$/, '');
+          break;
+        }
+      }
+      if (!tempat) {
+        tempat =
+          contextStyle === 'sekolah'
+            ? 'Bilik Mesyuarat / Dewan Taklimat, Pejabat Pendidikan Daerah (PPD)'
+            : contextStyle === 'persatuan'
+            ? 'Bilik Mesyuarat Sekolah / Dewan Serbaguna'
+            : 'Bilik Mesyuarat Utama, Jabatan / Agensi Penganjur';
+      }
+
+      // 5. Extract Time (Masa)
+      let masa = '';
+      const timeMatch = text.match(
+        /(\d{1,2}[:.]\d{2}\s*(?:pagi|tengah hari|petang|malam|am|pm)\s*(?:[-–hingga sampai]+\s*\d{1,2}[:.]\d{2}\s*(?:pagi|tengah hari|petang|malam|am|pm))?)/i
+      );
+      if (timeMatch) {
+        masa = timeMatch[1]
+          .replace(/am/gi, ' pagi')
+          .replace(/pm/gi, ' petang')
+          .replace(/:/g, '.')
+          .replace(/\s+/g, ' ')
+          .trim();
+      } else if (/早上.*下午|全天|sepanjang hari/i.test(text)) {
+        masa = '8.30 pagi – 4.30 petang';
+      } else if (/下午|petang/i.test(text)) {
+        masa = '2.00 petang – 4.30 petang';
+      } else {
+        masa = kategori === 'BENGKEL' || kategori === 'KURSUS' ? '8.30 pagi – 4.30 petang' : '8.30 pagi – 1.00 tengah hari';
+      }
+
+      // 6. Infer Organizer (Anjuran) & Chairperson (Pengerusi)
+      let anjuran = '';
+      const anjuranMatch = text.match(/(?:anjuran|主办单位|主办方|主办)\s*[:：是]?\s*([^\n，。；]+)/i);
+      if (anjuranMatch) {
+        anjuran = anjuranMatch[1].trim();
+      } else if (/SEA-PLM|UASA|PBD|DELIMa|IDME|APDM|MOEIS|KSSR|KSSM|TS25|NILAM|HIP|RMT|SPBT|MSSD/i.test(text)) {
+        anjuran = 'Kementerian Pendidikan Malaysia (KPM) / Jabatan Pendidikan Negeri (JPN) / Pejabat Pendidikan Daerah (PPD)';
+      } else if (/PPD/i.test(text)) {
+        anjuran = 'Pejabat Pendidikan Daerah (PPD)';
+      } else if (/JPN/i.test(text)) {
+        anjuran = 'Jabatan Pendidikan Negeri (JPN)';
+      } else {
+        anjuran =
+          contextStyle === 'sekolah'
+            ? 'Sektor Pembelajaran, Pejabat Pendidikan Daerah (PPD)'
+            : contextStyle === 'persatuan'
+            ? 'Jawatankuasa Induk PIBG / Persatuan'
+            : 'Bahagian Pengurusan & Pentadbiran Jabatan';
+      }
+
+      let pengerusi = '';
+      const pengerusiMatch = text.match(/(?:pengerusi|penceramah|主持人|主讲人|主席)\s*[:：是]?\s*([^\n，。；]+)/i);
+      if (pengerusiMatch) {
+        pengerusi = pengerusiMatch[1].trim();
+      } else {
+        pengerusi =
+          contextStyle === 'sekolah'
+            ? 'Penolong PPD / Pegawai Meja Unit yang Bertanggungjawab'
+            : contextStyle === 'persatuan'
+            ? 'Yang Dipertua PIBG / Pengerusi Majlis'
+            : 'Ketua Penolong Pengarah / Pegawai Penyelaras Program';
+      }
+
+      // 7. Extract Bahan Edaran
+      let bahanEdaran = 'Slaid Pembentangan Digital & Bahan Rujukan Program';
+      const bahanMatch = text.match(/(?:bahan|分发资料|资料)\s*[:：]?\s*([^\n。；]+)/i);
+      if (bahanMatch) {
+        bahanEdaran = bahanMatch[1].trim();
+      }
+
+      // 8. Parse Bullet Points OR Synthesize Domain-Specific KPM Malay Content
+      const rawLines = text
+        .split(/\n+/)
+        .map((l) => l.trim())
+        .filter(Boolean);
+
+      const bulletLines = rawLines.filter((line) => /^(\d+[.)、]|[-•*]|\(\d+\))\s*/.test(line));
+      let kandungan = [];
+
+      if (bulletLines.length > 0) {
+        kandungan = bulletLines.map((line) => translateSentenceToFormalBM(line, tajuk));
+      }
+
+      // Always ensure rich, structured KPM content even when input is a single summary sentence!
+      if (kandungan.length < 3) {
+        const domainKnowledge = [
+          {
+            rx: /SEA-PLM/i,
+            items: [
+              {
+                perkara: `Pihak penganjur telah memberikan taklimat menyeluruh berhubung tujuan, objektif serta kerangka pelaksanaan Penilaian Antarabangsa SEA-PLM (Southeast Asia Primary Learning Metrics) bagi murid Tahun 3 sekolah rendah.`,
+                tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+              },
+              {
+                perkara: `Guru mata pelajaran yang terlibat didedahkan dengan format instrumen pentaksiran, domain literasi serta pendekatan pengajaran yang menekankan Kemahiran Berfikir Aras Tinggi (KBAT) dan penyelesaian masalah kontekstual.`,
+                tindakan: 'Tindakan Ketua Panitia dan guru mata pelajaran Tahun 3.'
+              },
+              {
+                perkara: `Pihak sekolah dikehendaki membuat persediaan rapi termasuk menyediakan latihan pengukuhan, menyelaras jadual pelaksanaan serta mengemas kini senarai nama murid Tahun 3 yang terlibat mengikut ketetapan KPM.`,
+                tindakan: 'Tindakan semua guru mata pelajaran yang terlibat.'
+              },
+              {
+                perkara: `Panitia berkaitan perlu mengadakan sesi perkongsian ilmu (LDP / PLC dalaman) di peringkat sekolah bagi menyebarluaskan maklumat terkini kepada semua guru serta melaporkan perkembangan persediaan kepada Guru Besar.`,
+                tindakan: 'Untuk makluman semua guru.'
+              }
+            ]
+          },
+          {
+            rx: /\b(PBD|UASA)\b/i,
+            items: [
+              {
+                perkara: `Pelaporan Pentaksiran Bilik Darjah (PBD) dan pelaksanaan Ujian Akhir Sesi Akademik (UASA) hendaklah dilaksanakan secara telus, adil dan berintegriti berpandukan Dokumen Standard Kurikulum dan Pentaksiran (DSKP).`,
+                tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+              },
+              {
+                perkara: `Semua guru mata pelajaran dikehendaki melengkapkan perekodan Tahap Penguasaan (TP) murid dalam Sistem Pengurusan Pentaksiran Bersepadu (SPPB / IDME) sebelum tarikh tutup yang ditetapkan.`,
+                tindakan: 'Tindakan semua guru mata pelajaran yang terlibat.'
+              },
+              {
+                perkara: `Pembinaan instrumen pentaksiran hendaklah mematuhi Jadual Spesifikasi Ujian (JSU) serta disemak dan disahkan oleh Ketua Panitia masing-masing.`,
+                tindakan: 'Tindakan Ketua Panitia yang berkenaan.'
+              },
+              {
+                perkara: `Taklimat dalaman (LDP / PLC) di peringkat sekolah akan diadakan bagi memastikan semua guru memahami tatacara pelaporan terkini.`,
+                tindakan: 'Untuk makluman semua guru.'
+              }
+            ]
+          },
+          {
+            rx: /\b(DELIMa|IDME|APDM|MOEIS|SSDM)\b/i,
+            items: [
+              {
+                perkara: `Kementerian Pendidikan Malaysia (KPM) menekankan pengemaskinian data induk murid dan guru secara tepat serta berkala dalam sistem rasmi (DELIMa / IDME / APDM / SSDM).`,
+                tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+              },
+              {
+                perkara: `Guru kelas dan penyelaras sistem sekolah diminta menyemak serta mengesahkan rekod kehadiran, sahsiah dan profil murid sebelum tarikh akhir pengesahan peringkat daerah.`,
+                tindakan: 'Tindakan semua guru kelas yang terlibat.'
+              },
+              {
+                perkara: `Latihan dalaman (In-House Training / LDP) akan dilaksanakan bagi membimbing guru menggunakan ciri-ciri baharu pelantar digital KPM dalam pengajaran dan pentadbiran.`,
+                tindakan: 'Untuk makluman semua guru.'
+              }
+            ]
+          },
+          {
+            rx: /\b(PAJSK|KOKURIKULUM|SUKAN|MSSD)\b/i,
+            items: [
+              {
+                perkara: `Pengurusan aktiviti kokurikulum, latihan sukan dan pengisian markah PAJSK murid hendaklah dilaksanakan mengikut takwim rasmi serta garis panduan keselamatan Kementerian Pendidikan Malaysia (KPM).`,
+                tindakan: 'Tindakan GPK Kokurikulum dan Setiausaha Sukan.'
+              },
+              {
+                perkara: `Surat kebenaran ibu bapa atau penjaga serta rekod kesihatan murid wajib diperoleh sebelum murid menyertai sebarang latihan pusat atau kejohanan peringkat daerah (MSSD).`,
+                tindakan: 'Tindakan guru penasihat dan jurulatih pasukan.'
+              },
+              {
+                perkara: `Pendaftaran kontinjen dan perekodan penglibatan murid dalam sistem PAJSK perlu diselesaikan sebelum tarikh tutup yang ditetapkan.`,
+                tindakan: 'Sila ambil tindakan segera.'
+              }
+            ]
+          }
+        ];
+
+        const matchedDomain = domainKnowledge.find((d) => d.rx.test(tajuk) || d.rx.test(text));
+        if (matchedDomain && kandungan.length === 0) {
+          kandungan = matchedDomain.items;
+        } else {
+          const fallbackTemplates = [
+            {
+              perkara: `Pihak penganjur telah menyampaikan taklimat terperinci mengenai objektif, hala tuju serta garis panduan pelaksanaan ${tajuk} selaras dengan ketetapan terkini Kementerian Pendidikan Malaysia (KPM).`,
+              tindakan: 'Untuk makluman dan tindakan pihak pentadbir.'
+            },
+            {
+              perkara: `Semua pegawai, ketua panitia dan guru yang terlibat dikehendaki mematuhi tatacara pelaksanaan, jadual tindakan serta standard kualiti yang telah digariskan sepanjang sesi ${kategori.toLowerCase()} tersebut.`,
+              tindakan: 'Tindakan Ketua Panitia / guru yang berkenaan.'
+            },
+            {
+              perkara: `Dokumen sokongan, senarai semak serta bahan rujukan yang berkaitan perlu disediakan dan dikemas kini di peringkat sekolah untuk tujuan pemantauan dan rekod fail rasmi.`,
+              tindakan: 'Tindakan penyelaras program yang terlibat.'
+            },
+            {
+              perkara: `Sesi perkongsian maklumat dalaman (LDP / PLC) akan diadakan di peringkat sekolah bagi menyebarluaskan dapatan program kepada semua guru serta melaporkan status pelaksanaan kepada Guru Besar.`,
+              tindakan: 'Untuk makluman semua guru.'
+            }
+          ];
+          const needed = 4 - kandungan.length;
+          kandungan.push(...fallbackTemplates.slice(0, needed));
+        }
+      }
+
+      return {
+        kategori,
+        tajuk,
+        tarikh: extractedTarikh,
+        anjuran,
+        tempat,
+        pengerusi,
+        pegawai_hadir: state.pegawaiHadir || '',
+        masa,
+        bahan_edaran: bahanEdaran,
+        kandungan,
+        _engine: 'local'
+      };
+    }
+
+    async function generateMinitWithAI() {
+      const rawNotes = document.getElementById('ai-raw-notes').value.trim();
+      if (!rawNotes) {
+        showToast('请先输入或粘贴会议/课程草稿笔记！', 'error');
+        return;
+      }
+
+      const contextStyle = document.getElementById('ai-context-style').value;
+      const btn = document.getElementById('ai-generate-btn');
+      const spinner = document.getElementById('ai-spinner');
+      const btnText = document.getElementById('ai-btn-text');
+
+      btn.disabled = true;
+      spinner.classList.remove('hidden');
+      btnText.textContent = '正在智能提取并生成公文马来文...';
+
+      const customKey = getConfiguredGeminiKey();
+      const isLocalFile = window.location.protocol === 'file:';
+
+      const renderAISummaryPreview = (parsed, engineSource) => {
+        lastAIExtractedData = parsed;
+        const headerLabel = document.getElementById('ai-result-header-label');
+        if (headerLabel) {
+          headerLabel.textContent =
+            engineSource === 'gemini'
+              ? '⚡ Gemini 2.5 Flash 已整理为标准马来文公文，请选择应用方式：'
+              : '🧠 本地 KPM 智能公文引擎已生成标准公文，请选择应用方式：';
+        }
+
+        const summaryEl = document.getElementById('ai-result-summary');
+        const datePreview = parsed.tarikh ? formatMalayDate(parsed.tarikh) : '-';
+        const itemsHtml = (parsed.kandungan || [])
+          .map(
+            (k, idx) =>
+              `<div class="border-t border-slate-200 pt-1.5 mt-1.5"><strong>${idx + 1}.</strong> ${escapeHtml(k.perkara)} <span class="text-indigo-700 font-semibold">[${escapeHtml(k.tindakan)}]</span></div>`
+          )
+          .join('');
+
+        summaryEl.innerHTML = `
+          <div><span class="font-semibold text-slate-500">Tajuk:</span> <strong class="text-slate-900">${escapeHtml(parsed.tajuk)}</strong></div>
+          <div><span class="font-semibold text-slate-500">Tarikh:</span> ${escapeHtml(datePreview)} | <span class="font-semibold text-slate-500">Masa:</span> ${escapeHtml(parsed.masa || '-')}</div>
+          <div><span class="font-semibold text-slate-500">Tempat:</span> ${escapeHtml(parsed.tempat || '-')} | <span class="font-semibold text-slate-500">Anjuran:</span> ${escapeHtml(parsed.anjuran || '-')}</div>
+          ${itemsHtml}
+        `;
+
+        document.getElementById('ai-result-box').classList.remove('hidden');
+
+        if (engineSource === 'gemini') {
+          showToast('⚡ Gemini 2.5 Flash 已成功生成正式马来文简报！', 'success');
+        } else {
+          showToast('🧠 本地 KPM 智能公文引擎已生成正式马来文简报！', 'success');
+        }
+      };
+
+      // When opened locally via file:// without an API Key, execute Local KPM NLP Engine directly
+      if (isLocalFile && !customKey) {
+        setTimeout(() => {
+          const localParsed = parseNotesLocallyKPM(rawNotes, contextStyle);
+          renderAISummaryPreview(localParsed, 'local');
+          btn.disabled = false;
+          spinner.classList.add('hidden');
+          btnText.textContent = '✨ 生成正式马来文简报 (Jana Rasmi)';
+        }, 180);
+        return;
+      }
+
+      const todayIso = new Date().toISOString().slice(0, 10);
+      const systemPrompt =
+        contextStyle === 'sekolah'
+          ? `Anda ialah Setiausaha Kanan sekolah Kementerian Pendidikan Malaysia (KPM) yang sangat mahir dalam penulisan Minit Curai rasmi Perkhidmatan Awam Malaysia. Tukarkan nota kasar pengguna (dalam Bahasa Cina, Inggeris atau Melayu tidak formal) kepada kandungan Minit Curai dalam Bahasa Melayu rasmi yang gramatis, tepat, sopan dan profesional mengikut format KPM/PPD/JPN. Gunakan laras bahasa pentadbiran seperti "Pihak sekolah dimaklumkan bahawa...", "Semua guru dikehendaki...", "Untuk makluman semua guru.", "Tindakan Ketua Panitia...". Tarikh hari ini ialah ${todayIso}.`
+          : contextStyle === 'persatuan'
+          ? `Anda ialah Setiausaha Kehormat Persatuan Ibu Bapa dan Guru (PIBG) / pertubuhan berdaftar di Malaysia. Tukarkan nota kasar pengguna kepada Minit Curai dalam Bahasa Melayu rasmi yang sopan, jelas dan tersusun. Tarikh hari ini ialah ${todayIso}.`
+          : `Anda ialah Pegawai Tadbir Kerajaan Malaysia yang pakar dalam penulisan Minit Curai rasmi Perkhidmatan Awam. Tukarkan nota kasar pengguna (dalam Bahasa Cina, Inggeris atau Melayu tidak formal) kepada kandungan Minit Curai dalam Bahasa Melayu rasmi yang gramatis, tepat dan profesional mengikut Pekeliling Kemajuan Pentadbiran Awam. Tarikh hari ini ialah ${todayIso}.`;
+
+      const payload = {
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              {
+                text: `Sila ekstrak maklumat (termasuk tarikh dalam format YYYY-MM-DD jika dinyatakan, tarikh hari ini ${todayIso}) dan susun semula nota kasar berikut menjadi draf Minit Curai rasmi yang lengkap dengan 4 hingga 5 perkara utama:\n\n${rawNotes}`
+              }
+            ]
+          }
+        ],
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'OBJECT',
+            properties: {
+              kategori: {
+                type: 'STRING',
+                enum: ['MESYUARAT', 'TAKLIMAT', 'KURSUS', 'BENGKEL', 'SEMINAR']
+              },
+              tajuk: {
+                type: 'STRING',
+                description: 'Tajuk rasmi mesyuarat/taklimat/kursus dalam huruf besar Bahasa Melayu'
+              },
+              tarikh: {
+                type: 'STRING',
+                description: 'Tarikh aktiviti dalam format YYYY-MM-DD'
+              },
+              anjuran: {
+                type: 'STRING',
+                description: 'Nama pihak penganjur dalam Bahasa Melayu rasmi'
+              },
+              tempat: {
+                type: 'STRING',
+                description: 'Lokasi atau tempat aktiviti'
+              },
+              pengerusi: {
+                type: 'STRING',
+                description: 'Nama dan jawatan pengerusi atau penceramah jika dinyatakan'
+              },
+              pegawai_hadir: {
+                type: 'STRING',
+                description: 'Nama dan jawatan pegawai/guru yang hadir jika dinyatakan'
+              },
+              masa: {
+                type: 'STRING',
+                description: 'Masa aktiviti dalam format Bahasa Melayu (contoh: 8.30 pagi – 4.30 petang)'
+              },
+              bahan_edaran: {
+                type: 'STRING',
+                description: 'Bahan-bahan yang diedarkan jika dinyatakan, atau Tiada'
+              },
+              kandungan: {
+                type: 'ARRAY',
+                description: 'Senarai perkara/isu penting dan tindakan/makluman dalam Bahasa Melayu rasmi',
+                items: {
+                  type: 'OBJECT',
+                  properties: {
+                    perkara: {
+                      type: 'STRING',
+                      description: 'Huraian perkara atau isu yang dibincangkan dalam ayat Bahasa Melayu rasmi yang lengkap'
+                    },
+                    tindakan: {
+                      type: 'STRING',
+                      description: 'Pihak bertanggungjawab atau makluman (contoh: Untuk makluman semua guru. / Tindakan Ketua Panitia...)'
+                    }
+                  },
+                  required: ['perkara', 'tindakan']
+                }
+              }
+            },
+            required: ['kategori', 'tajuk', 'anjuran', 'tempat', 'pengerusi', 'kandungan']
+          }
+        }
+      };
+
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(customKey)}`;
+
+      try {
+        const response = await fetchWithBackoff(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response || !response.ok) {
+          throw new Error(`API status: ${response ? response.status : 'network'}`);
+        }
+
+        const result = await response.json();
+        const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!jsonText) throw new Error('Empty response');
+
+        const parsed = JSON.parse(jsonText);
+        renderAISummaryPreview(parsed, 'gemini');
+      } catch (err) {
+        // Automatic seamless fallback to Local KPM NLP Engine
+        const localParsed = parseNotesLocallyKPM(rawNotes, contextStyle);
+        renderAISummaryPreview(localParsed, 'local');
+      } finally {
+        btn.disabled = false;
+        spinner.classList.add('hidden');
+        btnText.textContent = '✨ 生成正式马来文简报 (Jana Rasmi)';
+      }
+    }
+
+    function applyAIResultToForm(mode = 'replace') {
+      if (!lastAIExtractedData) return;
+      const d = lastAIExtractedData;
+
+      const newRows =
+        Array.isArray(d.kandungan) && d.kandungan.length > 0
+          ? d.kandungan.map((row) => ({
+              perkara: row.perkara || '',
+              tindakan: row.tindakan || 'Untuk makluman semua guru.'
+            }))
+          : [];
+
+      if (mode === 'append') {
+        if (newRows.length > 0) {
+          // Remove empty placeholder row if it is the only row
+          if (state.items.length === 1 && !state.items[0].perkara.trim()) {
+            state.items = newRows;
+          } else {
+            state.items.push(...newRows);
+          }
+        }
+        renderItemEditors();
+        renderDocument();
+        document.getElementById('ai-result-box').classList.add('hidden');
+        showToast(`➕ 已将 ${newRows.length} 项正式马来文条款追加到现有列表！`, 'success');
+        return;
+      }
+
+      // Default 'replace' mode: update metadata and replace items
+      if (d.kategori) state.kategori = d.kategori;
+      if (d.tajuk) state.tajuk = d.tajuk.toUpperCase();
+      if (d.tarikh && /^\d{4}-\d{2}-\d{2}$/.test(d.tarikh)) {
+        state.tarikh = d.tarikh;
+        state.tarikhDisediakan = d.tarikh;
+      }
+      if (d.anjuran) state.anjuran = d.anjuran;
+      if (d.tempat) state.tempat = d.tempat;
+      if (d.pengerusi) state.pengerusi = d.pengerusi;
+      if (d.pegawai_hadir) state.pegawaiHadir = d.pegawai_hadir;
+      if (d.masa) state.masa = d.masa;
+      if (d.bahan_edaran) state.bahanEdaran = d.bahan_edaran;
+
+      if (newRows.length > 0) {
+        state.items = newRows;
+      }
+
+      populateInputsFromState();
+      renderItemEditors();
+      renderDocument();
+      document.getElementById('ai-result-box').classList.add('hidden');
+      showToast('⬇️ 已将生成的正式马来文覆盖填入简报表格！', 'success');
+    }
+
+    // =========================================================================
+    // 8. NATIVE .DOCX EXPORT ENGINE (USING docx@8.5.0 UMD)
+    // =========================================================================
+    /**
+     * Converts any uploaded Data URL image into a clean PNG Uint8Array with
+     * scaled dimensions so docx ImageRun embeds it reliably across Word/WPS/Docs.
+     */
+    function prepareLogoForDocx(dataUrl, maxDimension = 64) {
+      return new Promise((resolve) => {
+        if (!dataUrl) {
+          resolve(null);
+          return;
+        }
+        const img = new Image();
+        img.onload = () => {
+          try {
+            let w = img.naturalWidth || maxDimension;
+            let h = img.naturalHeight || maxDimension;
+            const scale = Math.min(maxDimension / w, maxDimension / h, 1);
+            const targetW = Math.max(24, Math.round(w * scale));
+            const targetH = Math.max(24, Math.round(h * scale));
+
+            const canvas = document.createElement('canvas');
+            canvas.width = targetW * 2; // 2x DPI for crisp print
+            canvas.height = targetH * 2;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            canvas.toBlob((blob) => {
+              if (!blob) {
+                resolve(null);
+                return;
+              }
+              const reader = new FileReader();
+              reader.onload = () => {
+                resolve({
+                  buffer: new Uint8Array(reader.result),
+                  width: targetW,
+                  height: targetH
+                });
+              };
+              reader.onerror = () => resolve(null);
+              reader.readAsArrayBuffer(blob);
+            }, 'image/png');
+          } catch (e) {
+            resolve(null);
+          }
+        };
+        img.onerror = () => resolve(null);
+        img.src = dataUrl;
+      });
+    }
+
+    async function exportToDocx() {
+      if (!window.docx) {
+        showToast('DOCX 生成库尚未加载完成，请稍后重试或刷新页面。', 'error');
+        return;
+      }
+
+      const exportBtn = document.getElementById('btn-export-docx');
+      const originalBtnHtml = exportBtn.innerHTML;
+      exportBtn.disabled = true;
+      exportBtn.innerHTML = '<span>正在生成 .docx...</span>';
+
+      try {
+        const {
+          Document,
+          Packer,
+          Paragraph,
+          TextRun,
+          Table,
+          TableRow,
+          TableCell,
+          WidthType,
+          AlignmentType,
+          BorderStyle,
+          ImageRun,
+          ShadingType,
+          VerticalAlign,
+          TableLayoutType
+        } = window.docx;
+
+        const fontFamily = state.docFont === 'Times New Roman' ? 'Times New Roman' : 'Arial';
+        const ptValue = parseFloat(state.docFontSize) || 10.5;
+        const halfPt = Math.round(ptValue * 2); // docx uses half-points (e.g. 21 = 10.5pt)
+
+        // Standard solid black border (0.75pt = size 6)
+        const blackBorder = { style: BorderStyle.SINGLE, size: 6, color: '000000' };
+        const allBlackBorders = {
+          top: blackBorder,
+          bottom: blackBorder,
+          left: blackBorder,
+          right: blackBorder
+        };
+        const noBorders = {
+          top: { style: BorderStyle.NONE, size: 0, color: 'auto' },
+          bottom: { style: BorderStyle.NONE, size: 0, color: 'auto' },
+          left: { style: BorderStyle.NONE, size: 0, color: 'auto' },
+          right: { style: BorderStyle.NONE, size: 0, color: 'auto' }
+        };
+
+        const cellPadding = { top: 85, bottom: 85, left: 115, right: 115 };
+        const headerShading = { fill: 'F3F4F6', type: ShadingType.CLEAR, color: 'auto' };
+
+        // Helper: create multi-line paragraphs inside a cell
+        const makeTextParagraphs = (text, options = {}) => {
+          const lines = String(text || '-').split('\n');
+          return lines.map(
+            (line, idx) =>
+              new Paragraph({
+                alignment: options.alignment || AlignmentType.LEFT,
+                spacing: {
+                  before: idx === 0 ? 0 : 30,
+                  after: idx === lines.length - 1 ? 0 : 30,
+                  line: 260
+                },
+                children: [
+                  new TextRun({
+                    text: line,
+                    font: fontFamily,
+                    size: options.size || halfPt,
+                    bold: Boolean(options.bold),
+                    italics: Boolean(options.italics),
+                    underline: options.underline ? {} : undefined,
+                    color: '000000'
+                  })
+                ]
+              })
+          );
+        };
+
+        // Prepare Logo Image if uploaded
+        const logoAsset = await prepareLogoForDocx(state.logoDataUrl, 60);
+
+        const orgName = (state.namaOrganisasi || 'NAMA SEKOLAH / JABATAN').toUpperCase();
+        const orgKod = state.kodOrganisasi || '';
+        const noRuj = state.noRujukan || '';
+
+        // Usable A4 width in DXA: 11906 - (850 * 2) = 10206 DXA
+        const totalWidth = 10206;
+        const docChildren = [];
+
+        // -------------------------------------------------------------------
+        // A. HEADER SECTION (Center or Left Logo Layout + Bottom Rule)
+        // -------------------------------------------------------------------
+        if (logoAsset && state.logoAlign === 'left') {
+          const headerTable = new Table({
+            width: { size: totalWidth, type: WidthType.DXA },
+            layout: TableLayoutType.FIXED,
+            columnWidths: [1150, totalWidth - 1150],
+            rows: [
+              new TableRow({
+                children: [
+                  new TableCell({
+                    width: { size: 1150, type: WidthType.DXA },
+                    verticalAlign: VerticalAlign.CENTER,
+                    borders: {
+                      top: noBorders.top,
+                      left: noBorders.left,
+                      right: noBorders.right,
+                      bottom: { style: BorderStyle.SINGLE, size: 12, color: '000000' }
+                    },
+                    margins: { top: 0, bottom: 100, left: 0, right: 80 },
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.LEFT,
+                        children: [
+                          new ImageRun({
+                            data: logoAsset.buffer,
+                            transformation: { width: logoAsset.width, height: logoAsset.height }
+                          })
+                        ]
+                      })
+                    ]
+                  }),
+                  new TableCell({
+                    width: { size: totalWidth - 1150, type: WidthType.DXA },
+                    verticalAlign: VerticalAlign.CENTER,
+                    borders: {
+                      top: noBorders.top,
+                      left: noBorders.left,
+                      right: noBorders.right,
+                      bottom: { style: BorderStyle.SINGLE, size: 12, color: '000000' }
+                    },
+                    margins: { top: 0, bottom: 100, left: 60, right: 0 },
+                    children: [
+                      new Paragraph({
+                        alignment: AlignmentType.LEFT,
+                        spacing: { after: 30 },
+                        children: [
+                          new TextRun({
+                            text: orgName,
+                            font: fontFamily,
+                            size: 23, // 11.5pt
+                            bold: true,
+                            color: '000000'
+                          })
+                        ]
+                      }),
+                      ...(orgKod
+                        ? [
+                            new Paragraph({
+                              alignment: AlignmentType.LEFT,
+                              children: [
+                                new TextRun({
+                                  text: orgKod,
+                                  font: fontFamily,
+                                  size: 18, // 9pt
+                                  color: '000000'
+                                })
+                              ]
+                            })
+                          ]
+                        : [])
+                    ]
+                  })
+                ]
+              })
+            ]
+          });
+          docChildren.push(headerTable);
+        } else {
+          if (logoAsset) {
+            docChildren.push(
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 80 },
+                children: [
+                  new ImageRun({
+                    data: logoAsset.buffer,
+                    transformation: { width: logoAsset.width, height: logoAsset.height }
+                  })
+                ]
+              })
+            );
+          }
+
+          docChildren.push(
+            new Paragraph({
+              alignment: AlignmentType.CENTER,
+              spacing: { after: orgKod ? 30 : 100 },
+              border: orgKod
+                ? undefined
+                : { bottom: { style: BorderStyle.SINGLE, size: 12, color: '000000', space: 6 } },
+              children: [
+                new TextRun({
+                  text: orgName,
+                  font: fontFamily,
+                  size: 23, // 11.5pt
+                  bold: true,
+                  color: '000000'
+                })
+              ]
+            })
+          );
+
+          if (orgKod) {
+            docChildren.push(
+              new Paragraph({
+                alignment: AlignmentType.CENTER,
+                spacing: { after: 100 },
+                border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: '000000', space: 6 } },
+                children: [
+                  new TextRun({
+                    text: orgKod,
+                    font: fontFamily,
+                    size: 18, // 9pt
+                    color: '000000'
+                  })
+                ]
+              })
+            );
+          }
+        }
+
+        // Reference Number (Ruj. Kami)
+        if (noRuj) {
+          docChildren.push(
+            new Paragraph({
+              alignment: AlignmentType.RIGHT,
+              spacing: { before: 80, after: 60 },
+              children: [
+                new TextRun({
+                  text: `Ruj. Kami : ${noRuj}`,
+                  font: fontFamily,
+                  size: 19, // 9.5pt
+                  color: '000000'
+                })
+              ]
+            })
+          );
+        }
+
+        // -------------------------------------------------------------------
+        // B. DOCUMENT TITLE ("MINIT CURAI" + CATEGORY)
+        // -------------------------------------------------------------------
+        docChildren.push(
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { before: 140, after: 40 },
+            children: [
+              new TextRun({
+                text: 'MINIT CURAI',
+                font: fontFamily,
+                size: 26, // 13pt
+                bold: true,
+                underline: {},
+                color: '000000'
+              })
+            ]
+          }),
+          new Paragraph({
+            alignment: AlignmentType.CENTER,
+            spacing: { after: 180 },
+            children: [
+              new TextRun({
+                text: (state.kategori || 'MESYUARAT / TAKLIMAT').toUpperCase(),
+                font: fontFamily,
+                size: 20, // 10pt
+                bold: true,
+                color: '000000'
+              })
+            ]
+          })
+        );
+
+        // -------------------------------------------------------------------
+        // C. MAKLUMAT MESYUARAT TABLE
+        // Column widths: Label (3150) + Colon (320) + Value1 (2600) + MasaLabel (1100) + MasaColon (320) + MasaValue (2716) = 10206 DXA
+        // -------------------------------------------------------------------
+        const metaCols = [3150, 320, 2600, 1100, 320, 2716];
+        const metaSpanVal = 2600 + 1100 + 320 + 2716; // 6736 DXA
+
+        const makeFullMetaRow = (label, value, boldVal = false) =>
+          new TableRow({
+            cantSplit: true,
+            children: [
+              new TableCell({
+                width: { size: metaCols[0], type: WidthType.DXA },
+                borders: allBlackBorders,
+                shading: headerShading,
+                margins: cellPadding,
+                children: makeTextParagraphs(label, { bold: true })
+              }),
+              new TableCell({
+                width: { size: metaCols[1], type: WidthType.DXA },
+                borders: allBlackBorders,
+                margins: cellPadding,
+                children: makeTextParagraphs(':', { bold: true, alignment: AlignmentType.CENTER })
+              }),
+              new TableCell({
+                width: { size: metaSpanVal, type: WidthType.DXA },
+                columnSpan: 4,
+                borders: allBlackBorders,
+                margins: cellPadding,
+                children: makeTextParagraphs(value || '-', { bold: boldVal })
+              })
+            ]
+          });
+
+        const tarikhRangeStr = formatMalayDateRange(state.tarikh, state.tarikhTamat) || '-';
+
+        const metaTable = new Table({
+          width: { size: totalWidth, type: WidthType.DXA },
+          layout: TableLayoutType.FIXED,
+          columnWidths: metaCols,
+          rows: [
+            makeFullMetaRow('TAJUK MESYUARAT / TAKLIMAT', state.tajuk || '-', true),
+            // Split Tarikh & Masa Row
+            new TableRow({
+              cantSplit: true,
+              children: [
+                new TableCell({
+                  width: { size: metaCols[0], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  shading: headerShading,
+                  margins: cellPadding,
+                  children: makeTextParagraphs('TARIKH', { bold: true })
+                }),
+                new TableCell({
+                  width: { size: metaCols[1], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  margins: cellPadding,
+                  children: makeTextParagraphs(':', { bold: true, alignment: AlignmentType.CENTER })
+                }),
+                new TableCell({
+                  width: { size: metaCols[2], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  margins: cellPadding,
+                  children: makeTextParagraphs(tarikhRangeStr)
+                }),
+                new TableCell({
+                  width: { size: metaCols[3], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  shading: headerShading,
+                  margins: cellPadding,
+                  children: makeTextParagraphs('MASA', { bold: true })
+                }),
+                new TableCell({
+                  width: { size: metaCols[4], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  margins: cellPadding,
+                  children: makeTextParagraphs(':', { bold: true, alignment: AlignmentType.CENTER })
+                }),
+                new TableCell({
+                  width: { size: metaCols[5], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  margins: cellPadding,
+                  children: makeTextParagraphs(state.masa || '-')
+                })
+              ]
+            }),
+            makeFullMetaRow('TEMPAT', state.tempat || '-'),
+            makeFullMetaRow('ANJURAN', state.anjuran || '-'),
+            makeFullMetaRow('PENGERUSI', state.pengerusi || '-'),
+            makeFullMetaRow('PEGAWAI YANG HADIR', state.pegawaiHadir || '-'),
+            makeFullMetaRow('BAHAN-BAHAN YANG DIEDARKAN', state.bahanEdaran || 'Tiada')
+          ]
+        });
+
+        docChildren.push(metaTable);
+
+        // -------------------------------------------------------------------
+        // D. KANDUNGAN MINIT CURAI (BIL | PERKARA | TINDAKAN) TABLE
+        // Widths: 720 (7%) + 6426 (63%) + 3060 (30%) = 10206 DXA
+        // -------------------------------------------------------------------
+        docChildren.push(
+          new Paragraph({
+            spacing: { before: 200, after: 80 },
+            children: [
+              new TextRun({
+                text: 'KANDUNGAN MINIT CURAI :',
+                font: fontFamily,
+                size: 20, // 10pt
+                bold: true,
+                color: '000000'
+              })
+            ]
+          })
+        );
+
+        const contentCols = [720, 6426, 3060];
+        const contentRows = [
+          new TableRow({
+            tableHeader: true,
+            cantSplit: true,
+            children: [
+              new TableCell({
+                width: { size: contentCols[0], type: WidthType.DXA },
+                borders: allBlackBorders,
+                shading: headerShading,
+                margins: cellPadding,
+                children: makeTextParagraphs('BIL.', { bold: true, alignment: AlignmentType.CENTER })
+              }),
+              new TableCell({
+                width: { size: contentCols[1], type: WidthType.DXA },
+                borders: allBlackBorders,
+                shading: headerShading,
+                margins: cellPadding,
+                children: makeTextParagraphs('PERKARA / ISU YANG DIBINCANGKAN', { bold: true })
+              }),
+              new TableCell({
+                width: { size: contentCols[2], type: WidthType.DXA },
+                borders: allBlackBorders,
+                shading: headerShading,
+                margins: cellPadding,
+                children: makeTextParagraphs('TINDAKAN / MAKLUMAN', { bold: true })
+              })
+            ]
+          })
+        ];
+
+        const itemsList =
+          state.items && state.items.length > 0
+            ? state.items
+            : [{ perkara: 'Tiada catatan dimasukkan.', tindakan: '-' }];
+
+        itemsList.forEach((item, idx) => {
+          contentRows.push(
+            new TableRow({
+              cantSplit: true,
+              children: [
+                new TableCell({
+                  width: { size: contentCols[0], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  margins: cellPadding,
+                  children: makeTextParagraphs(`${idx + 1}.`, { bold: true, alignment: AlignmentType.CENTER })
+                }),
+                new TableCell({
+                  width: { size: contentCols[1], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  margins: cellPadding,
+                  children: makeTextParagraphs(item.perkara || '-', { alignment: AlignmentType.JUSTIFIED })
+                }),
+                new TableCell({
+                  width: { size: contentCols[2], type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  margins: cellPadding,
+                  children: makeTextParagraphs(item.tindakan || '-', { bold: true })
+                })
+              ]
+            })
+          );
+        });
+
+        const contentTable = new Table({
+          width: { size: totalWidth, type: WidthType.DXA },
+          layout: TableLayoutType.FIXED,
+          columnWidths: contentCols,
+          rows: contentRows
+        });
+
+        docChildren.push(contentTable);
+
+        // -------------------------------------------------------------------
+        // E. TINDAKAN SUSULAN KETUA JABATAN BOX
+        // -------------------------------------------------------------------
+        docChildren.push(new Paragraph({ spacing: { before: 160, after: 0 }, children: [] }));
+
+        const susulanParagraphs =
+          state.tindakanSusulan && state.tindakanSusulan.trim()
+            ? makeTextParagraphs(state.tindakanSusulan)
+            : [
+                new Paragraph({
+                  spacing: { before: 100, after: 120 },
+                  children: [
+                    new TextRun({
+                      text: '..........................................................................................................................................................',
+                      font: fontFamily,
+                      size: halfPt,
+                      color: '000000'
+                    })
+                  ]
+                }),
+                new Paragraph({
+                  spacing: { before: 60, after: 120 },
+                  children: [
+                    new TextRun({
+                      text: '..........................................................................................................................................................',
+                      font: fontFamily,
+                      size: halfPt,
+                      color: '000000'
+                    })
+                  ]
+                }),
+                new Paragraph({
+                  spacing: { before: 60, after: 60 },
+                  children: [
+                    new TextRun({
+                      text: '..........................................................................................................................................................',
+                      font: fontFamily,
+                      size: halfPt,
+                      color: '000000'
+                    })
+                  ]
+                })
+              ];
+
+        const susulanTable = new Table({
+          width: { size: totalWidth, type: WidthType.DXA },
+          layout: TableLayoutType.FIXED,
+          columnWidths: [totalWidth],
+          rows: [
+            new TableRow({
+              cantSplit: true,
+              children: [
+                new TableCell({
+                  width: { size: totalWidth, type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  shading: headerShading,
+                  margins: cellPadding,
+                  children: makeTextParagraphs('TINDAKAN SUSULAN OLEH KETUA JABATAN / PENGETUA / GURU BESAR :', {
+                    bold: true
+                  })
+                })
+              ]
+            }),
+            new TableRow({
+              cantSplit: true,
+              children: [
+                new TableCell({
+                  width: { size: totalWidth, type: WidthType.DXA },
+                  borders: allBlackBorders,
+                  margins: { top: 100, bottom: 100, left: 115, right: 115 },
+                  children: susulanParagraphs
+                })
+              ]
+            })
+          ]
+        });
+
+        docChildren.push(susulanTable);
+
+        // -------------------------------------------------------------------
+        // F. TWO-COLUMN SIGNATURE BLOCK (Disediakan oleh & Disahkan oleh)
+        // -------------------------------------------------------------------
+        docChildren.push(new Paragraph({ spacing: { before: 220, after: 0 }, children: [] }));
+
+        const sigDisediakan = (state.disediakanNama || '').trim().toUpperCase();
+        const sigDisediakanDisplay = sigDisediakan
+          ? `( ${sigDisediakan} )`
+          : '(                                                  )';
+        const tarikhDisediakanStr =
+          formatMalayDate(state.tarikhDisediakan || state.tarikh) || '............................';
+
+        const sigDisahkan = (state.disahkanNama || '').trim().toUpperCase();
+        const sigDisahkanDisplay = sigDisahkan
+          ? `( ${sigDisahkan} )`
+          : '(                                                  )';
+
+        const halfWidth = Math.floor(totalWidth / 2);
+
+        const signatureTable = new Table({
+          width: { size: totalWidth, type: WidthType.DXA },
+          layout: TableLayoutType.FIXED,
+          columnWidths: [halfWidth, totalWidth - halfWidth],
+          rows: [
+            new TableRow({
+              cantSplit: true,
+              children: [
+                // Left Column: Disediakan oleh
+                new TableCell({
+                  width: { size: halfWidth, type: WidthType.DXA },
+                  borders: noBorders,
+                  margins: { top: 0, bottom: 0, left: 0, right: 220 },
+                  children: [
+                    new Paragraph({
+                      spacing: { after: 680 },
+                      children: [new TextRun({ text: 'Disediakan oleh,', font: fontFamily, size: halfPt })]
+                    }),
+                    new Paragraph({
+                      spacing: { after: 30 },
+                      children: [
+                        new TextRun({
+                          text: '....................................................................',
+                          font: fontFamily,
+                          size: halfPt
+                        })
+                      ]
+                    }),
+                    new Paragraph({
+                      spacing: { after: 25 },
+                      children: [
+                        new TextRun({
+                          text: sigDisediakanDisplay,
+                          font: fontFamily,
+                          size: halfPt,
+                          bold: true
+                        })
+                      ]
+                    }),
+                    ...(state.disediakanJawatan
+                      ? [
+                          new Paragraph({
+                            spacing: { after: 25 },
+                            children: [
+                              new TextRun({
+                                text: state.disediakanJawatan,
+                                font: fontFamily,
+                                size: halfPt
+                              })
+                            ]
+                          })
+                        ]
+                      : []),
+                    ...(state.namaOrganisasi
+                      ? [
+                          new Paragraph({
+                            spacing: { after: 60 },
+                            children: [
+                              new TextRun({
+                                text: state.namaOrganisasi,
+                                font: fontFamily,
+                                size: halfPt
+                              })
+                            ]
+                          })
+                        ]
+                      : []),
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: `Tarikh : ${tarikhDisediakanStr}`,
+                          font: fontFamily,
+                          size: halfPt
+                        })
+                      ]
+                    })
+                  ]
+                }),
+
+                // Right Column: Disahkan oleh
+                new TableCell({
+                  width: { size: totalWidth - halfWidth, type: WidthType.DXA },
+                  borders: noBorders,
+                  margins: { top: 0, bottom: 0, left: 220, right: 0 },
+                  children: [
+                    new Paragraph({
+                      spacing: { after: 680 },
+                      children: [new TextRun({ text: 'Disahkan oleh,', font: fontFamily, size: halfPt })]
+                    }),
+                    new Paragraph({
+                      spacing: { after: 30 },
+                      children: [
+                        new TextRun({
+                          text: '....................................................................',
+                          font: fontFamily,
+                          size: halfPt
+                        })
+                      ]
+                    }),
+                    new Paragraph({
+                      spacing: { after: 25 },
+                      children: [
+                        new TextRun({
+                          text: sigDisahkanDisplay,
+                          font: fontFamily,
+                          size: halfPt,
+                          bold: true
+                        })
+                      ]
+                    }),
+                    new Paragraph({
+                      spacing: { after: 60 },
+                      children: [
+                        new TextRun({
+                          text: state.disahkanGelaran || 'Guru Besar',
+                          font: fontFamily,
+                          size: halfPt
+                        })
+                      ]
+                    }),
+                    new Paragraph({
+                      children: [
+                        new TextRun({
+                          text: 'Cop Rasmi & Tarikh :',
+                          font: fontFamily,
+                          size: halfPt
+                        })
+                      ]
+                    })
+                  ]
+                })
+              ]
+            })
+          ]
+        });
+
+        docChildren.push(signatureTable);
+
+        // Construct A4 Document
+        const doc = new Document({
+          sections: [
+            {
+              properties: {
+                page: {
+                  size: {
+                    width: 11906, // A4 width (210mm) in twips
+                    height: 16838 // A4 height (297mm) in twips
+                  },
+                  margin: {
+                    top: 850, // ~15mm
+                    right: 850,
+                    bottom: 850,
+                    left: 850
+                  }
+                }
+              },
+              children: docChildren
+            }
+          ]
+        });
+
+        const blob = await Packer.toBlob(doc);
+
+        const cleanDate = (formatMalayDate(state.tarikh) || 'Dokumen').replace(/\s+/g, '_');
+        const filename = `Minit_Curai_${cleanDate}.docx`;
+
+        if (typeof window.saveAs === 'function') {
+          window.saveAs(blob, filename);
+        } else {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        }
+
+        showToast(`✅ 已成功导出原生 Word 文件：${filename}`, 'success');
+      } catch (err) {
+        showToast('导出 .docx 时发生异常，请检查内容后重试。', 'error');
+      } finally {
+        exportBtn.disabled = false;
+        exportBtn.innerHTML = originalBtnHtml;
+      }
+    }
+
+    function printDocument() {
+      window.print();
+    }
+
+    // =========================================================================
+    // 9. LOCALSTORAGE DRAFTS MANAGEMENT
+    // =========================================================================
+    function getSavedDrafts() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function setSavedDrafts(drafts) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(drafts));
+        updateDraftBadge();
+      } catch (e) {
+        showToast('浏览器本地存储空间不足，无法保存草稿！', 'error');
+      }
+    }
+
+    function updateDraftBadge() {
+      const drafts = getSavedDrafts();
+      document.getElementById('draft-count-badge').textContent = drafts.length;
+    }
+
+    function saveCurrentDraft() {
+      const drafts = getSavedDrafts();
+      const now = new Date();
+      const savedAt = now.toLocaleString('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      const newDraft = {
+        id: 'mc_' + Date.now(),
+        savedAt,
+        title: state.tajuk || 'Tanpa Tajuk (未命名简报)',
+        dateLabel: formatMalayDateRange(state.tarikh, state.tarikhTamat) || '-',
+        pegawai: state.disediakanNama || state.pegawaiHadir || '-',
+        data: JSON.parse(JSON.stringify(state))
+      };
+
+      drafts.unshift(newDraft);
+      setSavedDrafts(drafts);
+      renderDraftsList();
+      showToast('已保存到本地草稿箱！', 'success');
+    }
+
+    function openDraftsModal() {
+      renderDraftsList();
+      document.getElementById('drafts-modal').classList.remove('hidden');
+    }
+
+    function closeDraftsModal() {
+      document.getElementById('drafts-modal').classList.add('hidden');
+    }
+
+    function renderDraftsList() {
+      const container = document.getElementById('drafts-list-container');
+      const drafts = getSavedDrafts();
+
+      if (drafts.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 text-slate-400 space-y-2">
+            <div class="text-3xl">📂</div>
+            <div class="text-sm font-medium text-slate-600">草稿箱暂无记录</div>
+            <div class="text-xs">点击上方“保存当前简报”即可随时存档备份</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = drafts
+        .map(
+          (d) => `
+          <div class="rounded-xl border border-slate-200 hover:border-indigo-300 bg-slate-50/60 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition">
+            <div class="min-w-0 space-y-1">
+              <div class="text-xs sm:text-sm font-bold text-slate-900 truncate">${escapeHtml(d.title)}</div>
+              <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
+                <span>📅 会议日期: ${escapeHtml(d.dateLabel)}</span>
+                <span>•</span>
+                <span>👤 ${escapeHtml(d.pegawai)}</span>
+                <span>•</span>
+                <span class="text-indigo-600">保存于 ${escapeHtml(d.savedAt)}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onclick="loadDraftById('${d.id}')"
+                class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition"
+              >
+                加载编辑 (Buka)
+              </button>
+              <button
+                type="button"
+                onclick="deleteDraftById('${d.id}')"
+                class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-rose-600 bg-rose-50 hover:bg-rose-100 transition"
+              >
+                删除
+              </button>
+            </div>
+          </div>
+        `
+        )
+        .join('');
+    }
+
+    function loadDraftById(id) {
+      const drafts = getSavedDrafts();
+      const found = drafts.find((d) => d.id === id);
+      if (!found) return;
+
+      const currentZoom = state.zoom;
+      state = {
+        ...found.data,
+        zoom: currentZoom
+      };
+      populateInputsFromState();
+      setDocFont(state.docFont || 'Arial');
+      renderItemEditors();
+      renderDocument();
+      applyZoom();
+      closeDraftsModal();
+      showToast('已加载草稿记录', 'success');
+    }
+
+    function deleteDraftById(id) {
+      openConfirmModal('删除草稿记录 (Padam Draf)', '确定要永久删除这条草稿记录吗？', () => {
+        const drafts = getSavedDrafts().filter((d) => d.id !== id);
+        setSavedDrafts(drafts);
+        renderDraftsList();
+        showToast('草稿已删除', 'info');
+      });
+    }
+  </script>
+</body>
+</html>
