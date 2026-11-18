@@ -159,7 +159,7 @@
   <header id="top-navbar" class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
     <div class="max-w-[1600px] mx-auto px-3 sm:px-5 h-14 sm:h-16 flex items-center justify-between gap-2">
       <!-- Brand Identity + Live Viewport Mode Pill -->
-      <div class="flex items-center gap-2.5 min-w-0">
+      <div class="flex items-center gap-2 sm:gap-2.5 min-w-0">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-700 flex items-center justify-center text-white shadow-sm shrink-0">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -170,7 +170,7 @@
             <h1 class="text-sm sm:text-lg font-bold text-slate-900 tracking-tight truncate">e-Minit Curai</h1>
             <span
               id="viewport-mode-pill"
-              class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0"
+              class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0"
             >
               🖥️ 电脑端分屏
             </span>
@@ -178,49 +178,74 @@
               Native .DOCX &amp; KPM
             </span>
           </div>
-          <p class="hidden sm:block text-xs text-slate-500 truncate">马来西亚公文 / 学校会议简报生成系统</p>
+          <p data-i18n="appSubtitle" class="hidden sm:block text-xs text-slate-500 truncate">马来西亚公文 / 学校会议简报生成系统</p>
         </div>
       </div>
 
       <!-- Top Toolbar Actions -->
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <!-- Bilingual UI Language Switcher Pill (中文 | BM) -->
+        <div
+          id="ui-lang-switcher"
+          role="group"
+          aria-label="Antaramuka Bahasa / 界面语言切换"
+          class="inline-flex items-center rounded-xl border border-slate-200 bg-slate-100 p-0.5 text-xs shrink-0"
+        >
+          <button
+            type="button"
+            id="lang-btn-zh"
+            onclick="setUILanguage('zh')"
+            class="px-2 sm:px-2.5 min-h-[32px] sm:min-h-[34px] rounded-lg font-bold bg-white text-indigo-700 shadow-2xs transition"
+          >
+            中文
+          </button>
+          <button
+            type="button"
+            id="lang-btn-bm"
+            onclick="setUILanguage('bm')"
+            class="px-2 sm:px-2.5 min-h-[32px] sm:min-h-[34px] rounded-lg font-semibold text-slate-600 hover:text-slate-900 transition"
+          >
+            BM
+          </button>
+        </div>
+
         <!-- Sample Templates Dropdown -->
         <div class="relative" id="sample-dropdown-wrapper">
           <button
             type="button"
             onclick="toggleSampleMenu()"
+            data-i18n-title="sampleBtnTitle"
             class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 min-h-[38px] sm:min-h-[40px] rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
             title="载入马来西亚学校或政府部门示例数据"
           >
             <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
             </svg>
-            <span>示例</span>
-            <span class="hidden xl:inline text-xs text-slate-500">(Isi Contoh)</span>
+            <span data-i18n="sampleBtn">示例</span>
             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
           <div id="sample-menu" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-slate-200 py-1.5 z-50">
-            <div class="px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-100">
+            <div data-i18n="sampleMenuHeader" class="px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400 border-b border-slate-100">
               Pilih Templat Contoh (选择示例模板)
             </div>
             <button type="button" onclick="loadSample('sjkc')" class="w-full text-left px-3.5 py-2.5 hover:bg-indigo-50 transition">
               <div class="text-xs font-semibold text-slate-800">1. SJK(C) - Taklimat PBD &amp; UASA</div>
-              <div class="text-[11px] text-slate-500">华小校本评估与学年末测验汇报简报</div>
+              <div data-i18n="sample1Desc" class="text-[11px] text-slate-500">华小校本评估与学年末测验汇报简报</div>
             </button>
             <button type="button" onclick="loadSample('smk')" class="w-full text-left px-3.5 py-2.5 hover:bg-indigo-50 transition">
               <div class="text-xs font-semibold text-slate-800">2. SMK - Mesyuarat Kokurikulum Daerah</div>
-              <div class="text-[11px] text-slate-500">国中县级课外活动与学联运动会协调会议</div>
+              <div data-i18n="sample2Desc" class="text-[11px] text-slate-500">国中县级课外活动与学联运动会协调会议</div>
             </button>
             <button type="button" onclick="loadSample('agensi')" class="w-full text-left px-3.5 py-2.5 hover:bg-indigo-50 transition">
               <div class="text-xs font-semibold text-slate-800">3. PPD / Agensi - Bengkel Digital DELIMa</div>
-              <div class="text-[11px] text-slate-500">县教育局/政府部门数字教学工作坊</div>
+              <div data-i18n="sample3Desc" class="text-[11px] text-slate-500">县教育局/政府部门数字教学工作坊</div>
             </button>
             <div class="border-t border-slate-100 mt-1 pt-1">
               <button type="button" onclick="clearFormPrompt()" class="w-full text-left px-3.5 py-2 text-xs font-medium text-rose-600 hover:bg-rose-50 transition flex items-center gap-1.5">
-                <span>🗑️ 清空当前表单 (Kosongkan Borang)</span>
+                <span data-i18n="clearFormBtn">🗑️ 清空当前表单 (Kosongkan Borang)</span>
               </button>
             </div>
           </div>
@@ -230,14 +255,14 @@
         <button
           type="button"
           onclick="openDraftsModal()"
+          data-i18n-title="draftsBtnTitle"
           class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 min-h-[38px] sm:min-h-[40px] rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition"
           title="查看或管理本地保存的历史草稿"
         >
           <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
           </svg>
-          <span>草稿</span>
-          <span class="hidden xl:inline text-xs text-slate-500">(Rekod)</span>
+          <span data-i18n="draftsBtn">草稿</span>
           <span id="draft-count-badge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-indigo-100 text-indigo-700">
             0
           </span>
@@ -248,26 +273,28 @@
           type="button"
           id="btn-export-docx"
           onclick="exportToDocx()"
+          data-i18n-title="exportDocxTitle"
           class="hidden lg:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-sm transition"
           title="导出原生 Microsoft Word (.docx) 文件"
         >
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          <span>导出 Word (.docx)</span>
+          <span data-i18n="exportDocxBtn">导出 Word (.docx)</span>
         </button>
 
         <!-- Primary Action 2: Print / Save PDF (Desktop Header; on Mobile moved to Fixed Bottom Bar) -->
         <button
           type="button"
           onclick="printDocument()"
+          data-i18n-title="printBtnTitle"
           class="hidden lg:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm transition"
           title="打印或另存为标准 A4 PDF"
         >
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
           </svg>
-          <span>打印 / PDF</span>
+          <span data-i18n="printBtn">打印 / PDF</span>
         </button>
       </div>
     </div>
@@ -289,22 +316,23 @@
             <span class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-sm shadow-sm shrink-0">✨</span>
             <div class="min-w-0">
               <div class="flex flex-wrap items-center gap-2">
-                <h2 class="text-sm font-bold text-indigo-950 truncate">AI 智能公文助手 (Penjana Pintar AI)</h2>
+                <h2 data-i18n="aiTitle" class="text-sm font-bold text-indigo-950 truncate">AI 智能公文助手 (Penjana Pintar AI)</h2>
                 <span id="ai-engine-badge" class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
                   🧠 本地 KPM 智能公文引擎 (离线可用)
                 </span>
               </div>
-              <p class="text-xs text-indigo-700/80 truncate mt-0.5">支持中/英/马混合草稿 → 自动提取元数据并生成标准 KPM 公文马来文</p>
+              <p data-i18n="aiSubtitle" class="text-xs text-indigo-700/80 truncate mt-0.5">支持中/英/马混合草稿 → 自动提取元数据并生成标准 KPM 公文马来文</p>
             </div>
           </div>
           <div class="flex items-center gap-2 shrink-0">
             <button
               type="button"
               onclick="toggleApiSettings(event)"
+              data-i18n-title="apiSettingsTitle"
               class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200 shadow-2xs transition"
               title="配置可选的 Google Gemini API Key"
             >
-              <span>⚙️ API 设置</span>
+              <span data-i18n="apiSettingsBtn">⚙️ API 设置</span>
             </button>
             <svg id="ai-chevron" class="w-5 h-5 text-indigo-600 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -315,16 +343,17 @@
         <!-- Collapsible API Key Settings Drawer -->
         <div id="ai-api-drawer" class="hidden px-4 sm:px-5 py-3.5 bg-indigo-950/[0.03] border-t border-indigo-100 space-y-2.5">
           <div class="flex flex-wrap items-center justify-between gap-1">
-            <span class="text-xs font-bold text-slate-800">⚙️ Google Gemini API 设置 (可选增强)</span>
-            <span id="api-test-status" class="text-[11px] font-medium text-slate-500">内置 KPM 智能引擎无需配置即可离线使用</span>
+            <span data-i18n="apiDrawerTitle" class="text-xs font-bold text-slate-800">⚙️ Google Gemini API 设置 (可选增强)</span>
+            <span id="api-test-status" data-i18n="apiStatusDefault" class="text-[11px] font-medium text-slate-500">内置 KPM 智能引擎无需配置即可离线使用</span>
           </div>
-          <p class="text-[11px] text-slate-600 leading-relaxed">
-            本系统已内置<strong>本地 KPM 智能公文引擎</strong>，下载到本地（<code class="bg-white px-1 rounded border border-slate-200">file://</code>）无需网络或 Key 即可直接提取日期、地点、会议标题并生成规范公文马来文。如希望启用 <strong>Gemini 2.5 Flash</strong> 云端大模型进行更深度的自由语义润色，可在 <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="text-indigo-600 underline font-medium">Google AI Studio</a> 获取免费 Key 并粘贴于此（仅保存在当前浏览器本地）：
+          <p data-i18n="apiDrawerDesc" class="text-[11px] text-slate-600 leading-relaxed">
+            本系统已内置本地 KPM 智能公文引擎，下载到本地无需网络或 Key 即可直接提取日期、地点、会议标题并生成规范公文马来文。如希望启用 Gemini 2.5 Flash 云端大模型进行更深度的自由语义润色，可在 Google AI Studio 获取免费 Key 并粘贴于此（仅保存在当前浏览器本地）：
           </p>
           <div class="flex flex-col sm:flex-row gap-2">
             <input
               type="password"
               id="inp-custom-gemini-key"
+              data-i18n-placeholder="apiKeyPlaceholder"
               placeholder="输入 AIzaSy... 开头的 Gemini API Key（留空则使用内置 KPM 智能引擎）"
               class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs text-slate-800 focus:border-indigo-500 outline-none"
             />
@@ -332,6 +361,7 @@
               <button
                 type="button"
                 onclick="saveCustomGeminiKey()"
+                data-i18n="apiSaveBtn"
                 class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition"
               >
                 保存 Key
@@ -340,6 +370,7 @@
                 type="button"
                 id="btn-test-gemini"
                 onclick="testGeminiConnection()"
+                data-i18n="apiTestBtn"
                 class="px-2.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
               >
                 测试连接
@@ -347,6 +378,7 @@
               <button
                 type="button"
                 onclick="clearCustomGeminiKey()"
+                data-i18n="apiClearBtn"
                 class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 bg-white hover:bg-slate-100 border border-slate-300 transition"
               >
                 清除
@@ -357,12 +389,13 @@
 
         <div id="ai-section-body" class="px-4 sm:px-5 pb-4 pt-1 space-y-3 border-t border-indigo-100">
           <div class="flex flex-wrap items-center justify-between gap-2 pt-2">
-            <label for="ai-raw-notes" class="text-xs font-semibold text-slate-700">
+            <label for="ai-raw-notes" data-i18n="aiNotesLabel" class="text-xs font-semibold text-slate-700">
               输入会议/课程草稿笔记 (Nota Kasar - 支持中文 / English / BM):
             </label>
             <button
               type="button"
               onclick="fillSampleRawNotes()"
+              data-i18n="aiFillSampleBtn"
               class="text-xs font-medium text-indigo-600 hover:text-indigo-800 underline underline-offset-2"
             >
               填入示例草稿试一试
@@ -372,16 +405,18 @@
           <textarea
             id="ai-raw-notes"
             rows="4"
+            data-i18n-placeholder="aiNotesPlaceholder"
             placeholder="例如：今天18/11去SK Puteri出席Bengkel Pengenalan Dan Persediaan Penilaian Antarabangsa SEA-PLM Bagi Guru Matematik Tahun 3 Sekolah Rendah Tahun 2026，时间早上8点半到下午4点半。重点：1. 汇报三年级数学SEA-PLM国际评估框架。2. 科主任与老师需准备KBAT练习。3. 需办校内PLC分享会并向校长汇报..."
             class="w-full rounded-xl border border-indigo-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
           ></textarea>
 
           <!-- Quick Context Chips (Horizontally scrollable on mobile, wraps on desktop) -->
           <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar sm:flex-wrap pb-0.5">
-            <span class="text-[11px] font-medium text-slate-500 mr-0.5 shrink-0">快捷意图:</span>
+            <span data-i18n="aiChipsLabel" class="text-[11px] font-medium text-slate-500 mr-0.5 shrink-0">快捷意图:</span>
             <button
               type="button"
               onclick="appendContextChip('需办校内培训（LDP/PLC）向全体老师传达最新指示。')"
+              data-i18n="aiChip1"
               class="shrink-0 min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
             >
               + 需办校内培训 (LDP)
@@ -389,6 +424,7 @@
             <button
               type="button"
               onclick="appendContextChip('需在截止日期前提交相关报告/填写Google Form回执。')"
+              data-i18n="aiChip2"
               class="shrink-0 min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
             >
               + 需提交报告/Google Form
@@ -396,6 +432,7 @@
             <button
               type="button"
               onclick="appendContextChip('需整理并核对涉及的学生及教师名单以供存档。')"
+              data-i18n="aiChip3"
               class="shrink-0 min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
             >
               + 涉及学生/教师名单
@@ -403,6 +440,7 @@
             <button
               type="button"
               onclick="appendContextChip('需向校长及副校长汇报并获取行政指示。')"
+              data-i18n="aiChip4"
               class="shrink-0 min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
             >
               + 校长/副校长指示
@@ -411,14 +449,14 @@
 
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-0.5">
             <div class="flex items-center gap-2">
-              <label for="ai-context-style" class="text-xs font-medium text-slate-600">公文语境:</label>
+              <label for="ai-context-style" data-i18n="aiContextLabel" class="text-xs font-medium text-slate-600">公文语境:</label>
               <select
                 id="ai-context-style"
                 class="rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 focus:border-indigo-500 outline-none"
               >
-                <option value="sekolah">Sekolah / KPM / PPD (学校与教育部体系)</option>
-                <option value="agensi">Jabatan Kerajaan / Agensi (政府部门公文)</option>
-                <option value="persatuan">Persatuan / PIBG / NGO (家协与社团)</option>
+                <option value="sekolah" data-i18n="aiCtxSekolah">Sekolah / KPM / PPD (学校与教育部体系)</option>
+                <option value="agensi" data-i18n="aiCtxAgensi">Jabatan Kerajaan / Agensi (政府部门公文)</option>
+                <option value="persatuan" data-i18n="aiCtxPersatuan">Persatuan / PIBG / NGO (家协与社团)</option>
               </select>
             </div>
 
@@ -432,7 +470,7 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
               </svg>
-              <span id="ai-btn-text">✨ 生成正式马来文简报 (Jana Rasmi)</span>
+              <span id="ai-btn-text" data-i18n="aiGenerateBtn">✨ 生成正式马来文简报 (Jana Rasmi)</span>
             </button>
           </div>
 
@@ -449,6 +487,7 @@
               <button
                 type="button"
                 onclick="applyAIResultToForm('append')"
+                data-i18n="aiApplyAppendBtn"
                 class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
                 title="保留现有抬头与事项，仅将新生成的条款追加到列表末尾"
               >
@@ -457,6 +496,7 @@
               <button
                 type="button"
                 onclick="applyAIResultToForm('replace')"
+                data-i18n="aiApplyReplaceBtn"
                 class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition"
                 title="用提取的会议信息与事项替换当前表单内容"
               >
@@ -477,8 +517,8 @@
           <div class="flex items-center gap-2.5">
             <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">01</span>
             <div>
-              <h2 class="text-sm font-bold text-slate-900">机构与校徽设置 (Organisasi, Logo &amp; Fon Rasmi)</h2>
-              <p class="text-xs text-slate-500">校名/部门名称、校徽上传与排版、公文字体（Arial / Times New Roman）</p>
+              <h2 data-i18n="sec1Title" class="text-sm font-bold text-slate-900">机构与校徽设置 (Organisasi, Logo &amp; Fon Rasmi)</h2>
+              <p data-i18n="sec1Subtitle" class="text-xs text-slate-500">校名/部门名称、校徽上传与排版、公文字体（Arial / Times New Roman）</p>
             </div>
           </div>
           <svg id="org-chevron" class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -489,8 +529,8 @@
         <div id="org-section-body" class="p-4 sm:p-5 border-t border-slate-100 space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                学校 / 部门名称 <span class="text-slate-400 font-normal">(Nama Sekolah / Jabatan)</span>
+              <label data-i18n="lblOrgName" class="block text-xs font-semibold text-slate-700 mb-1">
+                学校 / 部门名称 (Nama Sekolah / Jabatan)
               </label>
               <input
                 type="text"
@@ -502,8 +542,8 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                学校代码 / 地址 <span class="text-slate-400 font-normal">(Kod Sekolah / Alamat)</span>
+              <label data-i18n="lblOrgCode" class="block text-xs font-semibold text-slate-700 mb-1">
+                学校代码 / 地址 (Kod Sekolah / Alamat)
               </label>
               <input
                 type="text"
@@ -515,8 +555,8 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                档案编号 <span class="text-slate-400 font-normal">(No. Rujukan Fail)</span>
+              <label data-i18n="lblRefNo" class="block text-xs font-semibold text-slate-700 mb-1">
+                档案编号 (No. Rujukan Fail)
               </label>
               <input
                 type="text"
@@ -530,21 +570,22 @@
             <!-- Logo Upload + Preview + Clear -->
             <div class="md:col-span-2 bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-2.5">
               <div class="flex flex-wrap items-center justify-between gap-2">
-                <label class="text-xs font-semibold text-slate-700">
-                  校徽 / 部门 Logo 图片 <span class="text-slate-400 font-normal">(同步嵌入 .docx 公文顶部)</span>
+                <label data-i18n="lblLogoUpload" class="text-xs font-semibold text-slate-700">
+                  校徽 / 部门 Logo 图片 (同步嵌入 .docx 公文顶部)
                 </label>
                 <div class="flex items-center gap-2">
                   <label class="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white hover:bg-indigo-50 border border-slate-300 hover:border-indigo-400 text-xs font-semibold text-slate-700 hover:text-indigo-700 shadow-2xs transition">
                     <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
-                    <span id="logo-upload-label">上传校徽 / Logo</span>
+                    <span id="logo-upload-label" data-i18n="btnUploadLogo">上传校徽 / Logo</span>
                     <input type="file" id="inp-logo" accept="image/*" onchange="handleLogoUpload(event)" class="hidden" />
                   </label>
                   <button
                     type="button"
                     id="btn-remove-logo"
                     onclick="removeLogo()"
+                    data-i18n="btnRemoveLogo"
                     class="hidden px-2.5 py-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 border border-rose-200 text-xs font-semibold transition"
                   >
                     清除图片
@@ -559,15 +600,15 @@
                     <img id="logo-thumb-img" src="" alt="Logo Preview" class="max-w-full max-h-full object-contain" />
                   </div>
                   <div class="space-y-1">
-                    <div class="text-xs font-medium text-slate-600">校徽排版位置 (Susunan Logo):</div>
+                    <div data-i18n="lblLogoAlign" class="text-xs font-medium text-slate-600">校徽排版位置 (Susunan Logo):</div>
                     <div class="flex items-center gap-3 text-xs">
                       <label class="inline-flex items-center gap-1.5 cursor-pointer font-medium text-slate-700">
                         <input type="radio" name="logoAlign" value="center" checked onchange="setLogoAlign('center')" class="accent-indigo-600" />
-                        <span>居中 (Tengah)</span>
+                        <span data-i18n="optLogoCenter">居中 (Tengah)</span>
                       </label>
                       <label class="inline-flex items-center gap-1.5 cursor-pointer font-medium text-slate-700">
                         <input type="radio" name="logoAlign" value="left" onchange="setLogoAlign('left')" class="accent-indigo-600" />
-                        <span>居左 (Kiri)</span>
+                        <span data-i18n="optLogoLeft">居左 (Kiri)</span>
                       </label>
                     </div>
                   </div>
@@ -575,7 +616,7 @@
 
                 <!-- Font Switcher inside Form -->
                 <div class="space-y-1">
-                  <div class="text-xs font-medium text-slate-600">公文字体 (Jenis Fon Rasmi):</div>
+                  <div data-i18n="lblDocFont" class="text-xs font-medium text-slate-600">公文字体 (Jenis Fon Rasmi):</div>
                   <div class="inline-flex rounded-lg border border-slate-300 bg-white p-0.5 text-xs">
                     <button
                       type="button"
@@ -612,8 +653,8 @@
           <div class="flex items-center gap-2.5">
             <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">02</span>
             <div>
-              <h2 class="text-sm font-bold text-slate-900">基本会议信息 (Maklumat Mesyuarat / Taklimat)</h2>
-              <p class="text-xs text-slate-500">会议名称、日期、时间、地点、主办单位、主席、出席官员及分发资料</p>
+              <h2 data-i18n="sec2Title" class="text-sm font-bold text-slate-900">基本会议信息 (Maklumat Mesyuarat / Taklimat)</h2>
+              <p data-i18n="sec2Subtitle" class="text-xs text-slate-500">会议名称、日期、时间、地点、主办单位、主席、出席官员及分发资料</p>
             </div>
           </div>
           <svg id="pegawai-chevron" class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -624,8 +665,8 @@
         <div id="pegawai-section-body" class="p-4 sm:p-5 border-t border-slate-100 space-y-4">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                公文类型 <span class="text-slate-400 font-normal">(Kategori)</span>
+              <label data-i18n="lblCategory" class="block text-xs font-semibold text-slate-700 mb-1">
+                公文类型 (Kategori)
               </label>
               <select
                 id="inp-kategori"
@@ -641,8 +682,8 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                日期 <span class="text-slate-400 font-normal">(Tarikh - 自动转标准马来文)</span>
+              <label data-i18n="lblDate" class="block text-xs font-semibold text-slate-700 mb-1">
+                日期 (Tarikh - 自动转标准马来文)
               </label>
               <div class="flex items-center gap-2">
                 <input
@@ -658,8 +699,8 @@
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                会议 / 课程名称 <span class="text-slate-400 font-normal">(Tajuk Mesyuarat / Kursus / Taklimat)</span>
+              <label data-i18n="lblMeetingTitle" class="block text-xs font-semibold text-slate-700 mb-1">
+                会议 / 课程名称 (Tajuk Mesyuarat / Kursus / Taklimat)
               </label>
               <input
                 type="text"
@@ -671,8 +712,8 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                结束日期 <span class="text-slate-400 font-normal">(Tarikh Tamat - 多日课程选填)</span>
+              <label data-i18n="lblEndDate" class="block text-xs font-semibold text-slate-700 mb-1">
+                结束日期 (Tarikh Tamat - 多日课程选填)
               </label>
               <input
                 type="date"
@@ -683,8 +724,8 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                时间 <span class="text-slate-400 font-normal">(Masa)</span>
+              <label data-i18n="lblTime" class="block text-xs font-semibold text-slate-700 mb-1">
+                时间 (Masa)
               </label>
               <input
                 type="text"
@@ -700,8 +741,8 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                地点 <span class="text-slate-400 font-normal">(Tempat)</span>
+              <label data-i18n="lblVenue" class="block text-xs font-semibold text-slate-700 mb-1">
+                地点 (Tempat)
               </label>
               <input
                 type="text"
@@ -713,8 +754,8 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                主办单位 <span class="text-slate-400 font-normal">(Anjuran)</span>
+              <label data-i18n="lblOrganizer" class="block text-xs font-semibold text-slate-700 mb-1">
+                主办单位 (Anjuran)
               </label>
               <input
                 type="text"
@@ -726,8 +767,8 @@
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                会议主席 / 主讲人 <span class="text-slate-400 font-normal">(Pengerusi)</span>
+              <label data-i18n="lblChairperson" class="block text-xs font-semibold text-slate-700 mb-1">
+                会议主席 / 主讲人 (Pengerusi)
               </label>
               <input
                 type="text"
@@ -739,8 +780,8 @@
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                出席官员 / 教师 <span class="text-slate-400 font-normal">(Pegawai yang Hadir)</span>
+              <label data-i18n="lblAttendees" class="block text-xs font-semibold text-slate-700 mb-1">
+                出席官员 / 教师 (Pegawai yang Hadir)
               </label>
               <textarea
                 id="inp-pegawaiHadir"
@@ -752,8 +793,8 @@
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                分发资料 <span class="text-slate-400 font-normal">(Bahan-bahan yang Diedarkan)</span>
+              <label data-i18n="lblMaterials" class="block text-xs font-semibold text-slate-700 mb-1">
+                分发资料 (Bahan-bahan yang Diedarkan)
               </label>
               <input
                 type="text"
@@ -761,75 +802,6 @@
                 oninput="syncFromInputs()"
                 placeholder="Contoh: Slaid Pembentangan Digital & Surat Siaran KPM Bil. 4/2026"
                 class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-              />
-              <div class="flex flex-wrap gap-1 mt-1.5">
-                <button type="button" onclick="setField('inp-masa', '8.30 pagi – 1.00 tengah hari')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] text-slate-600 transition">8.30 pagi – 1.00 tengah hari</button>
-                <button type="button" onclick="setField('inp-masa', '8.00 pagi – 4.30 petang')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] text-slate-600 transition">8.00 pagi – 4.30 petang</button>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                地点 <span class="text-slate-400 font-normal">(Tempat)</span>
-              </label>
-              <input
-                type="text"
-                id="inp-tempat"
-                oninput="syncFromInputs()"
-                placeholder="Contoh: Dewan Seri Gemilang, PPD Johor Bahru"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-              />
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                主办单位 <span class="text-slate-400 font-normal">(Anjuran)</span>
-              </label>
-              <input
-                type="text"
-                id="inp-anjuran"
-                oninput="syncFromInputs()"
-                placeholder="Contoh: Pejabat Pendidikan Daerah Johor Bahru"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-              />
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                会议主席 / 主讲人 <span class="text-slate-400 font-normal">(Pengerusi)</span>
-              </label>
-              <input
-                type="text"
-                id="inp-pengerusi"
-                oninput="syncFromInputs()"
-                placeholder="Contoh: Encik Ahmad bin Salleh (Penolong PPD)"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-              />
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                出席官员 / 教师 <span class="text-slate-400 font-normal">(Pegawai yang Hadir)</span>
-              </label>
-              <textarea
-                id="inp-pegawaiHadir"
-                rows="2"
-                oninput="syncFromInputs(true)"
-                placeholder="Contoh: 1. Cik Tan Mei Ling (Ketua Panitia Bahasa Melayu)&#10;2. Encik Lim Wei Jie (Setiausaha Kurikulum)"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
-              ></textarea>
-            </div>
-
-            <div class="sm:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                分发资料 <span class="text-slate-400 font-normal">(Bahan-bahan yang Diedarkan)</span>
-              </label>
-              <input
-                type="text"
-                id="inp-bahanEdaran"
-                oninput="syncFromInputs()"
-                placeholder="Contoh: Slaid Pembentangan Digital & Surat Siaran KPM Bil. 4/2026"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
               />
               <div class="flex flex-wrap gap-1 mt-1.5">
                 <button type="button" onclick="setField('inp-bahanEdaran', 'Tiada')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 text-[11px] text-slate-600">Tiada</button>
@@ -843,20 +815,21 @@
 
       <!-- 4. 动态事项表格 (PERKARA & TINDAKAN) -->
       <div class="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-        <div class="px-4 sm:px-5 py-3.5 flex items-center justify-between border-b border-slate-100">
+        <div class="px-4 sm:px-5 py-3.5 flex items-center justify-between border-b border-slate-100 gap-2">
           <div class="flex items-center gap-2.5">
-            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">03</span>
+            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center shrink-0">03</span>
             <div>
-              <h2 class="text-sm font-bold text-slate-900">简报内容明细 (Perkara &amp; Tindakan)</h2>
-              <p class="text-xs text-slate-500">支持添加、删除、上下排序，并点击快捷标签插入常用马来文公文短语</p>
+              <h2 data-i18n="sec3Title" class="text-sm font-bold text-slate-900">简报内容明细 (Perkara &amp; Tindakan)</h2>
+              <p data-i18n="sec3Subtitle" class="text-xs text-slate-500">支持添加、删除、上下排序，并点击快捷标签插入常用马来文公文短语</p>
             </div>
           </div>
           <button
             type="button"
             onclick="addItemRow()"
-            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
+            data-i18n="btnAddRowTop"
+            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition shrink-0"
           >
-            <span>+ 添加行</span>
+            + 添加行
           </button>
         </div>
 
@@ -868,17 +841,20 @@
           <button
             type="button"
             onclick="addItemRow()"
+            data-i18n="btnAddRowBottom"
             class="flex-1 py-2.5 px-3 rounded-xl border-2 border-dashed border-slate-300 hover:border-indigo-400 hover:bg-indigo-50/40 text-xs sm:text-sm font-semibold text-slate-600 hover:text-indigo-700 transition flex items-center justify-center gap-1.5"
           >
-            <span>+ Tambah Baris (添加新事项行)</span>
+            + Tambah Baris (添加新事项行)
           </button>
           <button
             type="button"
             onclick="generateFollowUpItems()"
+            data-i18n="btnAiFollowUp"
+            data-i18n-title="btnAiFollowUpTitle"
             class="py-2.5 px-4 rounded-xl border border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100 text-xs sm:text-sm font-semibold text-indigo-700 transition flex items-center justify-center gap-1.5 shrink-0"
             title="根据当前会议标题自动补充标准校内传达（LDP）与汇报校长行动项"
           >
-            <span>➕ AI 补充后续行动</span>
+            🤖 AI 补充后续行动
           </button>
         </div>
       </div>
@@ -893,8 +869,8 @@
           <div class="flex items-center gap-2.5">
             <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center">04</span>
             <div>
-              <h2 class="text-sm font-bold text-slate-900">签署栏信息 (Tandatangan &amp; Pengesahan)</h2>
-              <p class="text-xs text-slate-500">拟稿人（Disediakan oleh）与审核/校长（Disahkan oleh）姓名及职位</p>
+              <h2 data-i18n="sec4Title" class="text-sm font-bold text-slate-900">签署栏信息 (Tandatangan &amp; Pengesahan)</h2>
+              <p data-i18n="sec4Subtitle" class="text-xs text-slate-500">拟稿人（Disediakan oleh）与审核/校长（Disahkan oleh）姓名及职位</p>
             </div>
           </div>
           <svg id="sign-chevron" class="w-5 h-5 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -906,9 +882,9 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Disediakan oleh -->
             <div class="space-y-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
-              <div class="text-xs font-bold text-slate-800">拟稿人 (Disediakan oleh):</div>
+              <div data-i18n="lblPreparedByGroup" class="text-xs font-bold text-slate-800">拟稿人 (Disediakan oleh):</div>
               <div>
-                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿人姓名 (Nama)</label>
+                <label data-i18n="lblPreparedName" class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿人姓名 (Nama)</label>
                 <input
                   type="text"
                   id="inp-disediakanNama"
@@ -918,7 +894,7 @@
                 />
               </div>
               <div>
-                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿人职位 (Jawatan)</label>
+                <label data-i18n="lblPreparedRole" class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿人职位 (Jawatan)</label>
                 <input
                   type="text"
                   id="inp-disediakanJawatan"
@@ -933,7 +909,7 @@
                 </div>
               </div>
               <div>
-                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿日期 (Tarikh)</label>
+                <label data-i18n="lblPreparedDate" class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿日期 (Tarikh)</label>
                 <input
                   type="date"
                   id="inp-tarikhDisediakan"
@@ -945,19 +921,20 @@
 
             <!-- Disahkan oleh -->
             <div class="space-y-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
-              <div class="text-xs font-bold text-slate-800">审核 / 校长 (Disahkan oleh):</div>
+              <div data-i18n="lblVerifiedByGroup" class="text-xs font-bold text-slate-800">审核 / 校长 (Disahkan oleh):</div>
               <div>
-                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">校长 / 主管姓名 (Nama - 留空供盖章签名)</label>
+                <label data-i18n="lblVerifiedName" class="block text-[11px] font-medium text-slate-600 mb-0.5">校长 / 主管姓名 (Nama - 留空供盖章签名)</label>
                 <input
                   type="text"
                   id="inp-disahkanNama"
                   oninput="syncFromInputs()"
+                  data-i18n-placeholder="phVerifiedName"
                   placeholder="留空则显示空白签名括号 (          )"
                   class="w-full rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs focus:border-indigo-500 outline-none"
                 />
               </div>
               <div>
-                <label class="block text-[11px] font-medium text-slate-600 mb-0.5">职位 (Jawatan)</label>
+                <label data-i18n="lblVerifiedRole" class="block text-[11px] font-medium text-slate-600 mb-0.5">职位 (Jawatan)</label>
                 <input
                   type="text"
                   id="inp-disahkanGelaran"
@@ -977,13 +954,14 @@
 
           <!-- Optional Tindakan Susulan Ketua Jabatan -->
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">
-              校长 / 主管后续指示批示栏 <span class="text-slate-400 font-normal">(Tindakan Susulan Ketua Jabatan - 留空自动生成手写划线)</span>
+            <label data-i18n="lblFollowUpNote" class="block text-xs font-semibold text-slate-700 mb-1">
+              校长 / 主管后续指示批示栏 (Tindakan Susulan Ketua Jabatan - 留空自动生成手写划线)
             </label>
             <textarea
               id="inp-tindakanSusulan"
               rows="2"
               oninput="syncFromInputs()"
+              data-i18n-placeholder="phFollowUpNote"
               placeholder="留空则在公文底部生成标准 3 行手写划线供校长/主管批示..."
               class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
             ></textarea>
@@ -991,13 +969,14 @@
 
           <!-- Save Draft Action -->
           <div class="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100">
-            <span class="text-xs text-slate-500">随时将当前简报存入本地草稿箱，方便日后修改或再次导出 `.docx`。</span>
+            <span data-i18n="saveDraftHint" class="text-xs text-slate-500">随时将当前简报存入本地草稿箱，方便日后修改或再次导出 `.docx`。</span>
             <button
               type="button"
               onclick="saveCurrentDraft()"
+              data-i18n="saveDraftBtn"
               class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition"
             >
-              <span>💾 保存到草稿箱 (Simpan Draf)</span>
+              💾 保存到草稿箱 (Simpan Draf)
             </button>
           </div>
         </div>
@@ -1013,7 +992,7 @@
         <div class="flex items-center gap-2">
           <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            实时 A4 公文预览
+            <span data-i18n="previewHeader">实时 A4 公文预览</span>
           </span>
           <span id="item-counter-badge" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">
             4 项内容
@@ -1046,6 +1025,7 @@
           <select
             id="doc-fontsize-select"
             onchange="setDocFontSize(this.value)"
+            data-i18n-title="fontSizeTitle"
             class="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-700 outline-none"
             title="公文字体大小"
           >
@@ -1056,13 +1036,15 @@
 
           <!-- Zoom & Smart Fit Controls (Visible on Both Mobile & Desktop) -->
           <div class="inline-flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden text-xs">
-            <button type="button" onclick="adjustZoom(-0.08)" class="px-2.5 py-1 hover:bg-slate-100 active:bg-slate-200 text-slate-600 font-bold" title="缩小">−</button>
+            <button type="button" onclick="adjustZoom(-0.08)" data-i18n-title="zoomOutTitle" class="px-2.5 py-1 hover:bg-slate-100 active:bg-slate-200 text-slate-600 font-bold" title="缩小">−</button>
             <span id="zoom-label" class="px-1.5 py-1 text-slate-700 font-medium min-w-[42px] text-center">80%</span>
-            <button type="button" onclick="adjustZoom(0.08)" class="px-2.5 py-1 hover:bg-slate-100 active:bg-slate-200 text-slate-600 font-bold" title="放大">+</button>
+            <button type="button" onclick="adjustZoom(0.08)" data-i18n-title="zoomInTitle" class="px-2.5 py-1 hover:bg-slate-100 active:bg-slate-200 text-slate-600 font-bold" title="放大">+</button>
             <button
               type="button"
               id="btn-fit-screen"
               onclick="fitA4ToContainer(true)"
+              data-i18n="fitScreenBtn"
+              data-i18n-title="fitScreenTitle"
               class="px-2.5 py-1 border-l border-slate-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-700 font-semibold transition"
               title="自动缩放 A4 页面以完整适合当前屏幕宽度"
             >
@@ -1205,7 +1187,7 @@
   <!-- ==================== FIXED MOBILE BOTTOM NAVIGATION BAR (<1024px) ==================== -->
   <nav
     id="mobile-bottom-nav"
-    aria-label="移动端快捷导航栏"
+    aria-label="Navigasi Mudah Alih / 移动端快捷导航栏"
     class="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-white/95 backdrop-blur border-t border-slate-200 shadow-[0_-4px_20px_-4px_rgba(15,23,42,0.1)] px-2 py-1.5"
   >
     <div class="grid grid-cols-4 gap-1.5 max-w-lg mx-auto">
@@ -1216,7 +1198,7 @@
         class="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold bg-indigo-600 text-white shadow-xs transition"
       >
         <span class="text-sm leading-none">✏️</span>
-        <span>编辑表单</span>
+        <span data-i18n="mobNavForm">编辑表单</span>
       </button>
 
       <button
@@ -1226,7 +1208,7 @@
         class="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
       >
         <span class="text-sm leading-none">📄</span>
-        <span>A4 预览</span>
+        <span data-i18n="mobNavPreview">A4 预览</span>
       </button>
 
       <button
@@ -1235,7 +1217,7 @@
         class="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 transition"
       >
         <span class="text-sm leading-none">📥</span>
-        <span>导出 .docx</span>
+        <span data-i18n="mobNavDocx">导出 .docx</span>
       </button>
 
       <button
@@ -1244,7 +1226,7 @@
         class="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 transition"
       >
         <span class="text-sm leading-none">🖨️</span>
-        <span>打印/PDF</span>
+        <span data-i18n="mobNavPrint">打印/PDF</span>
       </button>
     </div>
   </nav>
@@ -1254,32 +1236,415 @@
     <div class="bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden">
       <div class="w-10 h-1 rounded-full bg-slate-300 mx-auto mt-2.5 sm:hidden"></div>
       <div class="px-5 py-3.5 sm:py-4 border-b border-slate-200 flex items-center justify-between">
+        <div>
+          <h3 data-i18n="draftsModalTitle" class="text-base font-bold text-slate-900">本地草稿箱 (Rekod Draf Minit Curai)</h3>
+          <p data-i18n="draftsModalSub" class="text-xs text-slate-500">所有草稿均安全保存在当前浏览器本地存储中</p>
+        </div>
+        <button
+          type="button"
+          onclick="closeDraftsModal()"
+          class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 flex items-center justify-center font-bold transition"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="px-5 py-3 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between gap-2">
+        <span data-i18n="draftsToolbarTip" class="text-xs text-slate-600">可将当前编辑中的简报另存为新草稿记录：</span>
+        <button
+          type="button"
+          onclick="saveCurrentDraft()"
+          data-i18n="draftsSaveNewBtn"
+          class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition shrink-0"
+        >
+          + 保存当前简报
+        </button>
+      </div>
+      <div id="drafts-list-container" class="p-4 sm:p-5 overflow-y-auto space-y-2.5 flex-1"></div>
+    </div>
+  </div>
+
+  <!-- ==================== CONFIRMATION MODAL ==================== -->
+  <div id="confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md p-5 space-y-4">
+      <div class="space-y-1.5">
+        <h3 id="confirm-title" class="text-base font-bold text-slate-900">确认操作</h3>
+        <p id="confirm-message" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button
+          type="button"
+          onclick="closeConfirmModal()"
+          data-i18n="confirmCancelBtn"
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+        >
+          取消 (Batal)
+        </button>
+        <button
+          type="button"
+          id="confirm-ok-btn"
+          data-i18n="confirmOkBtn"
+          class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 transition"
+        >
+          确定 (Sahkan)
+        </button>
+      </div>
+    </div>
   </div>
 
   <!-- ==================== TOAST CONTAINER ==================== -->
-  <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
+  <div id="toast-container" class="fixed bottom-20 lg:bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
 
   <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
   <script>
     // =========================================================================
-    // 1. CONSTANTS, SAMPLE DATA & STATE
+    // 1. CONSTANTS, BILINGUAL I18N DICTIONARY, SAMPLE DATA & STATE
     // =========================================================================
     const STORAGE_KEY = 'eminit_curai_drafts_v2';
     const API_KEY_STORAGE_KEY = 'minit_curai_gemini_key';
+    const UI_LANG_STORAGE_KEY = 'eminit_ui_lang';
+
+    const I18N = {
+      zh: {
+        appSubtitle: '马来西亚公文 / 学校会议简报生成系统',
+        viewDesktop: '🖥️ 电脑端分屏',
+        viewMobile: '📱 手机端视图',
+        sampleBtn: '示例',
+        sampleBtnTitle: '载入马来西亚学校或政府部门示例数据',
+        sampleMenuHeader: '选择示例模板 (Pilih Templat Contoh)',
+        sample1Desc: '华小校本评估与学年末测验汇报简报',
+        sample2Desc: '国中县级课外活动与学联运动会协调会议',
+        sample3Desc: '县教育局/政府部门数字教学工作坊',
+        clearFormBtn: '🗑️ 清空当前表单 (Kosongkan Borang)',
+        draftsBtn: '草稿箱',
+        draftsBtnTitle: '查看或管理本地保存的历史草稿',
+        exportDocxBtn: '导出 Word (.docx)',
+        exportDocxTitle: '导出原生 Microsoft Word (.docx) 文件',
+        printBtn: '打印 / PDF',
+        printBtnTitle: '打印或另存为标准 A4 PDF',
+        aiTitle: 'AI 智能公文助手 (Penjana Pintar AI)',
+        aiSubtitle: '支持中/英/马混合草稿 → 自动提取元数据并生成标准 KPM 公文马来文',
+        engineLocal: '🧠 本地 KPM 智能公文引擎 (离线可用)',
+        engineGemini: '⚡ Gemini 云端 AI 已就绪',
+        apiSettingsBtn: '⚙️ API 设置',
+        apiSettingsTitle: '配置可选的 Google Gemini API Key',
+        apiDrawerTitle: '⚙️ Google Gemini API 设置 (可选增强)',
+        apiStatusDefault: '内置 KPM 智能引擎无需配置即可离线使用',
+        apiStatusNeedKey: '⚠️ 请先在下方输入框粘贴您的 Gemini API Key 再测试',
+        apiStatusTesting: '正在连接 Gemini 2.5 Flash...',
+        apiStatusOk: '✅ Gemini 2.5 Flash 连接成功！',
+        apiStatusFail: '❌ 连接失败，请检查 Key 或网络（仍可离线使用本地引擎）',
+        apiDrawerDesc:
+          '本系统已内置本地 KPM 智能公文引擎，下载到本地无需网络或 Key 即可直接提取日期、地点、会议标题并生成规范公文马来文。如希望启用 Gemini 2.5 Flash 云端大模型进行深度自由润色，可粘贴您的 API Key（仅保存在当前浏览器本地）：',
+        apiKeyPlaceholder: '输入 AIzaSy... 开头的 Gemini API Key（留空则使用内置 KPM 智能引擎）',
+        apiSaveBtn: '保存 Key',
+        apiTestBtn: '测试连接',
+        apiClearBtn: '清除',
+        aiNotesLabel: '输入会议/课程草稿笔记 (Nota Kasar - 支持中文 / English / BM):',
+        aiFillSampleBtn: '填入示例草稿试一试',
+        aiNotesPlaceholder:
+          '例如：今天18/11去SK Puteri出席Bengkel Pengenalan Dan Persediaan Penilaian Antarabangsa SEA-PLM Bagi Guru Matematik Tahun 3 Sekolah Rendah Tahun 2026，时间早上8点半到下午4点半。重点：1. 汇报三年级数学SEA-PLM国际评估框架。2. 科主任与老师需准备KBAT练习。3. 需办校内PLC分享会并向校长汇报...',
+        aiChipsLabel: '快捷意图:',
+        aiChip1: '+ 需办校内培训 (LDP)',
+        aiChip2: '+ 需提交报告/Google Form',
+        aiChip3: '+ 涉及学生/教师名单',
+        aiChip4: '+ 校长/副校长指示',
+        aiContextLabel: '公文语境:',
+        aiCtxSekolah: 'Sekolah / KPM / PPD (学校与教育部体系)',
+        aiCtxAgensi: 'Jabatan Kerajaan / Agensi (政府部门公文)',
+        aiCtxPersatuan: 'Persatuan / PIBG / NGO (家协与社团)',
+        aiGenerateBtn: '✨ 生成正式马来文简报 (Jana Rasmi)',
+        aiGeneratingBtn: '正在智能提取并生成公文马来文...',
+        aiResHeaderGemini: '⚡ Gemini 2.5 Flash 已整理为标准马来文公文，请选择应用方式：',
+        aiResHeaderLocal: '🧠 本地 KPM 智能公文引擎已生成标准公文，请选择应用方式：',
+        aiApplyAppendBtn: '➕ 追加到现有事项 (Tambah ke Senarai)',
+        aiApplyReplaceBtn: '⬇️ 覆盖填入简报 (Ganti Semua)',
+        sec1Title: '机构与校徽设置 (Organisasi, Logo & Fon Rasmi)',
+        sec1Subtitle: '校名/部门名称、校徽上传与排版、公文字体（Arial / Times New Roman）',
+        lblOrgName: '学校 / 部门名称 (Nama Sekolah / Jabatan)',
+        lblOrgCode: '学校代码 / 地址 (Kod Sekolah / Alamat)',
+        lblRefNo: '档案编号 (No. Rujukan Fail)',
+        lblLogoUpload: '校徽 / 部门 Logo 图片 (同步嵌入 .docx 公文顶部)',
+        btnUploadLogo: '上传校徽 / Logo',
+        btnRemoveLogo: '清除图片',
+        lblLogoAlign: '校徽排版位置 (Susunan Logo):',
+        optLogoCenter: '居中 (Tengah)',
+        optLogoLeft: '居左 (Kiri)',
+        lblDocFont: '公文字体 (Jenis Fon Rasmi):',
+        sec2Title: '基本会议信息 (Maklumat Mesyuarat / Taklimat)',
+        sec2Subtitle: '会议名称、日期、时间、地点、主办单位、主席、出席官员及分发资料',
+        lblCategory: '公文类型 (Kategori)',
+        lblDate: '日期 (Tarikh - 自动转标准马来文)',
+        malayDatePrefix: '马来文显示：',
+        lblMeetingTitle: '会议 / 课程名称 (Tajuk Mesyuarat / Kursus / Taklimat)',
+        lblEndDate: '结束日期 (Tarikh Tamat - 多日课程选填)',
+        lblTime: '时间 (Masa)',
+        lblVenue: '地点 (Tempat)',
+        lblOrganizer: '主办单位 (Anjuran)',
+        lblChairperson: '会议主席 / 主讲人 (Pengerusi)',
+        lblAttendees: '出席官员 / 教师 (Pegawai yang Hadir)',
+        lblMaterials: '分发资料 (Bahan-bahan yang Diedarkan)',
+        sec3Title: '简报内容明细 (Perkara & Tindakan)',
+        sec3Subtitle: '支持添加、删除、上下排序，并点击快捷标签插入常用马来文公文短语',
+        btnAddRowTop: '+ 添加行',
+        btnAddRowBottom: '+ 添加新事项行 (Tambah Baris)',
+        btnAiFollowUp: '🤖 AI 补充后续行动',
+        btnAiFollowUpTitle: '根据当前会议标题自动补充标准校内传达（LDP）与汇报校长行动项',
+        itemCardTitle: '事项 #{n} (Perkara)',
+        btnPolishRow: '✨ 润色',
+        btnPolishingRow: '⏳ 润色中...',
+        btnPolishRowTitle: '将当前行的中文/口语/简写内容一键润色为标准 KPM 公文马来文',
+        btnMoveUpTitle: '上移',
+        btnMoveDownTitle: '下移',
+        btnDeleteRowTitle: '删除此行',
+        lblPerkaraField: '事项内容 (Perkara / Isu yang Dibincangkan)',
+        phPerkaraField: '输入议题或汇报内容（支持输入中文或草稿后点击右上角 ✨ 润色）...',
+        lblTindakanField: '行动 / 知悉对象 (Tindakan / Makluman)',
+        sec4Title: '签署栏信息 (Tandatangan & Pengesahan)',
+        sec4Subtitle: '拟稿人（Disediakan oleh）与审核/校长（Disahkan oleh）姓名及职位',
+        lblPreparedByGroup: '拟稿人 (Disediakan oleh):',
+        lblPreparedName: '拟稿人姓名 (Nama)',
+        lblPreparedRole: '拟稿人职位 (Jawatan)',
+        lblPreparedDate: '拟稿日期 (Tarikh)',
+        lblVerifiedByGroup: '审核 / 校长 (Disahkan oleh):',
+        lblVerifiedName: '校长 / 主管姓名 (Nama - 留空供盖章签名)',
+        phVerifiedName: '留空则显示空白签名括号 (          )',
+        lblVerifiedRole: '职位 (Jawatan)',
+        lblFollowUpNote: '校长 / 主管后续指示批示栏 (Tindakan Susulan - 留空自动生成手写划线)',
+        phFollowUpNote: '留空则在公文底部生成标准 3 行手写划线供校长/主管批示...',
+        saveDraftHint: '随时将当前简报存入本地草稿箱，方便日后修改或再次导出 .docx。',
+        saveDraftBtn: '💾 保存到草稿箱 (Simpan Draf)',
+        previewHeader: '实时 A4 公文预览',
+        itemCountBadge: '{n} 项内容',
+        fontSizeTitle: '公文字体大小',
+        zoomOutTitle: '缩小',
+        zoomInTitle: '放大',
+        fitScreenBtn: '适合屏幕',
+        fitScreenTitle: '自动缩放 A4 页面以完整适合当前屏幕宽度',
+        mobNavForm: '编辑表单',
+        mobNavPreview: 'A4 预览',
+        mobNavDocx: '导出 .docx',
+        mobNavPrint: '打印/PDF',
+        draftsModalTitle: '本地草稿箱 (Rekod Draf Minit Curai)',
+        draftsModalSub: '所有草稿均安全保存在当前浏览器本地存储中',
+        draftsToolbarTip: '可将当前编辑中的简报另存为新草稿记录：',
+        draftsSaveNewBtn: '+ 保存当前简报',
+        draftsEmptyTitle: '草稿箱暂无记录',
+        draftsEmptySub: '点击上方“保存当前简报”即可随时存档备份',
+        draftMeetingDate: '会议日期',
+        draftSavedAt: '保存于',
+        draftLoadBtn: '加载编辑',
+        draftDeleteBtn: '删除',
+        confirmCancelBtn: '取消',
+        confirmOkBtn: '确定',
+        confirmClearTitle: '清空当前表单',
+        confirmClearMsg: '确定要清空所有已填写的会议内容与事项吗？',
+        confirmDelDraftTitle: '删除草稿记录',
+        confirmDelDraftMsg: '确定要永久删除这条草稿记录吗？',
+        toastFitScreen: '已自动缩放至 {pct}% 以完整适合屏幕宽度',
+        toastSampleLoaded: '已载入示例模板',
+        toastFormCleared: '表单已清空',
+        toastLogoUploaded: '校徽 / Logo 已上传并同步至预览与 .docx',
+        toastLogoRemoved: '已移除校徽图片',
+        toastPolishEmpty: '请先在该行输入需要润色的内容！',
+        toastPolishGeminiOk: '✨ 第 {n} 行已润色为标准 KPM 公文马来文',
+        toastPolishLocalOk: '✨ 第 {n} 行已通过本地 KPM 引擎润色完成',
+        toastFollowUpAdded: '➕ 已自动补充 2 项标准校内后续行动（LDP 传达与行政汇报）',
+        toastKeySaved: '✅ 已保存 Gemini API Key，已切换为云端 AI 模式！',
+        toastKeyCleared: '已切换为本地 KPM 智能公文引擎 (离线可用)',
+        toastKeyTestOk: '✅ Gemini 2.5 Flash API 连接测试成功！',
+        toastKeyTestFail: 'API Key 测试未通过，但内置本地 KPM 引擎仍可正常使用',
+        toastNotesEmpty: '请先输入或粘贴会议/课程草稿笔记！',
+        toastAiGeminiOk: '⚡ Gemini 2.5 Flash 已成功生成正式马来文简报！',
+        toastAiLocalOk: '🧠 本地 KPM 智能公文引擎已生成正式马来文简报！',
+        toastAiAppended: '➕ 已将 {n} 项正式马来文条款追加到现有列表！',
+        toastAiReplaced: '⬇️ 已将生成的正式马来文覆盖填入简报表格！',
+        toastDocxNotReady: 'DOCX 生成库尚未加载完成，请稍后重试或刷新页面。',
+        toastDocxGenerating: '正在生成 .docx...',
+        toastDocxSuccess: '✅ 已成功导出原生 Word 文件：{file}',
+        toastDocxError: '导出 .docx 时发生异常，请检查内容后重试。',
+        toastDraftSaved: '已保存到本地草稿箱！',
+        toastDraftLoaded: '已加载草稿记录',
+        toastDraftDeleted: '草稿已删除',
+        toastLangSwitched: '界面已切换为中文（公文输出保持标准马来文）'
+      },
+      bm: {
+        appSubtitle: 'Sistem Penjana Minit Curai Rasmi KPM & Kerajaan',
+        viewDesktop: '🖥️ Paparan Desktop',
+        viewMobile: '📱 Paparan Mudah Alih',
+        sampleBtn: 'Contoh',
+        sampleBtnTitle: 'Muatkan templat contoh sekolah atau jabatan kerajaan',
+        sampleMenuHeader: 'Pilih Templat Contoh',
+        sample1Desc: 'Taklimat PBD & UASA Peringkat Sekolah Rendah (SJKC)',
+        sample2Desc: 'Mesyuarat Penyelarasan Kokurikulum & MSSD (SMK)',
+        sample3Desc: 'Bengkel Ekosistem Digital DELIMa & AI (PPD / JPN)',
+        clearFormBtn: '🗑️ Kosongkan Borang Semasa',
+        draftsBtn: 'Rekod',
+        draftsBtnTitle: 'Lihat atau urus draf Minit Curai yang disimpan',
+        exportDocxBtn: 'Muat Turun .docx',
+        exportDocxTitle: 'Eksport fail Microsoft Word (.docx) asli',
+        printBtn: 'Cetak / PDF',
+        printBtnTitle: 'Cetak atau simpan sebagai PDF saiz A4',
+        aiTitle: 'Penjana Pintar AI (Pembantu Minit Rasmi)',
+        aiSubtitle: 'Tampal nota kasar (BM / Inggeris / Cina) → Jana Minit Curai rasmi KPM',
+        engineLocal: '🧠 Enjin Pintar KPM Tempatan (Luar Talian)',
+        engineGemini: '⚡ AI Awan Gemini Sedia',
+        apiSettingsBtn: '⚙️ Tetapan API',
+        apiSettingsTitle: 'Tetapkan Kunci API Google Gemini (Pilihan)',
+        apiDrawerTitle: '⚙️ Tetapan API Google Gemini (Pilihan Tambahan)',
+        apiStatusDefault: 'Enjin Pintar KPM terbina dalam sedia digunakan tanpa internet',
+        apiStatusNeedKey: '⚠️ Sila tampal Kunci API Gemini anda di bawah sebelum menguji',
+        apiStatusTesting: 'Menyambung ke Gemini 2.5 Flash...',
+        apiStatusOk: '✅ Sambungan Gemini 2.5 Flash berjaya!',
+        apiStatusFail: '❌ Sambungan gagal. Enjin tempatan KPM masih berfungsi sepenuhnya',
+        apiDrawerDesc:
+          'Sistem ini dilengkapi Enjin Pintar KPM tempatan yang boleh mengekstrak tarikh, tempat dan tajuk secara luar talian. Jika ingin menggunakan model awan Gemini 2.5 Flash, tampal Kunci API anda di bawah (disimpan dalam pelayar ini sahaja):',
+        apiKeyPlaceholder: 'Masukkan Kunci API Gemini bermula AIzaSy... (Kosongkan untuk enjin tempatan)',
+        apiSaveBtn: 'Simpan Kunci',
+        apiTestBtn: 'Uji Sambungan',
+        apiClearBtn: 'Padam',
+        aiNotesLabel: 'Masukkan Nota Kasar Mesyuarat / Kursus (BM / Inggeris / Cina):',
+        aiFillSampleBtn: 'Isi Contoh Nota Kasar',
+        aiNotesPlaceholder:
+          'Contoh: Hari ini 18/11 hadir Bengkel Pengenalan Dan Persediaan Penilaian Antarabangsa SEA-PLM Bagi Guru Matematik Tahun 3 di SK Puteri, jam 8.30 pagi hingga 4.30 petang. Fokus: 1. Taklimat kerangka SEA-PLM Tahun 3. 2. Ketua Panitia dan guru menyediakan latihan KBAT. 3. Perlu adakan LDP dalaman dan lapor kepada Guru Besar...',
+        aiChipsLabel: 'Pantasan:',
+        aiChip1: '+ Perlu LDP Dalaman',
+        aiChip2: '+ Hantar Laporan / Borang',
+        aiChip3: '+ Senarai Murid / Guru',
+        aiChip4: '+ Arahan Guru Besar / GPK',
+        aiContextLabel: 'Konteks Rasmi:',
+        aiCtxSekolah: 'Sekolah / KPM / PPD (Institusi Pendidikan)',
+        aiCtxAgensi: 'Jabatan Kerajaan / Agensi Awam',
+        aiCtxPersatuan: 'Persatuan / PIBG / NGO',
+        aiGenerateBtn: '✨ Jana Minit Curai Rasmi',
+        aiGeneratingBtn: 'Menjana Minit Curai rasmi...',
+        aiResHeaderGemini: '⚡ Gemini 2.5 Flash telah menyusun Minit Curai rasmi. Pilih tindakan:',
+        aiResHeaderLocal: '🧠 Enjin Pintar KPM telah menjana Minit Curai rasmi. Pilih tindakan:',
+        aiApplyAppendBtn: '➕ Tambah ke Senarai Sedia Ada',
+        aiApplyReplaceBtn: '⬇️ Ganti Semua Kandungan Borang',
+        sec1Title: 'Organisasi, Logo & Fon Rasmi',
+        sec1Subtitle: 'Nama sekolah/jabatan, muat naik logo rasmi, susunan & jenis fon',
+        lblOrgName: 'Nama Sekolah / Jabatan',
+        lblOrgCode: 'Kod Sekolah / Alamat Ringkas',
+        lblRefNo: 'No. Rujukan Fail',
+        lblLogoUpload: 'Logo Sekolah / Jabatan (Disertakan dalam fail .docx)',
+        btnUploadLogo: 'Muat Naik Logo',
+        btnRemoveLogo: 'Padam Logo',
+        lblLogoAlign: 'Susunan Logo Rasmi:',
+        optLogoCenter: 'Tengah (Berpusat)',
+        optLogoLeft: 'Kiri (Bersebelahan)',
+        lblDocFont: 'Jenis Fon Rasmi:',
+        sec2Title: 'Maklumat Mesyuarat / Taklimat',
+        sec2Subtitle: 'Tajuk, tarikh, masa, tempat, anjuran, pengerusi, kehadiran & bahan edaran',
+        lblCategory: 'Kategori Aktiviti',
+        lblDate: 'Tarikh Mula (Format Rasmi BM)',
+        malayDatePrefix: 'Paparan Rasmi: ',
+        lblMeetingTitle: 'Tajuk Mesyuarat / Kursus / Taklimat',
+        lblEndDate: 'Tarikh Tamat (Pilihan jika melebihi sehari)',
+        lblTime: 'Masa',
+        lblVenue: 'Tempat',
+        lblOrganizer: 'Anjuran',
+        lblChairperson: 'Pengerusi / Penceramah',
+        lblAttendees: 'Pegawai / Guru yang Hadir',
+        lblMaterials: 'Bahan-bahan yang Diedarkan',
+        sec3Title: 'Kandungan Minit Curai (Perkara & Tindakan)',
+        sec3Subtitle: 'Tambah, susun semula dan guna frasa pantas rasmi kerajaan',
+        btnAddRowTop: '+ Tambah Baris',
+        btnAddRowBottom: '+ Tambah Baris Perkara Baharu',
+        btnAiFollowUp: '🤖 AI Cadang Tindakan Susulan',
+        btnAiFollowUpTitle: 'Tambah cadangan LDP dalaman dan laporan kepada pentadbir secara automatik',
+        itemCardTitle: 'Perkara #{n}',
+        btnPolishRow: '✨ Gilap Ayat',
+        btnPolishingRow: '⏳ Menggilap...',
+        btnPolishRowTitle: 'Tukarkan draf baris ini kepada Bahasa Melayu rasmi KPM',
+        btnMoveUpTitle: 'Naik ke atas',
+        btnMoveDownTitle: 'Turun ke bawah',
+        btnDeleteRowTitle: 'Padam baris ini',
+        lblPerkaraField: 'Perkara / Isu yang Dibincangkan',
+        phPerkaraField: 'Masukkan butiran perbincangan (klik ✨ Gilap Ayat untuk format rasmi KPM)...',
+        lblTindakanField: 'Tindakan / Makluman',
+        sec4Title: 'Tandatangan & Pengesahan',
+        sec4Subtitle: 'Butiran penyedia laporan (Disediakan oleh) dan pengesah (Disahkan oleh)',
+        lblPreparedByGroup: 'Disediakan oleh:',
+        lblPreparedName: 'Nama Penyedia',
+        lblPreparedRole: 'Jawatan',
+        lblPreparedDate: 'Tarikh Disediakan',
+        lblVerifiedByGroup: 'Disahkan oleh:',
+        lblVerifiedName: 'Nama Pengesah (Kosongkan untuk ruang tandatangan)',
+        phVerifiedName: 'Kosongkan untuk ruang kurungan tandatangan (          )',
+        lblVerifiedRole: 'Jawatan Pengesah',
+        lblFollowUpNote: 'Tindakan Susulan Ketua Jabatan (Kosongkan untuk garisan bertulis tangan)',
+        phFollowUpNote: 'Kosongkan untuk menjana 3 baris garisan bertulis tangan di bahagian bawah...',
+        saveDraftHint: 'Simpan draf Minit Curai ini ke dalam storan pelayar untuk rujukan semula.',
+        saveDraftBtn: '💾 Simpan ke Rekod Draf',
+        previewHeader: 'Pratonton Rasmi A4',
+        itemCountBadge: '{n} Perkara',
+        fontSizeTitle: 'Saiz Fon Dokumen',
+        zoomOutTitle: 'Kecilkan',
+        zoomInTitle: 'Besarkan',
+        fitScreenBtn: 'Muat Skrin',
+        fitScreenTitle: 'Laraskan saiz kertas A4 supaya muat lebar skrin',
+        mobNavForm: 'Borang',
+        mobNavPreview: 'Pratonton',
+        mobNavDocx: '.docx',
+        mobNavPrint: 'Cetak',
+        draftsModalTitle: 'Rekod Draf Minit Curai',
+        draftsModalSub: 'Semua draf disimpan secara selamat dalam pelayar peranti ini',
+        draftsToolbarTip: 'Simpan borang semasa sebagai rekod draf baharu:',
+        draftsSaveNewBtn: '+ Simpan Draf Semasa',
+        draftsEmptyTitle: 'Tiada Rekod Draf Disimpan',
+        draftsEmptySub: 'Klik "+ Simpan Draf Semasa" di atas untuk menyimpan sandaran',
+        draftMeetingDate: 'Tarikh Aktiviti',
+        draftSavedAt: 'Disimpan pada',
+        draftLoadBtn: 'Buka Draf',
+        draftDeleteBtn: 'Padam',
+        confirmCancelBtn: 'Batal',
+        confirmOkBtn: 'Sahkan',
+        confirmClearTitle: 'Kosongkan Borang',
+        confirmClearMsg: 'Adakah anda pasti mahu mengosongkan semua maklumat dan perkara dalam borang ini?',
+        confirmDelDraftTitle: 'Padam Rekod Draf',
+        confirmDelDraftMsg: 'Adakah anda pasti mahu memadam rekod draf ini secara kekal?',
+        toastFitScreen: 'Dilaraskan kepada {pct}% untuk muat lebar skrin',
+        toastSampleLoaded: 'Templat contoh berjaya dimuatkan',
+        toastFormCleared: 'Borang telah dikosongkan',
+        toastLogoUploaded: 'Logo berjaya dimuat naik ke pratonton & .docx',
+        toastLogoRemoved: 'Logo telah dipadamkan',
+        toastPolishEmpty: 'Sila masukkan kandungan pada baris ini terlebih dahulu!',
+        toastPolishGeminiOk: '✨ Baris #{n} telah digilap ke laras bahasa rasmi KPM',
+        toastPolishLocalOk: '✨ Baris #{n} berjaya digilap oleh enjin tempatan KPM',
+        toastFollowUpAdded: '➕ 2 tindakan susulan rasmi (LDP & laporan pentadbir) telah ditambah',
+        toastKeySaved: '✅ Kunci API Gemini disimpan! Mod AI Awan diaktifkan.',
+        toastKeyCleared: 'Beralih kepada Enjin Pintar KPM Tempatan (Luar Talian)',
+        toastKeyTestOk: '✅ Sambungan API Gemini 2.5 Flash berjaya!',
+        toastKeyTestFail: 'Ujian sambungan gagal, enjin tempatan KPM masih sedia digunakan',
+        toastNotesEmpty: 'Sila masukkan nota kasar mesyuarat atau kursus terlebih dahulu!',
+        toastAiGeminiOk: '⚡ Gemini 2.5 Flash berjaya menjana Minit Curai rasmi!',
+        toastAiLocalOk: '🧠 Enjin Pintar KPM berjaya menjana Minit Curai rasmi!',
+        toastAiAppended: '➕ {n} perkara rasmi telah ditambah ke senarai sedia ada!',
+        toastAiReplaced: '⬇️ Kandungan Minit Curai rasmi telah diisi ke dalam borang!',
+        toastDocxNotReady: 'Pustaka penjana DOCX sedang dimuatkan, sila cuba sebentar lagi.',
+        toastDocxGenerating: 'Menjana fail .docx...',
+        toastDocxSuccess: '✅ Berjaya mengeksport fail Word: {file}',
+        toastDocxError: 'Ralat semasa mengeksport .docx. Sila semak kandungan dan cuba lagi.',
+        toastDraftSaved: 'Berjaya disimpan ke Rekod Draf!',
+        toastDraftLoaded: 'Rekod draf berjaya dibuka',
+        toastDraftDeleted: 'Rekod draf telah dipadamkan',
+        toastLangSwitched: 'Antaramuka ditukar ke Bahasa Melayu'
+      }
+    };
 
     const MALAY_MONTHS = [
       'Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun',
       'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'
     ];
 
-    // Quick-insert official Malay phrases for Tindakan column
+    // Quick-insert official Malay phrases for Tindakan column (bilingual button labels, formal BM output)
     const QUICK_PHRASES = [
-      { label: '供全体教师知悉', text: 'Untuk makluman semua guru.' },
-      { label: '供行政层与全体教师知悉及行动', text: 'Untuk makluman dan tindakan pihak pentadbir.' },
-      { label: '请科主任跟进', text: 'Tindakan Ketua Panitia yang berkenaan.' },
-      { label: '请立即采取行动', text: 'Sila ambil tindakan segera.' },
-      { label: '请相关教师执行', text: 'Tindakan semua guru mata pelajaran yang terlibat.' },
-      { label: '请秘书准备完整报告', text: 'Tindakan Setiausaha untuk menyediakan laporan.' }
+      { labelZh: '供全体教师知悉', labelBm: 'Makluman Semua Guru', text: 'Untuk makluman semua guru.' },
+      { labelZh: '供行政层知悉及行动', labelBm: 'Tindakan Pentadbir', text: 'Untuk makluman dan tindakan pihak pentadbir.' },
+      { labelZh: '请科主任跟进', labelBm: 'Tindakan Ketua Panitia', text: 'Tindakan Ketua Panitia yang berkenaan.' },
+      { labelZh: '请立即采取行动', labelBm: 'Tindakan Segera', text: 'Sila ambil tindakan segera.' },
+      { labelZh: '请相关教师执行', labelBm: 'Tindakan Guru Terlibat', text: 'Tindakan semua guru mata pelajaran yang terlibat.' },
+      { labelZh: '请秘书准备报告', labelBm: 'Tindakan Setiausaha', text: 'Tindakan Setiausaha untuk menyediakan laporan.' }
     ];
 
     const SAMPLES = {
@@ -1403,11 +1768,74 @@
       zoom: 0.80,
       isMobileMode: window.innerWidth < 1024,
       mobileActiveView: 'editor',
-      autoFitEnabled: true
+      autoFitEnabled: true,
+      uiLang: localStorage.getItem(UI_LANG_STORAGE_KEY) || 'zh'
     };
 
     let lastAIExtractedData = null;
     let previewResizeObserver = null;
+
+    function t(key, vars = {}) {
+      const lang = state.uiLang === 'bm' ? 'bm' : 'zh';
+      let str = (I18N[lang] && I18N[lang][key]) || I18N.zh[key] || key;
+      Object.entries(vars).forEach(([k, v]) => {
+        str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v));
+      });
+      return str;
+    }
+
+    function setUILanguage(lang, notify = true) {
+      const normalized = lang === 'bm' ? 'bm' : 'zh';
+      state.uiLang = normalized;
+      try {
+        localStorage.setItem(UI_LANG_STORAGE_KEY, normalized);
+      } catch (e) {
+        // Ignore storage restrictions
+      }
+      applyUILanguage();
+      if (notify) {
+        showToast(t('toastLangSwitched'), 'info');
+      }
+    }
+
+    function applyUILanguage() {
+      const lang = state.uiLang === 'bm' ? 'bm' : 'zh';
+      document.documentElement.lang = lang === 'bm' ? 'ms' : 'zh-CN';
+
+      const activeLangCls = 'px-2 sm:px-2.5 min-h-[32px] sm:min-h-[34px] rounded-lg font-bold bg-white text-indigo-700 shadow-2xs transition';
+      const inactiveLangCls = 'px-2 sm:px-2.5 min-h-[32px] sm:min-h-[34px] rounded-lg font-semibold text-slate-600 hover:text-slate-900 transition';
+      const btnZh = document.getElementById('lang-btn-zh');
+      const btnBm = document.getElementById('lang-btn-bm');
+      if (btnZh) btnZh.className = lang === 'zh' ? activeLangCls : inactiveLangCls;
+      if (btnBm) btnBm.className = lang === 'bm' ? activeLangCls : inactiveLangCls;
+
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (key) el.textContent = t(key);
+      });
+
+      document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (key) el.setAttribute('placeholder', t(key));
+      });
+
+      document.querySelectorAll('[data-i18n-title]').forEach((el) => {
+        const key = el.getAttribute('data-i18n-title');
+        if (key) el.setAttribute('title', t(key));
+      });
+
+      updateViewportBadge();
+      updateApiStatusIndicator();
+      const hint = document.getElementById('tarikh-malay-hint');
+      if (hint) {
+        hint.textContent = `${t('malayDatePrefix')}${formatMalayDate(state.tarikh) || '-'}`;
+      }
+      renderItemEditors();
+      renderDocument();
+      if (!document.getElementById('drafts-modal').classList.contains('hidden')) {
+        renderDraftsList();
+      }
+    }
 
     // =========================================================================
     // 2. INITIALIZATION & AUTOMATIC DESKTOP / MOBILE RESPONSIVE ENGINE
@@ -1415,8 +1843,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       initApiKeySettings();
       populateInputsFromState();
-      renderItemEditors();
-      renderDocument();
+      applyUILanguage();
       initResponsiveArchitecture();
       updateDraftBadge();
 
@@ -1428,6 +1855,20 @@
       });
     });
 
+    function updateViewportBadge() {
+      const pill = document.getElementById('viewport-mode-pill');
+      if (!pill) return;
+      if (state.isMobileMode) {
+        pill.textContent = t('viewMobile');
+        pill.className =
+          'hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 shrink-0';
+      } else {
+        pill.textContent = t('viewDesktop');
+        pill.className =
+          'hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0';
+      }
+    }
+
     function initResponsiveArchitecture() {
       const mobileMediaQuery = window.matchMedia('(max-width: 1023px)');
 
@@ -1436,18 +1877,7 @@
         state.isMobileMode = isMobile;
         state.autoFitEnabled = true;
 
-        const pill = document.getElementById('viewport-mode-pill');
-        if (pill) {
-          if (isMobile) {
-            pill.textContent = '📱 手机端视图';
-            pill.className =
-              'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 shrink-0';
-          } else {
-            pill.textContent = '🖥️ 电脑端分屏';
-            pill.className =
-              'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0';
-          }
-        }
+        updateViewportBadge();
 
         const editor = document.getElementById('editor-panel');
         const preview = document.getElementById('preview-panel');
@@ -1510,7 +1940,7 @@
       applyZoom();
 
       if (showFeedback) {
-        showToast(`已自动缩放至 ${Math.round(state.zoom * 100)}% 以完整适合屏幕宽度`, 'info');
+        showToast(t('toastFitScreen', { pct: Math.round(state.zoom * 100) }), 'info');
       }
     }
 
@@ -1578,12 +2008,12 @@
       populateInputsFromState();
       renderItemEditors();
       renderDocument();
-      showToast('已载入示例模板 (Templat Contoh Dimuatkan)', 'success');
+      showToast(t('toastSampleLoaded'), 'success');
     }
 
     function clearFormPrompt() {
       document.getElementById('sample-menu').classList.add('hidden');
-      openConfirmModal('清空当前表单 (Kosongkan Borang)', '确定要清空所有已填写的会议内容与事项吗？', () => {
+      openConfirmModal(t('confirmClearTitle'), t('confirmClearMsg'), () => {
         state = {
           ...state,
           noRujukan: '',
@@ -1606,7 +2036,7 @@
         populateInputsFromState();
         renderItemEditors();
         renderDocument();
-        showToast('表单已清空', 'info');
+        showToast(t('toastFormCleared'), 'info');
       });
     }
 
@@ -1647,7 +2077,7 @@
 
       const hint = document.getElementById('tarikh-malay-hint');
       if (hint) {
-        hint.textContent = `马来文显示：${formatMalayDate(state.tarikh) || '-'}`;
+        hint.textContent = `${t('malayDatePrefix')}${formatMalayDate(state.tarikh) || '-'}`;
       }
 
       // Logo state
@@ -1694,7 +2124,7 @@
       if (updateHints) {
         const hint = document.getElementById('tarikh-malay-hint');
         if (hint) {
-          hint.textContent = `马来文显示：${formatMalayDate(state.tarikh) || '-'}`;
+          hint.textContent = `${t('malayDatePrefix')}${formatMalayDate(state.tarikh) || '-'}`;
         }
       }
 
@@ -1709,7 +2139,7 @@
         state.logoDataUrl = e.target.result;
         populateInputsFromState();
         renderDocument();
-        showToast('校徽 / Logo 已上传并同步至预览与 .docx', 'success');
+        showToast(t('toastLogoUploaded'), 'success');
       };
       reader.readAsDataURL(file);
     }
@@ -1719,7 +2149,7 @@
       document.getElementById('inp-logo').value = '';
       populateInputsFromState();
       renderDocument();
-      showToast('已移除校徽图片', 'info');
+      showToast(t('toastLogoRemoved'), 'info');
     }
 
     function setLogoAlign(align) {
@@ -1815,21 +2245,21 @@
       const container = document.getElementById('items-editor-list');
       if (!container) return;
 
-      document.getElementById('item-counter-badge').textContent = `${state.items.length} 项内容`;
+      document.getElementById('item-counter-badge').textContent = t('itemCountBadge', { n: state.items.length });
 
       container.innerHTML = state.items
         .map((item, idx) => {
-          const phraseButtons = QUICK_PHRASES.map(
-            (p) =>
-              `<button type="button" onclick="insertQuickPhrase(${idx}, '${escapeHtml(p.text)}')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[10px] text-slate-600 border border-slate-200/70 transition">${escapeHtml(p.label)}</button>`
-          ).join('');
+          const phraseButtons = QUICK_PHRASES.map((p) => {
+            const chipLabel = state.uiLang === 'bm' ? p.labelBm : p.labelZh;
+            return `<button type="button" onclick="insertQuickPhrase(${idx}, '${escapeHtml(p.text)}')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[10px] text-slate-600 border border-slate-200/70 transition">${escapeHtml(chipLabel)}</button>`;
+          }).join('');
 
           return `
             <div class="rounded-xl border border-slate-200 bg-slate-50/60 p-3.5 space-y-2.5 transition hover:border-indigo-200">
               <div class="flex items-center justify-between gap-2">
                 <span class="inline-flex items-center gap-1.5 text-xs font-bold text-slate-800">
                   <span class="w-5 h-5 rounded-md bg-indigo-600 text-white text-[11px] flex items-center justify-center">${idx + 1}</span>
-                  <span>Perkara #${idx + 1}</span>
+                  <span>${escapeHtml(t('itemCardTitle', { n: idx + 1 }))}</span>
                 </span>
                 <div class="flex items-center gap-1">
                   <button
@@ -1837,45 +2267,45 @@
                     id="polish-btn-${idx}"
                     onclick="polishItemRow(${idx})"
                     class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[11px] font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition"
-                    title="将当前行的中文/口语/简写内容一键润色为标准 KPM 公文马来文"
+                    title="${escapeHtml(t('btnPolishRowTitle'))}"
                   >
-                    <span>✨ 润色</span>
+                    <span>${escapeHtml(t('btnPolishRow'))}</span>
                   </button>
                   <button
                     type="button"
                     onclick="moveItemRow(${idx}, -1)"
                     ${idx === 0 ? 'disabled' : ''}
                     class="p-1 rounded hover:bg-slate-200 text-slate-500 disabled:opacity-30"
-                    title="上移"
+                    title="${escapeHtml(t('btnMoveUpTitle'))}"
                   >↑</button>
                   <button
                     type="button"
                     onclick="moveItemRow(${idx}, 1)"
                     ${idx === state.items.length - 1 ? 'disabled' : ''}
                     class="p-1 rounded hover:bg-slate-200 text-slate-500 disabled:opacity-30"
-                    title="下移"
+                    title="${escapeHtml(t('btnMoveDownTitle'))}"
                   >↓</button>
                   <button
                     type="button"
                     onclick="removeItemRow(${idx})"
                     class="p-1 rounded hover:bg-rose-100 text-rose-500 ml-1"
-                    title="删除此行"
+                    title="${escapeHtml(t('btnDeleteRowTitle'))}"
                   >✕</button>
                 </div>
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-slate-600 mb-1">事项内容 (Perkara / Isu yang Dibincangkan)</label>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">${escapeHtml(t('lblPerkaraField'))}</label>
                 <textarea
                   rows="2"
                   oninput="updateItemField(${idx}, 'perkara', this.value)"
-                  placeholder="输入议题或汇报内容（支持输入中文或草稿后点击右上角 ✨ 润色）..."
+                  placeholder="${escapeHtml(t('phPerkaraField'))}"
                   class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs sm:text-sm text-slate-800 focus:border-indigo-500 outline-none"
                 >${escapeHtml(item.perkara)}</textarea>
               </div>
 
               <div>
-                <label class="block text-[11px] font-semibold text-slate-600 mb-1">行动 / 知悉对象 (Tindakan / Makluman)</label>
+                <label class="block text-[11px] font-semibold text-slate-600 mb-1">${escapeHtml(t('lblTindakanField'))}</label>
                 <input
                   type="text"
                   value="${escapeHtml(item.tindakan)}"
@@ -1935,14 +2365,14 @@
     async function polishItemRow(idx) {
       const item = state.items[idx];
       if (!item || !item.perkara.trim()) {
-        showToast('请先在该行输入需要润色的内容！', 'error');
+        showToast(t('toastPolishEmpty'), 'error');
         return;
       }
 
       const btn = document.getElementById(`polish-btn-${idx}`);
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<span>⏳ 润色中...</span>';
+        btn.innerHTML = `<span>${escapeHtml(t('btnPolishingRow'))}</span>`;
       }
 
       const customKey = getConfiguredGeminiKey();
@@ -1990,7 +2420,7 @@
               state.items[idx].tindakan = polished.tindakan || item.tindakan;
               renderItemEditors();
               renderDocument();
-              showToast(`✨ 第 ${idx + 1} 行已润色为标准 KPM 公文马来文`, 'success');
+              showToast(t('toastPolishGeminiOk', { n: idx + 1 }), 'success');
               return;
             }
           }
@@ -2007,7 +2437,7 @@
       }
       renderItemEditors();
       renderDocument();
-      showToast(`✨ 第 ${idx + 1} 行已通过本地 KPM 引擎润色完成`, 'success');
+      showToast(t('toastPolishLocalOk', { n: idx + 1 }), 'success');
     }
 
     function generateFollowUpItems() {
@@ -2026,7 +2456,7 @@
       state.items.push(...followUps);
       renderItemEditors();
       renderDocument();
-      showToast('➕ 已自动补充 2 项标准校内后续行动（LDP 传达与行政汇报）', 'success');
+      showToast(t('toastFollowUpAdded'), 'success');
     }
 
     // =========================================================================
@@ -2126,7 +2556,7 @@
         : '(                                                  )';
       document.getElementById('doc-sig-disahkanGelaran').textContent = state.disahkanGelaran || 'Guru Besar';
 
-      document.getElementById('item-counter-badge').textContent = `${state.items.length} 项内容`;
+      document.getElementById('item-counter-badge').textContent = t('itemCountBadge', { n: state.items.length });
       applyZoom();
     }
 
@@ -2203,14 +2633,14 @@
       try {
         if (val) {
           localStorage.setItem(API_KEY_STORAGE_KEY, val);
-          showToast('✅ 已保存 Gemini API Key，已切换为云端 AI 模式！', 'success');
+          showToast(t('toastKeySaved'), 'success');
         } else {
           localStorage.removeItem(API_KEY_STORAGE_KEY);
-          showToast('已切换为本地 KPM 智能公文引擎 (离线可用)', 'info');
+          showToast(t('toastKeyCleared'), 'info');
         }
         updateApiStatusIndicator();
       } catch (e) {
-        showToast('无法访问本地存储', 'error');
+        showToast('Local storage unavailable', 'error');
       }
     }
 
@@ -2223,11 +2653,11 @@
       }
       const testStatus = document.getElementById('api-test-status');
       if (testStatus) {
-        testStatus.textContent = '内置 KPM 智能引擎无需配置即可离线使用';
+        testStatus.textContent = t('apiStatusDefault');
         testStatus.className = 'text-[11px] font-medium text-slate-500';
       }
       updateApiStatusIndicator();
-      showToast('已清除 API Key，当前使用本地 KPM 智能公文引擎', 'info');
+      showToast(t('toastKeyCleared'), 'info');
     }
 
     async function testGeminiConnection() {
@@ -2237,7 +2667,7 @@
 
       if (!inputVal && window.location.protocol === 'file:') {
         if (statusEl) {
-          statusEl.textContent = '⚠️ 请先在下方输入框粘贴您的 Gemini API Key 再测试';
+          statusEl.textContent = t('apiStatusNeedKey');
           statusEl.className = 'text-[11px] font-semibold text-amber-700';
         }
         return;
@@ -2245,10 +2675,10 @@
 
       if (btn) {
         btn.disabled = true;
-        btn.textContent = '测试中...';
+        btn.textContent = '...';
       }
       if (statusEl) {
-        statusEl.textContent = '正在连接 Gemini 2.5 Flash...';
+        statusEl.textContent = t('apiStatusTesting');
         statusEl.className = 'text-[11px] font-medium text-indigo-600';
       }
 
@@ -2268,23 +2698,23 @@
             updateApiStatusIndicator();
           }
           if (statusEl) {
-            statusEl.textContent = '✅ Gemini 2.5 Flash 连接成功！';
+            statusEl.textContent = t('apiStatusOk');
             statusEl.className = 'text-[11px] font-bold text-emerald-700';
           }
-          showToast('✅ Gemini 2.5 Flash API 连接测试成功！', 'success');
+          showToast(t('toastKeyTestOk'), 'success');
         } else {
           throw new Error(`HTTP ${resp.status}`);
         }
       } catch (err) {
         if (statusEl) {
-          statusEl.textContent = '❌ 连接失败，请检查 Key 或网络（仍可离线使用本地引擎）';
+          statusEl.textContent = t('apiStatusFail');
           statusEl.className = 'text-[11px] font-semibold text-rose-600';
         }
-        showToast('API Key 测试未通过，但内置本地 KPM 引擎仍可正常使用', 'error');
+        showToast(t('toastKeyTestFail'), 'error');
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = '测试连接';
+          btn.textContent = t('apiTestBtn');
         }
       }
     }
@@ -2296,10 +2726,10 @@
       const isLocalFile = window.location.protocol === 'file:';
 
       if (savedKey || !isLocalFile) {
-        badge.textContent = '⚡ Gemini 云端 AI 已就绪';
+        badge.textContent = t('engineGemini');
         badge.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200';
       } else {
-        badge.textContent = '🧠 本地 KPM 智能公文引擎 (离线可用)';
+        badge.textContent = t('engineLocal');
         badge.className = 'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200';
       }
     }
@@ -2767,7 +3197,7 @@
     async function generateMinitWithAI() {
       const rawNotes = document.getElementById('ai-raw-notes').value.trim();
       if (!rawNotes) {
-        showToast('请先输入或粘贴会议/课程草稿笔记！', 'error');
+        showToast(t('toastNotesEmpty'), 'error');
         return;
       }
 
@@ -2778,7 +3208,7 @@
 
       btn.disabled = true;
       spinner.classList.remove('hidden');
-      btnText.textContent = '正在智能提取并生成公文马来文...';
+      btnText.textContent = t('aiGeneratingBtn');
 
       const customKey = getConfiguredGeminiKey();
       const isLocalFile = window.location.protocol === 'file:';
@@ -2788,9 +3218,7 @@
         const headerLabel = document.getElementById('ai-result-header-label');
         if (headerLabel) {
           headerLabel.textContent =
-            engineSource === 'gemini'
-              ? '⚡ Gemini 2.5 Flash 已整理为标准马来文公文，请选择应用方式：'
-              : '🧠 本地 KPM 智能公文引擎已生成标准公文，请选择应用方式：';
+            engineSource === 'gemini' ? t('aiResHeaderGemini') : t('aiResHeaderLocal');
         }
 
         const summaryEl = document.getElementById('ai-result-summary');
@@ -2812,9 +3240,9 @@
         document.getElementById('ai-result-box').classList.remove('hidden');
 
         if (engineSource === 'gemini') {
-          showToast('⚡ Gemini 2.5 Flash 已成功生成正式马来文简报！', 'success');
+          showToast(t('toastAiGeminiOk'), 'success');
         } else {
-          showToast('🧠 本地 KPM 智能公文引擎已生成正式马来文简报！', 'success');
+          showToast(t('toastAiLocalOk'), 'success');
         }
       };
 
@@ -2825,7 +3253,7 @@
           renderAISummaryPreview(localParsed, 'local');
           btn.disabled = false;
           spinner.classList.add('hidden');
-          btnText.textContent = '✨ 生成正式马来文简报 (Jana Rasmi)';
+          btnText.textContent = t('aiGenerateBtn');
         }, 180);
         return;
       }
@@ -2943,7 +3371,7 @@
       } finally {
         btn.disabled = false;
         spinner.classList.add('hidden');
-        btnText.textContent = '✨ 生成正式马来文简报 (Jana Rasmi)';
+        btnText.textContent = t('aiGenerateBtn');
       }
     }
 
@@ -2971,7 +3399,7 @@
         renderItemEditors();
         renderDocument();
         document.getElementById('ai-result-box').classList.add('hidden');
-        showToast(`➕ 已将 ${newRows.length} 项正式马来文条款追加到现有列表！`, 'success');
+        showToast(t('toastAiAppended', { n: newRows.length }), 'success');
         return;
       }
 
@@ -2997,7 +3425,7 @@
       renderItemEditors();
       renderDocument();
       document.getElementById('ai-result-box').classList.add('hidden');
-      showToast('⬇️ 已将生成的正式马来文覆盖填入简报表格！', 'success');
+      showToast(t('toastAiReplaced'), 'success');
     }
 
     // =========================================================================
@@ -3055,14 +3483,14 @@
 
     async function exportToDocx() {
       if (!window.docx) {
-        showToast('DOCX 生成库尚未加载完成，请稍后重试或刷新页面。', 'error');
+        showToast(t('toastDocxNotReady'), 'error');
         return;
       }
 
       const exportBtn = document.getElementById('btn-export-docx');
       const originalBtnHtml = exportBtn.innerHTML;
       exportBtn.disabled = true;
-      exportBtn.innerHTML = '<span>正在生成 .docx...</span>';
+      exportBtn.innerHTML = `<span>${escapeHtml(t('toastDocxGenerating'))}</span>`;
 
       try {
         const {
@@ -3791,9 +4219,9 @@
           URL.revokeObjectURL(url);
         }
 
-        showToast(`✅ 已成功导出原生 Word 文件：${filename}`, 'success');
+        showToast(t('toastDocxSuccess', { file: filename }), 'success');
       } catch (err) {
-        showToast('导出 .docx 时发生异常，请检查内容后重试。', 'error');
+        showToast(t('toastDocxError'), 'error');
       } finally {
         exportBtn.disabled = false;
         exportBtn.innerHTML = originalBtnHtml;
@@ -3853,7 +4281,7 @@
       drafts.unshift(newDraft);
       setSavedDrafts(drafts);
       renderDraftsList();
-      showToast('已保存到本地草稿箱！', 'success');
+      showToast(t('toastDraftSaved'), 'success');
     }
 
     function openDraftsModal() {
@@ -3873,8 +4301,8 @@
         container.innerHTML = `
           <div class="text-center py-10 text-slate-400 space-y-2">
             <div class="text-3xl">📂</div>
-            <div class="text-sm font-medium text-slate-600">草稿箱暂无记录</div>
-            <div class="text-xs">点击上方“保存当前简报”即可随时存档备份</div>
+            <div class="text-sm font-medium text-slate-600">${escapeHtml(t('draftsEmptyTitle'))}</div>
+            <div class="text-xs">${escapeHtml(t('draftsEmptySub'))}</div>
           </div>
         `;
         return;
@@ -3887,11 +4315,11 @@
             <div class="min-w-0 space-y-1">
               <div class="text-xs sm:text-sm font-bold text-slate-900 truncate">${escapeHtml(d.title)}</div>
               <div class="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
-                <span>📅 会议日期: ${escapeHtml(d.dateLabel)}</span>
+                <span>📅 ${escapeHtml(t('draftMeetingDate'))}: ${escapeHtml(d.dateLabel)}</span>
                 <span>•</span>
                 <span>👤 ${escapeHtml(d.pegawai)}</span>
                 <span>•</span>
-                <span class="text-indigo-600">保存于 ${escapeHtml(d.savedAt)}</span>
+                <span class="text-indigo-600">${escapeHtml(t('draftSavedAt'))} ${escapeHtml(d.savedAt)}</span>
               </div>
             </div>
             <div class="flex items-center gap-2 shrink-0">
@@ -3900,14 +4328,14 @@
                 onclick="loadDraftById('${d.id}')"
                 class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition"
               >
-                加载编辑 (Buka)
+                ${escapeHtml(t('draftLoadBtn'))}
               </button>
               <button
                 type="button"
                 onclick="deleteDraftById('${d.id}')"
                 class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-rose-600 bg-rose-50 hover:bg-rose-100 transition"
               >
-                删除
+                ${escapeHtml(t('draftDeleteBtn'))}
               </button>
             </div>
           </div>
@@ -3922,9 +4350,11 @@
       if (!found) return;
 
       const currentZoom = state.zoom;
+      const currentLang = state.uiLang;
       state = {
         ...found.data,
-        zoom: currentZoom
+        zoom: currentZoom,
+        uiLang: currentLang
       };
       populateInputsFromState();
       setDocFont(state.docFont || 'Arial');
@@ -3932,15 +4362,15 @@
       renderDocument();
       applyZoom();
       closeDraftsModal();
-      showToast('已加载草稿记录', 'success');
+      showToast(t('toastDraftLoaded'), 'success');
     }
 
     function deleteDraftById(id) {
-      openConfirmModal('删除草稿记录 (Padam Draf)', '确定要永久删除这条草稿记录吗？', () => {
+      openConfirmModal(t('confirmDelDraftTitle'), t('confirmDelDraftMsg'), () => {
         const drafts = getSavedDrafts().filter((d) => d.id !== id);
         setSavedDrafts(drafts);
         renderDraftsList();
-        showToast('草稿已删除', 'info');
+        showToast(t('toastDraftDeleted'), 'info');
       });
     }
   </script>
