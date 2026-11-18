@@ -9,7 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Native Office Open XML (.docx) Browser Generator Library v8.5.0 -->
-  <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+  <script src="https://unpkg.com/docx@8.5.0/build/index.umd.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <!-- Google Fonts: Inter & Noto Sans SC for crisp bilingual UI -->
@@ -46,6 +46,15 @@
       background: #94a3b8;
     }
 
+    /* Hide scrollbar for horizontal touch chip strips */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
     /* Realistic A4 Paper Sheet */
     .a4-sheet {
       width: 210mm;
@@ -54,7 +63,7 @@
       color: #000000;
       padding: 16mm 17mm 18mm 17mm;
       box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.22), 0 4px 16px -4px rgba(15, 23, 42, 0.1);
-      transform-origin: top center;
+      transform-origin: top left;
       transition: transform 0.2s ease;
     }
 
@@ -96,7 +105,7 @@
 
       /* Hide all UI controls */
       #top-navbar,
-      #mobile-view-tabs,
+      #mobile-bottom-nav,
       #editor-panel,
       #preview-toolbar,
       #drafts-modal,
@@ -144,12 +153,12 @@
     }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans antialiased selection:bg-indigo-100 selection:text-indigo-900">
+<body class="bg-slate-100 text-slate-800 font-sans antialiased overflow-x-hidden selection:bg-indigo-100 selection:text-indigo-900">
 
   <!-- ==================== TOP NAVIGATION BAR ==================== -->
-  <header id="top-navbar" class="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
-    <div class="max-w-[1600px] mx-auto px-3 sm:px-5 h-16 flex items-center justify-between gap-2">
-      <!-- Brand Identity -->
+  <header id="top-navbar" class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm">
+    <div class="max-w-[1600px] mx-auto px-3 sm:px-5 h-14 sm:h-16 flex items-center justify-between gap-2">
+      <!-- Brand Identity + Live Viewport Mode Pill -->
       <div class="flex items-center gap-2.5 min-w-0">
         <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-700 flex items-center justify-center text-white shadow-sm shrink-0">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -157,13 +166,19 @@
           </svg>
         </div>
         <div class="truncate">
-          <div class="flex items-center gap-2">
-            <h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight truncate">e-Minit Curai</h1>
-            <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Native .DOCX &amp; KPM Format
+          <div class="flex items-center gap-1.5 sm:gap-2">
+            <h1 class="text-sm sm:text-lg font-bold text-slate-900 tracking-tight truncate">e-Minit Curai</h1>
+            <span
+              id="viewport-mode-pill"
+              class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0"
+            >
+              🖥️ 电脑端分屏
+            </span>
+            <span class="hidden xl:inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Native .DOCX &amp; KPM
             </span>
           </div>
-          <p class="text-[11px] sm:text-xs text-slate-500 truncate">马来西亚公文 / 学校会议简报生成系统</p>
+          <p class="hidden sm:block text-xs text-slate-500 truncate">马来西亚公文 / 学校会议简报生成系统</p>
         </div>
       </div>
 
@@ -174,14 +189,14 @@
           <button
             type="button"
             onclick="toggleSampleMenu()"
-            class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
+            class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 min-h-[38px] sm:min-h-[40px] rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
             title="载入马来西亚学校或政府部门示例数据"
           >
             <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
             </svg>
-            <span class="hidden sm:inline">载入示例</span>
-            <span class="hidden xl:inline text-xs text-slate-500">(Contoh)</span>
+            <span>示例</span>
+            <span class="hidden xl:inline text-xs text-slate-500">(Isi Contoh)</span>
             <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
@@ -215,24 +230,25 @@
         <button
           type="button"
           onclick="openDraftsModal()"
-          class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition"
+          class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 min-h-[38px] sm:min-h-[40px] rounded-xl text-xs sm:text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 transition"
           title="查看或管理本地保存的历史草稿"
         >
           <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
           </svg>
-          <span class="hidden sm:inline">草稿箱</span>
+          <span>草稿</span>
+          <span class="hidden xl:inline text-xs text-slate-500">(Rekod)</span>
           <span id="draft-count-badge" class="inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-bold rounded-full bg-indigo-100 text-indigo-700">
             0
           </span>
         </button>
 
-        <!-- Primary Action 1: Export Native .DOCX -->
+        <!-- Primary Action 1: Export Native .DOCX (Desktop Header; on Mobile moved to Fixed Bottom Bar) -->
         <button
           type="button"
           id="btn-export-docx"
           onclick="exportToDocx()"
-          class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-sm transition"
+          class="hidden lg:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 shadow-sm transition"
           title="导出原生 Microsoft Word (.docx) 文件"
         >
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -241,48 +257,27 @@
           <span>导出 Word (.docx)</span>
         </button>
 
-        <!-- Primary Action 2: Print / Save PDF -->
+        <!-- Primary Action 2: Print / Save PDF (Desktop Header; on Mobile moved to Fixed Bottom Bar) -->
         <button
           type="button"
           onclick="printDocument()"
-          class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm transition"
+          class="hidden lg:inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm transition"
           title="打印或另存为标准 A4 PDF"
         >
           <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
           </svg>
-          <span class="hidden sm:inline">打印 / PDF</span>
-          <span class="sm:hidden">PDF</span>
+          <span>打印 / PDF</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ==================== MOBILE VIEW TABS ==================== -->
-  <div id="mobile-view-tabs" class="lg:hidden bg-white border-b border-slate-200 px-4 py-2 flex gap-2 sticky top-16 z-20">
-    <button
-      type="button"
-      id="tab-btn-editor"
-      onclick="switchMobileView('editor')"
-      class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm transition"
-    >
-      ✏️ 填写表单 (Editor)
-    </button>
-    <button
-      type="button"
-      id="tab-btn-preview"
-      onclick="switchMobileView('preview')"
-      class="flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 transition"
-    >
-      📄 实时预览 (Pratonton A4)
-    </button>
-  </div>
-
-  <!-- ==================== MAIN SPLIT-SCREEN WORKSPACE ==================== -->
+  <!-- ==================== MAIN SPLIT-SCREEN / ADAPTIVE WORKSPACE ==================== -->
   <main id="main-workspace" class="max-w-[1600px] mx-auto flex flex-col lg:flex-row lg:h-[calc(100vh-4rem)]">
 
     <!-- ==================== LEFT PANEL: BILINGUAL EDITOR FORM ==================== -->
-    <section id="editor-panel" class="w-full lg:w-1/2 lg:h-full lg:overflow-y-auto p-4 sm:p-6 space-y-5 bg-slate-50/70 border-r border-slate-200">
+    <section id="editor-panel" class="w-full lg:w-[48%] lg:h-full lg:overflow-y-auto p-3.5 sm:p-6 pb-28 lg:pb-6 space-y-4 sm:space-y-5 bg-slate-50/70 lg:border-r border-slate-200">
 
       <!-- 1. DUAL-ENGINE AI SMART NOTE CONVERTER (PENJANA PINTAR AI) -->
       <div class="rounded-2xl bg-gradient-to-br from-indigo-50 via-white to-violet-50 border border-indigo-200 shadow-sm overflow-hidden">
@@ -381,34 +376,34 @@
             class="w-full rounded-xl border border-indigo-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 outline-none transition"
           ></textarea>
 
-          <!-- Quick Context Chips -->
-          <div class="flex flex-wrap items-center gap-1.5">
-            <span class="text-[11px] font-medium text-slate-500 mr-0.5">快捷补充意图:</span>
+          <!-- Quick Context Chips (Horizontally scrollable on mobile, wraps on desktop) -->
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar sm:flex-wrap pb-0.5">
+            <span class="text-[11px] font-medium text-slate-500 mr-0.5 shrink-0">快捷意图:</span>
             <button
               type="button"
               onclick="appendContextChip('需办校内培训（LDP/PLC）向全体老师传达最新指示。')"
-              class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
+              class="shrink-0 min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
             >
               + 需办校内培训 (LDP)
             </button>
             <button
               type="button"
               onclick="appendContextChip('需在截止日期前提交相关报告/填写Google Form回执。')"
-              class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
+              class="shrink-0 min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
             >
               + 需提交报告/Google Form
             </button>
             <button
               type="button"
               onclick="appendContextChip('需整理并核对涉及的学生及教师名单以供存档。')"
-              class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
+              class="shrink-0 min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
             >
               + 涉及学生/教师名单
             </button>
             <button
               type="button"
               onclick="appendContextChip('需向校长及副校长汇报并获取行政指示。')"
-              class="px-2.5 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
+              class="shrink-0 min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium bg-white hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 border border-indigo-200/90 shadow-2xs transition"
             >
               + 校长/副校长指示
             </button>
@@ -492,8 +487,8 @@
         </button>
 
         <div id="org-section-body" class="p-4 sm:p-5 border-t border-slate-100 space-y-4">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-            <div class="sm:col-span-2">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-slate-700 mb-1">
                 学校 / 部门名称 <span class="text-slate-400 font-normal">(Nama Sekolah / Jabatan)</span>
               </label>
@@ -502,7 +497,7 @@
                 id="inp-namaOrganisasi"
                 oninput="syncFromInputs()"
                 placeholder="Contoh: SEKOLAH JENIS KEBANGSAAN (CINA) FOON YEW 2"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
               />
             </div>
 
@@ -515,7 +510,7 @@
                 id="inp-kodOrganisasi"
                 oninput="syncFromInputs()"
                 placeholder="Contoh: JBC1002 • 80100 Johor Bahru, Johor"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
               />
             </div>
 
@@ -528,12 +523,12 @@
                 id="inp-noRujukan"
                 oninput="syncFromInputs()"
                 placeholder="Contoh: JBC1002/600-3/1/2 (14)"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
               />
             </div>
 
             <!-- Logo Upload + Preview + Clear -->
-            <div class="sm:col-span-2 bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-2.5">
+            <div class="md:col-span-2 bg-slate-50 rounded-xl p-3 border border-slate-200/80 space-y-2.5">
               <div class="flex flex-wrap items-center justify-between gap-2">
                 <label class="text-xs font-semibold text-slate-700">
                   校徽 / 部门 Logo 图片 <span class="text-slate-400 font-normal">(同步嵌入 .docx 公文顶部)</span>
@@ -627,7 +622,7 @@
         </button>
 
         <div id="pegawai-section-body" class="p-4 sm:p-5 border-t border-slate-100 space-y-4">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">
                 公文类型 <span class="text-slate-400 font-normal">(Kategori)</span>
@@ -635,7 +630,7 @@
               <select
                 id="inp-kategori"
                 onchange="syncFromInputs()"
-                class="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
               >
                 <option value="MESYUARAT">MESYUARAT (会议)</option>
                 <option value="TAKLIMAT">TAKLIMAT (汇报会 / 说明会)</option>
@@ -654,7 +649,7 @@
                   type="date"
                   id="inp-tarikh"
                   onchange="syncFromInputs(true)"
-                  class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                  class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
                 />
               </div>
               <div id="tarikh-malay-hint" class="text-[11px] font-medium text-indigo-600 mt-1">
@@ -662,7 +657,7 @@
               </div>
             </div>
 
-            <div class="sm:col-span-2">
+            <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-slate-700 mb-1">
                 会议 / 课程名称 <span class="text-slate-400 font-normal">(Tajuk Mesyuarat / Kursus / Taklimat)</span>
               </label>
@@ -671,7 +666,7 @@
                 id="inp-tajuk"
                 oninput="syncFromInputs()"
                 placeholder="Contoh: TAKLIMAT PENGURUSAN PENTAKSIRAN BILIK DARJAH (PBD) DAERAH JOHOR BAHRU"
-                class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
               />
             </div>
 
@@ -683,7 +678,7 @@
                 type="date"
                 id="inp-tarikhTamat"
                 onchange="syncFromInputs()"
-                class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
               />
             </div>
 
@@ -696,7 +691,76 @@
                 id="inp-masa"
                 oninput="syncFromInputs()"
                 placeholder="Contoh: 8.30 pagi – 1.00 tengah hari"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+              <div class="flex flex-wrap gap-1 mt-1.5">
+                <button type="button" onclick="setField('inp-masa', '8.30 pagi – 1.00 tengah hari')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] text-slate-600 transition">8.30 pagi – 1.00 tengah hari</button>
+                <button type="button" onclick="setField('inp-masa', '8.00 pagi – 4.30 petang')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] text-slate-600 transition">8.00 pagi – 4.30 petang</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                地点 <span class="text-slate-400 font-normal">(Tempat)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-tempat"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: Dewan Seri Gemilang, PPD Johor Bahru"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                主办单位 <span class="text-slate-400 font-normal">(Anjuran)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-anjuran"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: Pejabat Pendidikan Daerah Johor Bahru"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                会议主席 / 主讲人 <span class="text-slate-400 font-normal">(Pengerusi)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-pengerusi"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: Encik Ahmad bin Salleh (Penolong PPD)"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                出席官员 / 教师 <span class="text-slate-400 font-normal">(Pegawai yang Hadir)</span>
+              </label>
+              <textarea
+                id="inp-pegawaiHadir"
+                rows="2"
+                oninput="syncFromInputs(true)"
+                placeholder="Contoh: 1. Cik Tan Mei Ling (Ketua Panitia Bahasa Melayu)&#10;2. Encik Lim Wei Jie (Setiausaha Kurikulum)"
                 class="w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+              ></textarea>
+            </div>
+
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">
+                分发资料 <span class="text-slate-400 font-normal">(Bahan-bahan yang Diedarkan)</span>
+              </label>
+              <input
+                type="text"
+                id="inp-bahanEdaran"
+                oninput="syncFromInputs()"
+                placeholder="Contoh: Slaid Pembentangan Digital & Surat Siaran KPM Bil. 4/2026"
+                class="w-full min-h-[44px] rounded-xl border border-slate-300 px-3.5 py-2 text-sm focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
               />
               <div class="flex flex-wrap gap-1 mt-1.5">
                 <button type="button" onclick="setField('inp-masa', '8.30 pagi – 1.00 tengah hari')" class="px-2 py-0.5 rounded bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-[11px] text-slate-600 transition">8.30 pagi – 1.00 tengah hari</button>
@@ -839,7 +903,7 @@
         </button>
 
         <div id="sign-section-body" class="p-4 sm:p-5 border-t border-slate-100 space-y-4">
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <!-- Disediakan oleh -->
             <div class="space-y-2.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200/80">
               <div class="text-xs font-bold text-slate-800">拟稿人 (Disediakan oleh):</div>
@@ -866,9 +930,7 @@
                   <button type="button" onclick="setField('inp-disediakanJawatan', 'Guru Akademik')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Guru Akademik</button>
                   <button type="button" onclick="setField('inp-disediakanJawatan', 'Ketua Panitia')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Ketua Panitia</button>
                   <button type="button" onclick="setField('inp-disediakanJawatan', 'Setiausaha')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">Setiausaha</button>
-                  <button type="button" onclick="setField('inp-disediakanJawatan', 'GPK HEM')" class="px-1.5 py-0.5 rounded bg-white border border-slate-200 hover:border-indigo-300 text-[10px] text-slate-600">GPK HEM</button>
-                
-               </div>
+                </div>
               </div>
               <div>
                 <label class="block text-[11px] font-medium text-slate-600 mb-0.5">拟稿日期 (Tarikh)</label>
@@ -945,9 +1007,9 @@
     </section>
 
     <!-- ==================== RIGHT PANEL: LIVE A4 PREVIEW ==================== -->
-    <section id="preview-panel" class="hidden lg:flex w-full lg:w-1/2 lg:h-full flex-col bg-slate-200/85">
+    <section id="preview-panel" class="hidden lg:flex w-full lg:w-[52%] lg:h-full flex-col bg-slate-200/85 pb-24 lg:pb-0">
       <!-- Preview Toolbar -->
-      <div id="preview-toolbar" class="bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 shrink-0">
+      <div id="preview-toolbar" class="bg-white/95 backdrop-blur border-b border-slate-200 px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 shrink-0">
         <div class="flex items-center gap-2">
           <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -958,14 +1020,14 @@
           </span>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
           <!-- Font Switcher -->
           <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
             <button
               type="button"
               id="font-btn-arial"
               onclick="setDocFont('Arial')"
-              class="px-2.5 py-1 rounded-md font-semibold bg-white text-indigo-700 shadow-sm transition"
+              class="px-2 sm:px-2.5 py-1 rounded-md font-semibold bg-white text-indigo-700 shadow-sm transition"
             >
               Arial
             </button>
@@ -973,10 +1035,10 @@
               type="button"
               id="font-btn-times"
               onclick="setDocFont('Times New Roman')"
-              class="px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition"
+              class="px-2 sm:px-2.5 py-1 rounded-md font-medium text-slate-600 hover:text-slate-900 transition"
               style="font-family: 'Times New Roman', serif;"
             >
-              Times New Roman
+              Times
             </button>
           </div>
 
@@ -988,22 +1050,31 @@
             title="公文字体大小"
           >
             <option value="10pt">10pt</option>
-            <option value="10.5pt" selected>10.5pt (标准)</option>
+            <option value="10.5pt" selected>10.5pt</option>
             <option value="11pt">11pt</option>
           </select>
 
-          <!-- Zoom Controls -->
-          <div class="hidden sm:inline-flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden text-xs">
-            <button type="button" onclick="adjustZoom(-0.1)" class="px-2 py-1 hover:bg-slate-100 text-slate-600 font-bold" title="缩小">−</button>
-            <span id="zoom-label" class="px-2 py-1 text-slate-700 font-medium min-w-[46px] text-center">80%</span>
-            <button type="button" onclick="adjustZoom(0.1)" class="px-2 py-1 hover:bg-slate-100 text-slate-600 font-bold" title="放大">+</button>
+          <!-- Zoom & Smart Fit Controls (Visible on Both Mobile & Desktop) -->
+          <div class="inline-flex items-center rounded-lg border border-slate-200 bg-white overflow-hidden text-xs">
+            <button type="button" onclick="adjustZoom(-0.08)" class="px-2.5 py-1 hover:bg-slate-100 active:bg-slate-200 text-slate-600 font-bold" title="缩小">−</button>
+            <span id="zoom-label" class="px-1.5 py-1 text-slate-700 font-medium min-w-[42px] text-center">80%</span>
+            <button type="button" onclick="adjustZoom(0.08)" class="px-2.5 py-1 hover:bg-slate-100 active:bg-slate-200 text-slate-600 font-bold" title="放大">+</button>
+            <button
+              type="button"
+              id="btn-fit-screen"
+              onclick="fitA4ToContainer(true)"
+              class="px-2.5 py-1 border-l border-slate-200 bg-indigo-50/70 hover:bg-indigo-100 text-indigo-700 font-semibold transition"
+              title="自动缩放 A4 页面以完整适合当前屏幕宽度"
+            >
+              适合屏幕
+            </button>
           </div>
         </div>
       </div>
 
       <!-- Scrollable A4 Paper Canvas -->
-      <div id="preview-scroll-container" class="flex-1 overflow-auto p-4 sm:p-8 flex justify-center items-start">
-        <div id="a4-scale-wrapper" class="transition-all duration-200">
+      <div id="preview-scroll-container" class="flex-1 overflow-auto p-3 sm:p-6 flex justify-center items-start">
+        <div id="a4-scale-wrapper" class="relative mx-auto transition-all duration-200">
           <!-- ==================== OFFICIAL A4 DOCUMENT SHEET ==================== -->
           <article id="a4-paper" class="a4-sheet" style="font-family: Arial, sans-serif; font-size: 10.5pt;">
             <!-- Header Section -->
@@ -1131,58 +1202,58 @@
     </section>
   </main>
 
-  <!-- ==================== DRAFTS MODAL ==================== -->
-  <div id="drafts-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
-      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
-        <div>
-          <h3 class="text-base font-bold text-slate-900">草稿箱管理 (Rekod Draf Tersimpan)</h3>
-          <p class="text-xs text-slate-500">保存在本地浏览器中，可随时加载编辑或重新导出 `.docx`</p>
-        </div>
-        <button type="button" onclick="closeDraftsModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
+  <!-- ==================== FIXED MOBILE BOTTOM NAVIGATION BAR (<1024px) ==================== -->
+  <nav
+    id="mobile-bottom-nav"
+    aria-label="移动端快捷导航栏"
+    class="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-white/95 backdrop-blur border-t border-slate-200 shadow-[0_-4px_20px_-4px_rgba(15,23,42,0.1)] px-2 py-1.5"
+  >
+    <div class="grid grid-cols-4 gap-1.5 max-w-lg mx-auto">
+      <button
+        type="button"
+        id="mob-nav-editor"
+        onclick="switchMobileView('editor')"
+        class="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold bg-indigo-600 text-white shadow-xs transition"
+      >
+        <span class="text-sm leading-none">✏️</span>
+        <span>编辑表单</span>
+      </button>
 
-      <div class="px-5 py-3 bg-indigo-50/70 border-b border-indigo-100 flex items-center justify-between gap-2">
-        <span class="text-xs font-medium text-indigo-900">将当前正在编辑的简报保存为新草稿：</span>
-        <button
-          type="button"
-          onclick="saveCurrentDraft()"
-          class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition"
-        >
-          + 保存当前简报 (Simpan Sekarang)
-        </button>
-      </div>
+      <button
+        type="button"
+        id="mob-nav-preview"
+        onclick="switchMobileView('preview')"
+        class="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+      >
+        <span class="text-sm leading-none">📄</span>
+        <span>A4 预览</span>
+      </button>
 
-      <div id="drafts-list-container" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+      <button
+        type="button"
+        onclick="exportToDocx()"
+        class="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 transition"
+      >
+        <span class="text-sm leading-none">📥</span>
+        <span>导出 .docx</span>
+      </button>
+
+      <button
+        type="button"
+        onclick="printDocument()"
+        class="min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 transition"
+      >
+        <span class="text-sm leading-none">🖨️</span>
+        <span>打印/PDF</span>
+      </button>
     </div>
-  </div>
+  </nav>
 
-  <!-- ==================== CUSTOM CONFIRMATION MODAL ==================== -->
-  <div id="confirm-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-sm w-full p-5 space-y-4">
-      <h3 id="confirm-title" class="text-base font-bold text-slate-900">确认操作</h3>
-      <p id="confirm-message" class="text-xs sm:text-sm text-slate-600 leading-relaxed"></p>
-      <div class="flex justify-end gap-2 pt-2">
-        <button
-          type="button"
-          onclick="closeConfirmModal()"
-          class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
-        >
-          取消 (Batal)
-        </button>
-        <button
-          type="button"
-          id="confirm-ok-btn"
-          class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 transition"
-        >
-          确认 (Ya)
-        </button>
-      </div>
-    </div>
+  <!-- ==================== DRAFTS MODAL (BOTTOM-SHEET ON MOBILE) ==================== -->
+  <div id="drafts-modal" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[88vh] flex flex-col overflow-hidden">
+      <div class="w-10 h-1 rounded-full bg-slate-300 mx-auto mt-2.5 sm:hidden"></div>
+      <div class="px-5 py-3.5 sm:py-4 border-b border-slate-200 flex items-center justify-between">
   </div>
 
   <!-- ==================== TOAST CONTAINER ==================== -->
@@ -1329,25 +1400,24 @@
       logoAlign: 'center',
       docFont: 'Arial',
       docFontSize: '10.5pt',
-      zoom: 0.80
+      zoom: 0.80,
+      isMobileMode: window.innerWidth < 1024,
+      mobileActiveView: 'editor',
+      autoFitEnabled: true
     };
 
     let lastAIExtractedData = null;
+    let previewResizeObserver = null;
 
     // =========================================================================
-    // 2. INITIALIZATION & FORMATTING UTILITIES
+    // 2. INITIALIZATION & AUTOMATIC DESKTOP / MOBILE RESPONSIVE ENGINE
     // =========================================================================
     window.addEventListener('DOMContentLoaded', () => {
-      if (window.innerWidth < 640) {
-        state.zoom = 0.44;
-      } else if (window.innerWidth < 1280) {
-        state.zoom = 0.68;
-      }
       initApiKeySettings();
       populateInputsFromState();
       renderItemEditors();
       renderDocument();
-      applyZoom();
+      initResponsiveArchitecture();
       updateDraftBadge();
 
       document.addEventListener('click', (e) => {
@@ -1357,6 +1427,92 @@
         }
       });
     });
+
+    function initResponsiveArchitecture() {
+      const mobileMediaQuery = window.matchMedia('(max-width: 1023px)');
+
+      const handleViewportChange = (e) => {
+        const isMobile = e.matches;
+        state.isMobileMode = isMobile;
+        state.autoFitEnabled = true;
+
+        const pill = document.getElementById('viewport-mode-pill');
+        if (pill) {
+          if (isMobile) {
+            pill.textContent = '📱 手机端视图';
+            pill.className =
+              'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 shrink-0';
+          } else {
+            pill.textContent = '🖥️ 电脑端分屏';
+            pill.className =
+              'inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0';
+          }
+        }
+
+        const editor = document.getElementById('editor-panel');
+        const preview = document.getElementById('preview-panel');
+
+        if (!isMobile) {
+          // Desktop Dual-Pane Mode (>= 1024px): show both panels side-by-side
+          editor.classList.remove('hidden');
+          preview.classList.remove('hidden');
+          preview.classList.add('flex');
+          requestAnimationFrame(() => fitA4ToContainer(false));
+        } else {
+          // Mobile / Tablet Single-Pane Mode (< 1024px): respect active tab
+          switchMobileView(state.mobileActiveView || 'editor', false);
+        }
+      };
+
+      // Run immediately on load
+      handleViewportChange(mobileMediaQuery);
+
+      // Listen for breakpoint crossings & orientation changes
+      if (typeof mobileMediaQuery.addEventListener === 'function') {
+        mobileMediaQuery.addEventListener('change', handleViewportChange);
+      } else if (typeof mobileMediaQuery.addListener === 'function') {
+        mobileMediaQuery.addListener(handleViewportChange);
+      }
+
+      window.addEventListener('orientationchange', () => {
+        setTimeout(() => {
+          if (state.autoFitEnabled) fitA4ToContainer(false);
+        }, 160);
+      });
+
+      // Observe preview container width changes for fluid A4 auto-fit
+      const scrollContainer = document.getElementById('preview-scroll-container');
+      if (scrollContainer && typeof ResizeObserver !== 'undefined') {
+        previewResizeObserver = new ResizeObserver(() => {
+          if (state.autoFitEnabled && !document.getElementById('preview-panel').classList.contains('hidden')) {
+            fitA4ToContainer(false);
+          }
+        });
+        previewResizeObserver.observe(scrollContainer);
+      }
+    }
+
+    function fitA4ToContainer(showFeedback = false) {
+      const scrollContainer = document.getElementById('preview-scroll-container');
+      const sheet = document.getElementById('a4-paper');
+      if (!scrollContainer || !sheet) return;
+
+      const containerWidth = scrollContainer.clientWidth;
+      if (!containerWidth || containerWidth <= 0) return;
+
+      // 210mm A4 sheet is ~794px at 96 DPI
+      const a4PixelWidth = sheet.offsetWidth || 794;
+      const horizontalPadding = state.isMobileMode ? 24 : 48;
+      const computedScale = Math.min(1, Math.max(0.32, (containerWidth - horizontalPadding) / a4PixelWidth));
+
+      state.zoom = Math.round(computedScale * 100) / 100;
+      state.autoFitEnabled = true;
+      applyZoom();
+
+      if (showFeedback) {
+        showToast(`已自动缩放至 ${Math.round(state.zoom * 100)}% 以完整适合屏幕宽度`, 'info');
+      }
+    }
 
     function escapeHtml(str) {
       if (str === null || str === undefined) return '';
@@ -1596,7 +1752,8 @@
     }
 
     function adjustZoom(delta) {
-      state.zoom = Math.min(1.25, Math.max(0.4, Math.round((state.zoom + delta) * 100) / 100));
+      state.autoFitEnabled = false;
+      state.zoom = Math.min(1.3, Math.max(0.32, Math.round((state.zoom + delta) * 100) / 100));
       applyZoom();
     }
 
@@ -1606,33 +1763,48 @@
       const label = document.getElementById('zoom-label');
       if (!sheet || !wrapper) return;
 
+      const baseWidth = sheet.offsetWidth || 794;
+      const baseHeight = sheet.offsetHeight || 1123;
+
       sheet.style.transform = `scale(${state.zoom})`;
-      wrapper.style.width = `${210 * state.zoom}mm`;
-      wrapper.style.minHeight = `${297 * state.zoom}mm`;
+      wrapper.style.width = `${Math.round(baseWidth * state.zoom)}px`;
+      wrapper.style.height = `${Math.round(baseHeight * state.zoom)}px`;
+      wrapper.style.minHeight = 'auto';
+
       if (label) {
         label.textContent = `${Math.round(state.zoom * 100)}%`;
       }
     }
 
-    function switchMobileView(view) {
+    function switchMobileView(view, scrollTop = true) {
+      state.mobileActiveView = view;
       const editor = document.getElementById('editor-panel');
       const preview = document.getElementById('preview-panel');
-      const btnEd = document.getElementById('tab-btn-editor');
-      const btnPr = document.getElementById('tab-btn-preview');
+      const navEd = document.getElementById('mob-nav-editor');
+      const navPr = document.getElementById('mob-nav-preview');
+
+      const activeNavCls =
+        'min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-bold bg-indigo-600 text-white shadow-xs transition';
+      const inactiveNavCls =
+        'min-h-[48px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition';
 
       if (view === 'editor') {
         editor.classList.remove('hidden');
         preview.classList.add('hidden');
         preview.classList.remove('flex');
-        btnEd.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm transition';
-        btnPr.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 transition';
+        if (navEd) navEd.className = activeNavCls;
+        if (navPr) navPr.className = inactiveNavCls;
       } else {
         editor.classList.add('hidden');
         preview.classList.remove('hidden');
         preview.classList.add('flex');
-        btnPr.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-indigo-600 text-white shadow-sm transition';
-        btnEd.className = 'flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 transition';
-        applyZoom();
+        if (navPr) navPr.className = activeNavCls;
+        if (navEd) navEd.className = inactiveNavCls;
+        requestAnimationFrame(() => fitA4ToContainer(false));
+      }
+
+      if (scrollTop) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
 
@@ -1955,6 +2127,7 @@
       document.getElementById('doc-sig-disahkanGelaran').textContent = state.disahkanGelaran || 'Guru Besar';
 
       document.getElementById('item-counter-badge').textContent = `${state.items.length} 项内容`;
+      applyZoom();
     }
 
     // =========================================================================
